@@ -167,6 +167,12 @@
           this.renderLinkedList(state, step.highlights || [], step.pointers || {});
         } else if (type === 'stack') {
           this.renderStack(state, step.highlights || [], step.pointers || {});
+        } else if (type === 'queue') {
+          this.renderQueue(state, step.highlights || [], step.pointers || {});
+        } else if (type === 'tree') {
+          this.renderTree(state, step.highlights || [], step.pointers || {});
+        } else if (type === 'hash-table') {
+          this.renderHashTable(state, step.highlights || [], step.pointers || {});
         } else if (type === 'array') {
           this.renderArray(state, step.highlights || [], step.pointers || {});
         } else {
@@ -238,7 +244,7 @@
           arrowSvg.setAttribute('width', '32');
           arrowSvg.setAttribute('height', '24');
           arrowSvg.setAttribute('viewBox', '0 0 32 24');
-          arrowSvg.className = 'overflow-visible flex-shrink-0';
+          arrowSvg.setAttribute('class', 'overflow-visible flex-shrink-0');
           arrowSvg.innerHTML = `
             <line x1="2" y1="12" x2="24" y2="12" stroke="var(--accent-main)" stroke-width="2" class="link-arrow-animated" />
             <polygon points="22,7 30,12 22,17" fill="var(--accent-main)" />
@@ -341,7 +347,201 @@
         cellsContainer.appendChild(cellWrap);
       });
 
-      container.appendChild(cellsContainer);
+    /* -----------------------------------------------------------------------
+     * QUEUE RENDERER (Horizontal FIFO pipeline, FRONT & REAR pointers)
+     * ----------------------------------------------------------------------- */
+    renderQueue(state, highlights, pointers) {
+      const container = document.createElement('div');
+      container.className = 'w-full flex flex-col items-center justify-center py-8 px-4';
+
+      const items = Array.isArray(state.queue) ? state.queue : [];
+      const queueWrap = document.createElement('div');
+      queueWrap.className = 'flex items-center gap-3 overflow-x-auto p-4 bg-zinc-950/60 rounded-xl border border-zinc-800 shadow-inner max-w-full';
+
+      // Entry indicator (Enqueue)
+      const inIndicator = document.createElement('div');
+      inIndicator.className = 'flex flex-col items-center text-[10px] text-zinc-500 font-mono pr-2 border-r border-zinc-800/80';
+      inIndicator.innerHTML = '<span class="text-emerald-400 font-bold">&rarr; IN</span><span>(REAR)</span>';
+      queueWrap.appendChild(inIndicator);
+
+      if (items.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'text-xs font-mono text-zinc-500 px-8 py-4';
+        empty.textContent = 'Queue is Empty (size = 0)';
+        queueWrap.appendChild(empty);
+      } else {
+        items.forEach((val, idx) => {
+          const isHighlighted = highlights.includes(idx) || highlights.includes(val);
+          const itemWrap = document.createElement('div');
+          itemWrap.className = 'relative flex flex-col items-center';
+
+          // Pointer Badges Above
+          const activePtrs = [];
+          if (idx === 0) activePtrs.push('FRONT');
+          if (idx === items.length - 1) activePtrs.push('REAR');
+          for (const [pName, pVal] of Object.entries(pointers)) {
+            if (pVal === idx || pVal === val) activePtrs.push(pName);
+          }
+          const uniquePtrs = [...new Set(activePtrs)];
+
+          if (uniquePtrs.length > 0) {
+            const pill = document.createElement('div');
+            pill.className = 'pointer-pill';
+            pill.textContent = uniquePtrs.join(', ');
+            itemWrap.appendChild(pill);
+          }
+
+          const box = document.createElement('div');
+          box.className = `w-14 h-14 rounded-lg flex flex-col items-center justify-center font-mono text-sm font-bold border transition-all ${
+            isHighlighted ? 'bg-indigo-600/30 border-indigo-400 text-indigo-200 ring-2 ring-indigo-500/50' : 'bg-zinc-900 border-zinc-700 text-zinc-100'
+          }`;
+          box.innerHTML = `<span>${val}</span><span class="text-[9px] text-zinc-500 font-normal">[${idx}]</span>`;
+          itemWrap.appendChild(box);
+
+          queueWrap.appendChild(itemWrap);
+        });
+      }
+
+      // Exit indicator (Dequeue)
+      const outIndicator = document.createElement('div');
+      outIndicator.className = 'flex flex-col items-center text-[10px] text-zinc-500 font-mono pl-2 border-l border-zinc-800/80';
+      outIndicator.innerHTML = '<span class="text-rose-400 font-bold">OUT &rarr;</span><span>(FRONT)</span>';
+      queueWrap.appendChild(outIndicator);
+
+      container.appendChild(queueWrap);
+      this.canvasEl.appendChild(container);
+    }
+
+    /* -----------------------------------------------------------------------
+     * HASH TABLE RENDERER (Buckets, Keys, Values, Collisions)
+     * ----------------------------------------------------------------------- */
+    renderHashTable(state, highlights, pointers) {
+      const container = document.createElement('div');
+      container.className = 'w-full flex flex-col items-center justify-center py-6 px-4';
+
+      const buckets = state.buckets || [];
+      const tableWrap = document.createElement('div');
+      tableWrap.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl';
+
+      buckets.forEach((bucket, bIdx) => {
+        const bucketBox = document.createElement('div');
+        bucketBox.className = 'bg-zinc-900/80 border border-zinc-800 rounded-lg p-3 flex flex-col';
+        bucketBox.innerHTML = `
+          <div class="flex items-center justify-between border-b border-zinc-800 pb-2 mb-2">
+            <span class="text-xs font-mono font-bold text-amber-400">Bucket [${bIdx}]</span>
+            <span class="text-[10px] text-zinc-500 font-mono">${(bucket.entries || []).length} items</span>
+          </div>
+          <div class="flex flex-col gap-1.5 flex-1 min-h-[40px]">
+            ${(bucket.entries || []).map(entry => `
+              <div class="flex items-center justify-between text-xs font-mono px-2.5 py-1.5 rounded bg-zinc-950/70 border border-zinc-800/60">
+                <span class="text-indigo-300 font-semibold">${entry.key}</span>
+                <span class="text-emerald-400">&rarr; ${entry.val}</span>
+              </div>
+            `).join('') || '<span class="text-[10px] text-zinc-600 italic py-2">Empty</span>'}
+          </div>
+        `;
+        tableWrap.appendChild(bucketBox);
+      });
+
+      container.appendChild(tableWrap);
+      this.canvasEl.appendChild(container);
+    }
+
+    /* -----------------------------------------------------------------------
+     * BINARY TREE RENDERER (SVG Nodes, Child Branches, Active Highlights)
+     * ----------------------------------------------------------------------- */
+    renderTree(state, highlights, pointers) {
+      const container = document.createElement('div');
+      container.className = 'w-full flex flex-col items-center justify-center py-6 px-4 overflow-x-auto';
+
+      const tree = state.tree || []; // Breadth-first / level-order array
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '520');
+      svg.setAttribute('height', '260');
+      svg.setAttribute('viewBox', '0 0 520 260');
+      svg.setAttribute('class', 'overflow-visible');
+
+      // Standard 3-level tree node coordinates
+      const coords = [
+        { x: 260, y: 40 },  // Root (0)
+        { x: 140, y: 110 }, // Left (1)
+        { x: 380, y: 110 }, // Right (2)
+        { x: 80,  y: 190 }, // (3)
+        { x: 200, y: 190 }, // (4)
+        { x: 320, y: 190 }, // (5)
+        { x: 440, y: 190 }  // (6)
+      ];
+
+      // Draw connecting branches
+      const branches = [
+        [0, 1], [0, 2],
+        [1, 3], [1, 4],
+        [2, 5], [2, 6]
+      ];
+
+      branches.forEach(([p, c]) => {
+        if (tree[p] !== null && tree[p] !== undefined && tree[c] !== null && tree[c] !== undefined) {
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', coords[p].x);
+          line.setAttribute('y1', coords[p].y);
+          line.setAttribute('x2', coords[c].x);
+          line.setAttribute('y2', coords[c].y);
+          line.setAttribute('stroke', '#3f3f46');
+          line.setAttribute('stroke-width', '2');
+          svg.appendChild(line);
+        }
+      });
+
+      // Draw nodes
+      tree.forEach((val, idx) => {
+        if (val === null || val === undefined || idx >= coords.length) return;
+        const pt = coords[idx];
+        const isHighlighted = highlights.includes(idx) || highlights.includes(val);
+
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+        // Node Circle
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', pt.x);
+        circle.setAttribute('cy', pt.y);
+        circle.setAttribute('r', '20');
+        circle.setAttribute('fill', isHighlighted ? '#4338ca' : '#18181b');
+        circle.setAttribute('stroke', isHighlighted ? '#818cf8' : '#3f3f46');
+        circle.setAttribute('stroke-width', '2');
+        group.appendChild(circle);
+
+        // Value Text
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', pt.x);
+        text.setAttribute('y', pt.y + 4);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('fill', '#f4f4f5');
+        text.setAttribute('font-family', 'monospace');
+        text.setAttribute('font-size', '12');
+        text.setAttribute('font-weight', 'bold');
+        text.textContent = val;
+        group.appendChild(text);
+
+        // Pointers (e.g. root, curr)
+        for (const [pName, pVal] of Object.entries(pointers)) {
+          if (pVal === idx || pVal === val) {
+            const ptrText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            ptrText.setAttribute('x', pt.x);
+            ptrText.setAttribute('y', pt.y - 26);
+            ptrText.setAttribute('text-anchor', 'middle');
+            ptrText.setAttribute('fill', '#38bdf8');
+            ptrText.setAttribute('font-family', 'monospace');
+            ptrText.setAttribute('font-size', '10');
+            ptrText.setAttribute('font-weight', 'bold');
+            ptrText.textContent = pName;
+            group.appendChild(ptrText);
+          }
+        }
+
+        svg.appendChild(group);
+      });
+
+      container.appendChild(svg);
       this.canvasEl.appendChild(container);
     }
 

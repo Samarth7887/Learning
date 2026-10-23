@@ -57,10 +57,10 @@ Adding a new question requires **zero UI code changes**—simply append a questi
 | :--- | :--- | :---: | :---: | :--- |
 | **Phase 1** | **Linked List** | 18 | ✅ **Complete** | 11 Basics (Node, insert/delete head/tail/kth, search, traverse, update, size) + 7 Classics (Reverse, Cycle, Merge, Middle, Nth from end, Palindrome, LRU Cache) |
 | **Phase 1** | **Stack** | 10 | ✅ **Complete** | Array & LL implementations, Valid Parentheses, Min Stack, Monotonic Stack (NGE, Daily Temps), RPN, Queue using Stacks, Largest Rectangle |
-| Phase 2 | Arrays & Strings | Target: 20+ | ⏳ Queued | Two pointers, Sliding window, Prefix sum, Kadane's |
-| Phase 2 | Queue & Deque | Target: 10+ | ⏳ Queued | Circular queue, Deque, Sliding window maximum |
-| Phase 2 | Hashing | Target: 15+ | ⏳ Queued | Hash map/set, Two sum, Group anagrams, Subarray sum = k |
-| Phase 2 | Binary Trees & BST | Target: 20+ | ⏳ Queued | Traversals, Height, LCA, Validate BST, Level order, Serialize |
+| **Phase 2** | **Arrays & Strings** | 9 | ✅ **Complete** | Memory layout, 3-reversal rotation, Two Sum II, Most Water, Longest Substring, Trapping Rain Water, Kadane's algorithm, Product Except Self, Merge Intervals |
+| **Phase 2** | **Queue & Deque** | 9 | ✅ **Complete** | Array queue, Linked list queue, Circular Queue, Circular Deque, Stack using Queues, Sliding Window Maximum, First Unique Char, Rate Limiter, Rotting Oranges |
+| **Phase 2** | **Hashing** | 9 | ✅ **Complete** | Separate Chaining HashMap, HashSet, Two Sum, Group Anagrams, Valid Anagram, Longest Consecutive Sequence, Subarray Sum = K, Nearby Duplicate, RandomizedSet O(1) |
+| **Phase 2** | **Binary Trees & BST** | 7 | ✅ **Complete** | Tree Node linking, Inorder DFS, Level Order BFS, Max Depth, Invert Tree, Validate BST (Min/Max ranges), Lowest Common Ancestor (BST split) |
 | Phase 3 | Heaps & Priority Queues| Target: 12+ | ⏳ Queued | Heapify, Top-K, Merge K sorted, Median of stream |
 | Phase 3 | Graphs | Target: 20+ | ⏳ Queued | BFS, DFS, Dijkstra, Topo Sort, Union-Find, MST, Islands |
 | Phase 3 | Tries | Target: 10+ | ⏳ Queued | Prefix tree, autocomplete, Word Search II |
@@ -69,7 +69,8 @@ Adding a new question requires **zero UI code changes**—simply append a questi
 | Phase 4 | Dynamic Programming | Target: 25+ | ⏳ Queued | 1D, 2D, Knapsack, LIS, LCS, Edit Distance, Coin Change |
 | Phase 4 | Greedy & Bit Manipulation| Target: 15+ | ⏳ Queued | Interval scheduling, Bitwise tricks, Segment Tree |
 
-**Current Total:** 28 questions verified across 2 completed topics.
+**Current Total:** 62 questions verified across 6 completed topics (100% test pass rate).
+
 
 ---
 

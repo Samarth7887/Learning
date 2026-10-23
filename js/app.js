@@ -19,14 +19,36 @@
       this.filterStatus = 'all';
       this.searchQuery = '';
       
-      this.expandedTopics = new Set(['linked-list', 'stack']);
-      this.expandedSubtopics = new Set(['ll-basics', 'll-traversal', 'll-mutation', 'll-advanced', 'stack-basics', 'stack-matching', 'stack-monotonic']);
+      // Normalize topics: support both flat questions array and subtopic.questions arrays
+      for (const tKey in this.topics) {
+        const topic = this.topics[tKey];
+        if (!topic.questions) topic.questions = [];
+        if (topic.subtopics) {
+          topic.subtopics.forEach(sub => {
+            if (Array.isArray(sub.questions)) {
+              sub.questions.forEach(q => {
+                if (!q.subtopicId) q.subtopicId = sub.id;
+                if (!topic.questions.some(existing => existing.id === q.id)) {
+                  topic.questions.push(q);
+                }
+              });
+            }
+          });
+        }
+      }
+
+      this.expandedTopics = new Set(Object.keys(this.topics));
+      this.expandedSubtopics = new Set();
+      for (const tKey in this.topics) {
+        (this.topics[tKey].subtopics || []).forEach(s => this.expandedSubtopics.add(s.id));
+      }
       
       this.progress = this.loadProgress();
       this.animator = null;
 
       this.init();
     }
+
 
     init() {
       this.initAnimator();
