@@ -23,23 +23,29 @@ Then visit `http://localhost:3000/index.html`.
 
 ## 🏗 Modular, Data-Driven Architecture
 
-The codebase has been refactored from a monolithic file into a clean, decoupled, data-driven architecture:
+The codebase follows a decoupled, data-driven Neo-Brutalist architecture:
 
 ```text
-├── index.html                  # Shell layout & topic script loaders
+├── index.html                  # Neo-Brutalist single-page shell (Home, Topics, Progress)
 ├── css/
-│   └── styles.css              # Consolidated design tokens, animations & UI styles
+│   └── styles.css              # Neo-Brutalist design tokens (#ffe17c, #171e19, #b7c6c2), hard shadows & tactile CSS
 ├── js/
-│   ├── app.js                  # Controller: sidebar navigation, search, filters & progress
+│   ├── components.js           # Reusable HTML component factory (Navbar, Hero, TopicCard, DifficultyCard, etc.)
+│   ├── app.js                  # View router, sidebar accordion, difficulty filters & progress
 │   └── animator.js             # Universal step-driven animation engine
 ├── data/
-│   └── topics/                 # One standalone data file per DSA topic
-│       ├── linked-list.js      # Singly/doubly linked list basics & classic LC questions
-│       └── stack.js            # Array/LL stacks, monotonic stacks, evaluation
+│   └── topics/                 # Standalone data modules (62 verified problems across 6 topics)
+│       ├── arrays-strings.js
+│       ├── linked-list.js
+│       ├── stack.js
+│       ├── queue.js
+│       ├── hashing.js
+│       └── trees.js
 ├── AUDIT.md                    # Technical debt audit & file redundancy report
-├── TESTS.md                    # Test harness report verifying 100% passing solutions
+├── TESTS.md                    # Test harness report verifying 100% passing solutions (62/62)
 └── README.md                   # Project overview & progress roadmap
 ```
+
 
 ### 🧩 Global Registry Pattern
 To ensure `index.html` works when double-clicked from disk (where browser CORS security blocks `fetch()` and `import`), every topic file registers onto a safe global registry:

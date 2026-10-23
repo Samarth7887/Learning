@@ -1,296 +1,421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SynapseCS // Interactive Data Structures & Algorithms Lab</title>
-  
-  <!-- Tailwind CSS CDN for utility grid and flex classes -->
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  
-  <!-- Typography -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Modular Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css">
+  <!-- Fonts: Plus Jakarta Sans & JetBrains Mono with System Fallbacks -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Neo-Brutalist Design Tokens & Styles -->
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="min-h-screen flex flex-col surface-base selection:bg-indigo-500/20 selection:text-indigo-400">
+<body class="bg-[#fbfbf8] text-[#171e19] min-h-screen flex flex-col">
 
-  <!-- ===================================================================== -->
-  <!-- 1. MASTER HEADER & GLOBAL TELEMETRY BAR                              -->
-  <!-- ===================================================================== -->
-  <header class="surface-panel/90 backdrop-blur-md border-b sticky top-0 z-40">
-    <div class="max-w-[1720px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-      
-      <!-- Brand Identity -->
-      <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-        <div class="w-9 h-9 rounded-lg flex items-center justify-center font-mono-code font-bold text-xs text-white shadow-md bg-gradient-to-br from-indigo-500 to-cyan-400">
-          0x
+  <!-- NAVBAR CONTAINER -->
+  <div id="app-navbar-container"></div>
+
+  <!-- MAIN MULTI-VIEW CONTAINER -->
+  <div id="app-main-viewport" class="flex-1 flex flex-col">
+    
+    <!-- =================================================================== -->
+    <!-- VIEW 1: HOME PAGE (Neo-Brutalist Spec)                              -->
+    <!-- =================================================================== -->
+    <div id="view-home" class="flex-1 flex flex-col">
+
+      <!-- HERO SECTION -->
+      <section class="py-12 sm:py-16 px-4 sm:px-6 bg-[#fbfbf8] border-b-2 border-black dot-pattern-light">
+        <div class="max-w-6xl mx-auto flex flex-col items-center text-center space-y-6">
+          
+          <!-- Pill Badge -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 bg-[#ffe17c] border-2 border-black rounded-full hard-shadow-sm font-mono font-bold text-xs uppercase tracking-wider text-[#171e19]">
+            <span class="w-2 h-2 rounded-full bg-[#171e19]"></span>
+            <span>VISUAL • INTERACTIVE • FREE</span>
+          </div>
+
+          <!-- Outlined Hero Headline -->
+          <h1 class="text-4xl sm:text-6xl md:text-7xl font-black text-[#171e19] uppercase tracking-tight leading-[1.05]">
+            LEARN DSA BY <br />
+            <span class="text-outline">SEEING IT MOVE</span>
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="max-w-2xl text-sm sm:text-base md:text-lg text-zinc-700 font-medium leading-relaxed">
+            Stop memorizing LeetCode templates blindly. Trace physical memory addresses, watch pointer rewiring in real-time, and read plain-English code explanations for every single line.
+          </p>
+
+          <!-- Primary Actions -->
+          <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
+            <button onclick="window.SynapseApp.switchView('topics')" class="inline-flex items-center gap-2 px-6 py-3 font-mono font-bold text-sm uppercase tracking-wider bg-[#ffe17c] text-[#171e19] border-2 border-black hard-shadow btn-press rounded-lg">
+              <span>🚀 Start Learning</span>
+            </button>
+            <button onclick="window.SynapseApp.switchView('topics')" class="inline-flex items-center gap-2 px-6 py-3 font-mono font-bold text-sm uppercase tracking-wider bg-white text-[#171e19] border-2 border-black hard-shadow btn-press rounded-lg">
+              <span>📚 Browse 62 Questions</span>
+            </button>
+          </div>
+
+          <!-- Real Interactive Mini Reversal Demo inside Browser Window Mockup -->
+          <div class="w-full max-w-3xl pt-8">
+            <div class="code-mockup-window text-left">
+              <div class="code-mockup-header">
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-[#ff5f56] border border-black inline-block"></span>
+                  <span class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black inline-block"></span>
+                  <span class="w-3 h-3 rounded-full bg-[#27c93f] border border-black inline-block"></span>
+                </div>
+                <span class="text-xs font-mono font-semibold text-zinc-300">Live Memory Demo // Reversing Singly Linked List</span>
+                <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/40 font-bold">ONLINE</span>
+              </div>
+              <div class="p-6 bg-[#171e19] flex flex-col items-center justify-center gap-6 overflow-x-auto">
+                <div id="hero-mini-canvas" class="flex items-center gap-3 py-4 flex-wrap justify-center">
+                  <!-- Rendered dynamically by app.js -->
+                </div>
+                <div class="flex items-center gap-3">
+                  <button id="hero-mini-step-btn" class="px-4 py-1.5 text-xs font-mono font-bold uppercase bg-[#ffe17c] text-[#171e19] border-2 border-black hard-shadow-sm btn-press rounded">
+                    Step Reversal &rarr;
+                  </button>
+                  <button id="hero-mini-reset-btn" class="px-4 py-1.5 text-xs font-mono font-bold uppercase bg-white text-[#171e19] border-2 border-black hard-shadow-sm btn-press rounded">
+                    Reset
+                  </button>
+                  <span id="hero-mini-desc" class="text-xs font-mono text-zinc-300 ml-2">Head points to 0x1000 (val: 10)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
-        <div>
-          <div class="flex items-center space-x-2">
-            <span class="font-display font-bold text-lg tracking-tight">Synapse<span class="text-indigo-400">CS</span></span>
-            <span class="text-[10px] font-mono-code px-2 py-0.5 rounded-full border border-zinc-800 surface-sub text-zinc-400">DSA LAB</span>
+      </section>
+
+      <!-- TOPICS GRID SECTION -->
+      <section class="py-16 px-4 sm:px-6 bg-white border-b-2 border-black">
+        <div class="max-w-6xl mx-auto">
+          <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8 gap-4 pb-4 border-b-2 border-black">
+            <div>
+              <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-zinc-500">Core Curriculum</span>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#171e19] tracking-tight">Explore Essential DSA Topics</h2>
+            </div>
+            <button onclick="window.SynapseApp.switchView('topics')" class="text-xs font-mono font-bold text-[#171e19] hover:underline flex items-center gap-1">
+              <span>View all questions</span>
+              <span>&rarr;</span>
+            </button>
+          </div>
+
+          <!-- Topic Cards Container -->
+          <div id="home-topics-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Dynamically populated from window.DSA_TOPICS -->
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Quick Global Telemetry & Progress -->
-      <div id="overall-progress-summary" class="hidden md:flex flex-col w-56"></div>
+      <!-- HOW IT WORKS SECTION (01 Learn, 02 Watch, 03 Solve) -->
+      <section class="py-16 px-4 sm:px-6 bg-[#fbfbf8] border-b-2 border-black dot-pattern-light">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center max-w-xl mx-auto mb-12 space-y-2">
+            <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-zinc-500">Pedagogical Framework</span>
+            <h2 class="text-3xl font-extrabold text-[#171e19]">How SynapseCS Works</h2>
+            <p class="text-xs sm:text-sm text-zinc-600">Three integrated learning steps designed for lasting intuition.</p>
+          </div>
 
-      <!-- Theme & Action Controls -->
-      <div class="flex items-center space-x-2 sm:space-x-3">
-        <div class="flex items-center surface-sub border rounded-lg p-0.5 text-[11px] font-mono-code">
-          <button id="theme-btn-dark" class="px-2.5 py-1 rounded font-semibold text-white bg-indigo-600 transition-all">Dark</button>
-          <button id="theme-btn-light" class="px-2.5 py-1 rounded text-zinc-400 hover:text-white transition-all">Light</button>
-          <button id="theme-btn-matrix" class="px-2.5 py-1 rounded text-zinc-400 hover:text-white transition-all">Matrix</button>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div id="how-step-1"></div>
+            <div id="how-step-2"></div>
+            <div id="how-step-3"></div>
+          </div>
         </div>
+      </section>
 
-        <a href="https://github.com/Samarth7887/Learning" target="_blank" class="btn-mech text-xs font-mono-code text-zinc-300">
-          <span>GitHub</span>
-          <span class="text-xs">&nearr;</span>
-        </a>
-      </div>
+      <!-- DIFFICULTY FILTER CARDS -->
+      <section class="py-16 px-4 sm:px-6 bg-white border-b-2 border-black">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center max-w-xl mx-auto mb-10 space-y-2">
+            <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-zinc-500">Choose Your Level</span>
+            <h2 class="text-3xl font-extrabold text-[#171e19]">Filter by Problem Difficulty</h2>
+            <p class="text-xs sm:text-sm text-zinc-600">Start with fundamental pointer mechanics, then level up to hard problems.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div id="diff-card-basic"></div>
+            <div id="diff-card-medium"></div>
+            <div id="diff-card-hard"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROGRESS SUMMARY SECTION -->
+      <section class="py-16 px-4 sm:px-6 bg-[#fbfbf8] border-b-2 border-black">
+        <div class="max-w-4xl mx-auto">
+          <div id="home-progress-container"></div>
+        </div>
+      </section>
+
+      <!-- FINAL CTA SECTION -->
+      <div id="home-cta-container"></div>
 
     </div>
-  </header>
 
-  <!-- ===================================================================== -->
-  <!-- 2. MAIN APPLICATION WORKSPACE (SIDEBAR + QUESTION ENGINE)             -->
-  <!-- ===================================================================== -->
-  <div class="flex-1 max-w-[1720px] w-full mx-auto flex flex-col md:flex-row overflow-hidden">
-    
-    <!-- LEFT SIDEBAR: TOPICS & ACCORDION QUESTION LIST -->
-    <aside class="w-full md:w-80 lg:w-[350px] border-b md:border-b-0 md:border-r surface-panel flex flex-col flex-shrink-0 max-h-[calc(100vh-64px)] overflow-hidden">
+    <!-- =================================================================== -->
+    <!-- VIEW 2: TOPICS & QUESTION PRACTICE VIEW                             -->
+    <!-- =================================================================== -->
+    <div id="view-topics" class="hidden flex-1 flex flex-col md:flex-row overflow-hidden">
       
-      <!-- Search & Filter Controls -->
-      <div class="p-3.5 border-b space-y-2.5 surface-sub">
-        <div class="relative">
-          <input 
-            type="text" 
-            id="sidebar-search-input" 
-            placeholder="Search problems, topics, keywords..." 
-            class="w-full surface-panel border border-zinc-700/60 rounded-lg px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-indigo-500 font-sans"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-2 text-[11px]">
-          <select id="filter-difficulty-select" class="surface-panel border rounded-md px-2 py-1 text-zinc-300 focus:outline-none font-mono">
-            <option value="all">Diff: All</option>
-            <option value="basic">Basic</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
-          <select id="filter-status-select" class="surface-panel border rounded-md px-2 py-1 text-zinc-300 focus:outline-none font-mono">
-            <option value="all">Status: All</option>
-            <option value="completed">Completed</option>
-            <option value="pending">Pending</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Topics Accordion List -->
-      <div id="sidebar-topics-accordion" class="flex-1 overflow-y-auto p-3.5 space-y-2">
-        <!-- Rendered dynamically by app.js -->
-      </div>
-      
-    </aside>
-
-    <!-- RIGHT MAIN WORKSPACE: QUESTION VIEW, CODE, AND ANIMATOR -->
-    <main class="flex-1 flex flex-col overflow-y-auto max-h-[calc(100vh-64px)] p-4 sm:p-6 lg:p-8 space-y-6">
-      
-      <!-- Breadcrumbs & Question Actions -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
-        <div class="space-y-1.5">
-          <div class="flex items-center space-x-2 text-xs font-mono text-zinc-400">
-            <span id="bc-topic">Data Structures</span>
-            <span>&bull;</span>
-            <span class="text-indigo-400 font-semibold">Problem Workspace</span>
+      <!-- LEFT SIDEBAR ACCORDION & FILTERS -->
+      <aside class="w-full md:w-80 lg:w-96 bg-white border-r-2 border-black flex flex-col flex-shrink-0 h-auto md:h-[calc(100vh-64px)]">
+        
+        <!-- Sidebar Search & Filter Bar -->
+        <div class="p-4 border-b-2 border-black bg-[#fbfbf8] space-y-3">
+          <div class="relative">
+            <input 
+              type="text" 
+              id="sidebar-search-input"
+              placeholder="Search 62 questions (e.g. Kadane, Reverse)..."
+              class="w-full bg-white border-2 border-black rounded-lg px-3 py-2 text-xs font-mono text-[#171e19] placeholder-zinc-400 hard-shadow-sm focus:outline-none"
+            />
           </div>
-          <div class="flex items-center space-x-3 flex-wrap gap-y-2">
-            <h1 id="q-title" class="text-2xl sm:text-3xl font-extrabold tracking-tight font-display text-white">Loading problem...</h1>
-            <span id="q-diff-badge" class="badge-diff badge-easy">Easy</span>
-            <a id="q-leetcode-link" href="#" target="_blank" class="badge-leetcode" style="display: none;">LeetCode</a>
+
+          <div class="grid grid-cols-2 gap-2">
+            <select id="filter-difficulty-select" class="w-full bg-white border-2 border-black rounded-lg px-2.5 py-1.5 text-[11px] font-mono font-bold text-[#171e19] hard-shadow-sm focus:outline-none cursor-pointer">
+              <option value="all">All Difficulties</option>
+              <option value="basic">Basic / Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+
+            <select id="filter-status-select" class="w-full bg-white border-2 border-black rounded-lg px-2.5 py-1.5 text-[11px] font-mono font-bold text-[#171e19] hard-shadow-sm focus:outline-none cursor-pointer">
+              <option value="all">All Statuses</option>
+              <option value="completed">Completed</option>
+              <option value="pending">Unsolved</option>
+            </select>
           </div>
         </div>
 
-        <div class="flex items-center space-x-3 flex-shrink-0">
-          <button id="q-toggle-completed-btn" class="btn-mech text-xs font-semibold">
-            Mark as Completed
+        <!-- Scrollable Topics Accordion Tree -->
+        <div id="sidebar-topics-accordion" class="flex-1 overflow-y-auto p-3 space-y-2.5 sidebar-scroll">
+          <!-- Dynamically populated by app.js -->
+        </div>
+
+        <!-- Sidebar Footer Summary -->
+        <div id="overall-progress-summary" class="p-3.5 border-t-2 border-black bg-white">
+          <!-- Solved count bar populated by app.js -->
+        </div>
+
+      </aside>
+
+      <!-- RIGHT QUESTION DETAIL & ANIMATION WORKBENCH -->
+      <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 bg-[#fbfbf8] sidebar-scroll">
+
+        <!-- Question Header Badge Row -->
+        <div class="bg-white border-2 border-black rounded-xl p-5 hard-shadow flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span id="q-difficulty-badge" class="px-2.5 py-0.5 text-xs font-mono font-bold rounded">BASIC</span>
+              <a id="q-leetcode-link" href="#" target="_blank" class="hidden px-2.5 py-0.5 text-xs font-mono font-bold bg-[#ffe17c] text-[#171e19] border-2 border-black rounded hard-shadow-sm hover:underline">
+                LeetCode #<span id="q-leetcode-num">0</span> &rarr;
+              </a>
+              <span id="q-topic-badge" class="px-2 py-0.5 text-[10px] font-mono font-bold uppercase bg-zinc-100 text-zinc-700 border border-black rounded">Topic</span>
+            </div>
+            <h1 id="q-title" class="text-xl sm:text-2xl font-black text-[#171e19] tracking-tight">Question Title</h1>
+          </div>
+
+          <!-- Mark Completed Toggle Button -->
+          <button id="q-complete-toggle-btn" class="inline-flex items-center gap-2 px-4 py-2 font-mono font-bold text-xs uppercase bg-white text-[#171e19] border-2 border-black hard-shadow-sm btn-press rounded-lg">
+            <input type="checkbox" id="q-complete-checkbox" class="cursor-pointer" />
+            <span id="q-complete-label">Mark Completed</span>
           </button>
         </div>
-      </div>
 
-      <!-- Two-Column Grid: Problem Context (Left) & Interactive Animation (Right) -->
-      <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
-        
-        <!-- LEFT COLUMN (XL: 6 COLS): DESCRIPTION, EXAMPLES, CODE & LINE EXPLANATION -->
-        <div class="xl:col-span-6 space-y-6">
-          
-          <!-- Problem Statement Card -->
-          <div class="surface-panel border rounded-xl p-5 space-y-4">
-            <div class="space-y-2">
-              <h2 class="text-xs font-mono uppercase font-bold text-zinc-400 tracking-wider">Problem Statement</h2>
-              <p id="q-description" class="text-sm text-zinc-300 leading-relaxed font-sans"></p>
-            </div>
-
-            <!-- Constraints -->
-            <div class="surface-sub p-3 rounded-lg border text-xs font-mono text-zinc-400 space-y-1">
-              <span class="text-[10px] uppercase font-bold text-zinc-500">Constraints:</span>
-              <p id="q-constraints" class="text-zinc-300"></p>
-            </div>
-
-            <!-- Examples -->
-            <div class="space-y-2">
-              <h3 class="text-xs font-mono uppercase font-bold text-zinc-400 tracking-wider">Examples</h3>
-              <div id="q-examples" class="space-y-2"></div>
-            </div>
-
-            <!-- Common Pitfalls Callout -->
-            <div class="surface-sub p-3.5 rounded-lg border border-amber-500/30 text-xs space-y-1">
-              <div class="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                <span>⚠️ Common Pitfalls &amp; Mistakes</span>
-              </div>
-              <p id="q-common-mistakes" class="text-zinc-300 leading-relaxed font-sans"></p>
-            </div>
+        <!-- Problem Statement & Examples Card -->
+        <div class="bg-white border-2 border-black rounded-xl p-6 hard-shadow space-y-4">
+          <div class="space-y-1.5">
+            <h2 class="text-xs font-mono uppercase font-bold text-zinc-500 tracking-wider">Problem Statement</h2>
+            <p id="q-description" class="text-sm leading-relaxed text-[#171e19] font-medium"></p>
           </div>
 
-          <!-- Approaches & Rosetta Stone Multi-Language Code Panel -->
-          <div class="surface-panel border rounded-xl overflow-hidden shadow-lg space-y-0">
-            
-            <!-- Approach Selection Tabs -->
-            <div class="p-3 border-b surface-sub flex items-center justify-between flex-wrap gap-2">
-              <div class="flex items-center space-x-2">
-                <span class="text-[10px] font-mono uppercase font-bold text-zinc-500 mr-1">Approaches:</span>
-                <div id="approach-tabs" class="flex items-center space-x-1.5"></div>
-              </div>
-              <button id="toggle-explain-all-btn" onclick="window.app.toggleExplainAllMode()" class="btn-mech text-[11px] font-mono py-1 px-2.5">
-                Explain All Lines (Beginner Mode)
-              </button>
-            </div>
-
-            <!-- Intuition / Idea Callout -->
-            <div class="p-4 border-b surface-panel space-y-2">
-              <div class="text-xs font-mono text-indigo-400 font-bold uppercase">Core Intuition</div>
-              <p id="approach-idea" class="text-xs text-zinc-300 leading-relaxed"></p>
-              
-              <!-- Complexity Row -->
-              <div class="grid grid-cols-2 gap-2 pt-2 border-t border-zinc-800/80 font-mono text-xs">
-                <div><span class="text-zinc-500">Time:</span> <strong id="complexity-time" class="text-emerald-400 ml-1">O(n)</strong></div>
-                <div><span class="text-zinc-500">Space:</span> <strong id="complexity-space" class="text-cyan-400 ml-1">O(1)</strong></div>
-              </div>
-            </div>
-
-            <!-- Language Switcher Bar -->
-            <div class="px-4 surface-sub border-b flex items-center justify-between">
-              <div class="flex items-center space-x-1">
-                <button id="lang-btn-python" class="px-3 py-1.5 text-xs font-mono font-bold border-b-2 border-indigo-500 text-indigo-400">Python</button>
-                <button id="lang-btn-java" class="px-3 py-1.5 text-xs font-mono text-zinc-400 hover:text-white border-b-2 border-transparent">Java</button>
-                <button id="lang-btn-cpp" class="px-3 py-1.5 text-xs font-mono text-zinc-400 hover:text-white border-b-2 border-transparent">C++</button>
-                <button id="lang-btn-javascript" class="px-3 py-1.5 text-xs font-mono text-zinc-400 hover:text-white border-b-2 border-transparent">JavaScript</button>
-              </div>
-              <span class="text-[10px] font-mono text-zinc-500 pr-1">Click line to explain</span>
-            </div>
-
-            <!-- Interactive Code Display -->
-            <div id="code-lines-display" class="code-container max-h-[360px] overflow-y-auto select-text"></div>
-
-            <!-- Dynamic Line Explanation Tooltip/Box -->
-            <div id="line-explanation-box" class="p-4 border-t surface-sub line-expl-box">
-              <div class="text-[10px] font-mono text-cyan-400 font-bold uppercase mb-1">Plain-English Line Explanation</div>
-              <p class="text-zinc-300 text-xs">Click or hover any line of code above to see an explanation without jargon.</p>
-            </div>
-
-            <!-- All Lines Beginner Mode Breakdown -->
-            <div id="all-lines-guide" class="p-4 border-t surface-sub" style="display: none;"></div>
-
+          <div class="p-3 bg-[#fbfbf8] border-2 border-black rounded-lg text-xs font-mono text-zinc-700 space-y-1">
+            <span class="text-[10px] uppercase font-bold text-zinc-500">Constraints:</span>
+            <p id="q-constraints" class="text-[#171e19] font-semibold"></p>
           </div>
 
+          <div class="space-y-2">
+            <h3 class="text-xs font-mono uppercase font-bold text-zinc-500 tracking-wider">Examples</h3>
+            <div id="q-examples" class="space-y-2"></div>
+          </div>
+
+          <!-- Common Pitfalls Callout -->
+          <div class="p-4 bg-[#ffe17c]/30 border-2 border-black rounded-lg space-y-1">
+            <div class="text-[11px] font-mono text-[#171e19] font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <span>⚠️ Common Pitfalls &amp; Mistakes</span>
+            </div>
+            <p id="q-common-mistakes" class="text-xs text-zinc-800 leading-relaxed font-sans font-medium"></p>
+          </div>
         </div>
 
-        <!-- RIGHT COLUMN (XL: 6 COLS): REUSABLE DATA-DRIVEN ANIMATION ENGINE -->
-        <div class="xl:col-span-6 space-y-6 sticky top-20">
-          
-          <div class="anim-canvas-stage shadow-xl">
+        <!-- CODE WORKBENCH (Black Browser Window Mockup) -->
+        <div class="code-mockup-window">
+          <!-- Header Bar: Approach Tabs + Rosetta Stone Language Tabs -->
+          <div class="code-mockup-header flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             
-            <!-- Animation Top Toolbar -->
-            <div class="p-3.5 border-b surface-panel/90 backdrop-blur-md flex items-center justify-between flex-wrap gap-2 z-10">
-              
-              <!-- Playback Controls -->
-              <div class="flex items-center space-x-1.5">
-                <button id="anim-btn-play" class="btn-signal text-xs px-3 py-1 font-mono">
-                  <span>▶ Play</span>
+            <!-- Three Browser Window Dots + Approach Selector -->
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-full bg-[#ff5f56] border border-black inline-block"></span>
+                <span class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black inline-block"></span>
+                <span class="w-3 h-3 rounded-full bg-[#27c93f] border border-black inline-block"></span>
+              </div>
+              <div id="approach-tabs" class="flex items-center gap-1.5">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Rosetta Stone Multi-Language Tabs -->
+            <div class="flex items-center gap-1">
+              <button onclick="window.SynapseApp.selectLanguage('python')" id="lang-btn-python" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-black bg-[#ffe17c] text-[#171e19]">Python</button>
+              <button onclick="window.SynapseApp.selectLanguage('javascript')" id="lang-btn-javascript" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-zinc-700 bg-zinc-900 text-zinc-400">JavaScript</button>
+              <button onclick="window.SynapseApp.selectLanguage('java')" id="lang-btn-java" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-zinc-700 bg-zinc-900 text-zinc-400">Java</button>
+              <button onclick="window.SynapseApp.selectLanguage('cpp')" id="lang-btn-cpp" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-zinc-700 bg-zinc-900 text-zinc-400">C++</button>
+            </div>
+
+          </div>
+
+          <!-- Code View & Interactive Line Inspector -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 border-t-2 border-black">
+            
+            <!-- Code Block (Lines) -->
+            <div class="lg:col-span-8 p-4 bg-[#171e19] overflow-x-auto border-b lg:border-b-0 lg:border-r-2 border-black">
+              <div class="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800">
+                <span class="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Source Code (Click any line to inspect)</span>
+                <button id="explain-all-lines-btn" class="px-2.5 py-1 text-[10px] font-mono font-bold uppercase bg-white text-[#171e19] border border-black rounded hard-shadow-sm btn-press">
+                  Explain All Lines (Beginner Mode)
                 </button>
-                <button id="anim-btn-prev" class="btn-mech text-xs px-2.5 py-1 font-mono" title="Previous Step">&larr;</button>
-                <button id="anim-btn-next" class="btn-mech text-xs px-2.5 py-1 font-mono" title="Next Step">&rarr;</button>
-                <button id="anim-btn-reset" class="btn-mech text-xs px-2.5 py-1 font-mono" title="Reset">⟲</button>
               </div>
-
-              <!-- Speed & Counter -->
-              <div class="flex items-center space-x-3 font-mono text-xs text-zinc-400">
-                <select id="anim-speed-select" class="surface-sub border rounded px-1.5 py-0.5 text-xs text-zinc-300 focus:outline-none">
-                  <option value="0.5">0.5x Speed</option>
-                  <option value="1" selected>1.0x Speed</option>
-                  <option value="2">2.0x Speed</option>
-                </select>
-                <span id="anim-step-counter" class="text-white font-semibold">Step 1 / 1</span>
-              </div>
-
+              <div id="code-lines-display" class="font-mono text-xs text-zinc-200 space-y-0.5 select-text"></div>
             </div>
 
-            <!-- Live Step Description Banner -->
-            <div class="px-4 py-2 border-b surface-sub font-mono text-xs flex items-center justify-between text-zinc-300 z-10">
-              <div id="anim-step-description" class="truncate flex-1">
-                Ready. Click Play to observe execution.
+            <!-- Active Line Explanation Pane -->
+            <div class="lg:col-span-4 p-5 bg-[#0f1411] flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-mono font-bold uppercase text-[#ffe17c] tracking-wider">Line Inspector</span>
+                  <span id="active-line-badge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-bold">Line 1</span>
+                </div>
+                <div id="active-line-explanation" class="text-xs text-zinc-300 font-sans leading-relaxed">
+                  Click or hover any line of code on the left to see its beginner-friendly explanation.
+                </div>
               </div>
-            </div>
 
-            <!-- Visual Stage Viewport -->
-            <div id="anim-stage-viewport" class="flex-1 flex items-center justify-center p-6 overflow-x-auto relative"></div>
-
-            <!-- Scrubber Timeline Bar -->
-            <div class="p-3.5 border-t surface-panel flex flex-col gap-2 z-10">
-              <div class="flex items-center justify-between text-[10px] font-mono text-zinc-500">
-                <span>START</span>
-                <span>STEP SCRUBBER</span>
-                <span>END</span>
+              <!-- Complexity Summary Box -->
+              <div class="mt-6 p-3.5 bg-[#171e19] border-2 border-black rounded-lg space-y-2">
+                <span class="text-[10px] font-mono font-bold uppercase text-[#ffe17c]">Complexity Guarantee</span>
+                <div class="flex items-center justify-between text-xs font-mono">
+                  <span class="text-zinc-400">Time:</span>
+                  <strong id="q-complexity-time" class="text-[#ffe17c]">O(1)</strong>
+                </div>
+                <div class="flex items-center justify-between text-xs font-mono">
+                  <span class="text-zinc-400">Space:</span>
+                  <strong id="q-complexity-space" class="text-[#b7c6c2]">O(1)</strong>
+                </div>
               </div>
-              <input type="range" id="anim-scrubber" min="0" max="1" value="0" class="w-full cursor-pointer h-1.5 bg-zinc-800 rounded-lg" />
             </div>
 
           </div>
+        </div>
 
-          <!-- Custom User Input Playground -->
-          <div class="surface-panel border rounded-xl p-4 space-y-2">
-            <div class="flex items-center justify-between text-xs font-mono">
-              <span class="font-bold text-zinc-300 uppercase">Interactive Input Playground</span>
-              <span class="text-zinc-500 text-[11px]">Type an array to visualize</span>
-            </div>
+        <!-- ANIMATION CANVAS PANEL (Sage Card) -->
+        <div class="bg-[#b7c6c2] border-2 border-black rounded-xl p-5 hard-shadow space-y-4">
+          
+          <!-- Animation Header & Step Counter -->
+          <div class="flex items-center justify-between flex-wrap gap-2 pb-3 border-b-2 border-black">
             <div class="flex items-center gap-2">
-              <input 
-                type="text" 
-                id="anim-custom-input" 
-                placeholder="[10, 20, 30, 40]" 
-                class="flex-1 surface-sub border rounded-lg px-3 py-1.5 text-xs font-mono text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500"
-              />
-              <button id="anim-custom-run-btn" class="btn-signal text-xs font-mono px-4 py-1.5">
-                Run Input
+              <span class="text-lg">🎬</span>
+              <h3 class="font-mono font-black text-sm uppercase text-[#171e19]">Universal Animation Canvas</h3>
+            </div>
+            <span id="anim-step-counter" class="px-2.5 py-1 text-xs font-mono font-bold bg-white text-[#171e19] border border-black rounded hard-shadow-sm">
+              Step 1 / 1
+            </span>
+          </div>
+
+          <!-- Visual Canvas Viewport -->
+          <div class="bg-white border-2 border-black rounded-xl overflow-hidden hard-shadow-md">
+            <div id="anim-stage-viewport" class="min-h-[220px] flex items-center justify-center p-4">
+              <!-- Rendered by animator.js -->
+            </div>
+            <div id="anim-step-description" class="p-3 bg-[#fbfbf8] border-t-2 border-black font-sans text-xs text-[#171e19] font-medium min-h-[44px] flex items-center">
+              Animation ready. Click Play or Step Forward.
+            </div>
+          </div>
+
+          <!-- Playback Controls Bar -->
+          <div class="flex items-center justify-between flex-wrap gap-3 pt-1">
+            <div class="flex items-center gap-2">
+              <button id="anim-btn-play" class="px-4 py-2 text-xs font-mono font-bold uppercase bg-[#ffe17c] text-[#171e19] border-2 border-black hard-shadow-sm btn-press rounded">
+                ▶ Play
+              </button>
+              <button id="anim-btn-prev" class="px-3 py-2 text-xs font-mono font-bold uppercase bg-white text-[#171e19] border-2 border-black hard-shadow-sm btn-press rounded">
+                &larr; Prev
+              </button>
+              <button id="anim-btn-next" class="px-3 py-2 text-xs font-mono font-bold uppercase bg-white text-[#171e19] border-2 border-black hard-shadow-sm btn-press rounded">
+                Next &rarr;
+              </button>
+              <button id="anim-btn-reset" class="px-3 py-2 text-xs font-mono font-bold uppercase bg-white text-[#171e19] border-2 border-black hard-shadow-sm btn-press rounded">
+                Reset
               </button>
             </div>
+
+            <!-- Scrubber & Speed Selector -->
+            <div class="flex items-center gap-3">
+              <input type="range" id="anim-scrubber" min="0" max="0" value="0" class="w-28 sm:w-40 cursor-pointer accent-black" />
+              <select id="anim-speed-select" class="bg-white border-2 border-black rounded px-2 py-1 text-xs font-mono font-bold text-[#171e19] cursor-pointer">
+                <option value="0.5">0.5x</option>
+                <option value="1.0" selected>1.0x</option>
+                <option value="1.5">1.5x</option>
+                <option value="2.0">2.0x</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Live User Input Re-runner -->
+          <div class="flex items-center gap-2 pt-2 border-t border-black/30">
+            <input 
+              type="text" 
+              id="anim-custom-input" 
+              placeholder="Custom input e.g. [10, 20, 30, 40]" 
+              class="flex-1 bg-white border-2 border-black rounded-lg px-3 py-1.5 text-xs font-mono text-[#171e19] placeholder-zinc-500 focus:outline-none"
+            />
+            <button id="anim-custom-run-btn" class="px-4 py-1.5 text-xs font-mono font-bold uppercase bg-[#171e19] text-white border-2 border-black hard-shadow-sm btn-press rounded-lg">
+              Run Input
+            </button>
           </div>
 
         </div>
 
-      </div>
+      </main>
+    </div>
 
-    </main>
+    <!-- =================================================================== -->
+    <!-- VIEW 3: DEDICATED PROGRESS DASHBOARD                                -->
+    <!-- =================================================================== -->
+    <div id="view-progress" class="hidden flex-1 p-6 sm:p-12 bg-[#fbfbf8]">
+      <div class="max-w-4xl mx-auto space-y-8">
+        <div>
+          <span class="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500">Analytics</span>
+          <h1 class="text-3xl font-black text-[#171e19]">Learning Progress &amp; Mastery</h1>
+        </div>
+        <div id="dedicated-progress-mount"></div>
+      </div>
+    </div>
 
   </div>
 
+  <!-- FOOTER CONTAINER -->
+  <div id="app-footer-container"></div>
+
   <!-- ===================================================================== -->
-  <!-- 3. DATA MODULES & CLIENT APPLICATION ENGINE (Classic Scripts for local file://) -->
+  <!-- DATA MODULES & CLIENT APPLICATION ENGINE                              -->
   <!-- ===================================================================== -->
   <script src="data/topics/arrays-strings.js"></script>
   <script src="data/topics/linked-list.js"></script>
@@ -298,9 +423,15 @@
   <script src="data/topics/queue.js"></script>
   <script src="data/topics/hashing.js"></script>
   <script src="data/topics/trees.js"></script>
-  <script src="js/animator.js"></script>
-  <script src="js/app.js"></script>
 
+  <!-- Reusable Components Library -->
+  <script src="js/components.js"></script>
+  
+  <!-- Universal Animation Engine -->
+  <script src="js/animator.js"></script>
+  
+  <!-- Application Controller -->
+  <script src="js/app.js"></script>
 
 </body>
 </html>
