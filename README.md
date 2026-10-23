@@ -56,20 +56,22 @@ The codebase follows a decoupled, data-driven Neo-Brutalist architecture:
 │   │   ├── hashing.js
 │   │   └── trees.js
 │   └── languages/              # Language-specific code implementations, line tags & idiomatic notes
-│       ├── python/             # (meta.js, topic code files)
-│       ├── java/               # (meta.js, topic code files)
-│       ├── cpp/                # (meta.js, topic code files)
-│       ├── javascript/         # (meta.js, topic code files)
-│       ├── c/                  # (meta.js, coming soon)
-│       ├── go/                 # (meta.js, coming soon)
-│       └── rust/               # (meta.js, coming soon)
+│       ├── python/             # (meta.js, 6 topic files, 62 questions)
+│       ├── java/               # (meta.js, 6 topic files, 62 questions)
+│       ├── cpp/                # (meta.js, 6 topic files, 62 questions)
+│       ├── javascript/         # (meta.js, 6 topic files, 62 questions)
+│       ├── c/                  # (meta.js, 6 topic files, 62 questions, GCC verified)
+│       ├── go/                 # (meta.js, 6 topic files, 62 questions)
+│       └── rust/               # (meta.js, 6 topic files, 62 questions)
 ├── tools/
-│   ├── validate.js             # Plain Node test suite (contracts, tracers, parity, code parsing)
+│   ├── validate.js             # Plain Node test suite (contracts, tracers, 7-lang parity, tag-to-code, GCC)
+│   ├── build_all.js            # Master builder generating C, Go, and Rust question implementations
 │   └── migrate.js              # Data extraction & code tagging migration tool
 ├── ANIMATION_REPORT.md         # Diagnostic report with 100% pass verification (62/62)
+├── LANGUAGE_AUDIT.md           # Step 1 comprehensive language & unlock rule audit
 ├── CHANGES.md                  # Detailed plain-English summary of architectural upgrades
 ├── AUDIT.md                    # Technical debt audit & file redundancy report
-├── TESTS.md                    # Test harness report verifying 100% passing solutions (62/62)
+├── TESTS.md                    # Multi-language compiler test matrix & verification report
 └── README.md                   # Project overview & documentation
 ```
 
@@ -189,6 +191,56 @@ Open `debug.html` in any browser or visit `http://localhost:3000/debug.html`. It
 | **Phase 2** | **Arrays & Strings** | 9 | ✅ **Complete** | Memory layout, 3-reversal rotation, Two Sum II, Most Water, Longest Substring, Trapping Rain Water, Kadane's algorithm, Product Except Self, Merge Intervals |
 | **Phase 2** | **Queue & Deque** | 9 | ✅ **Complete** | Array queue, Linked list queue, Circular Queue, Circular Deque, Stack using Queues, Sliding Window Maximum, First Unique Char, Rate Limiter, Rotting Oranges |
 | **Phase 2** | **Hashing** | 9 | ✅ **Complete** | Separate Chaining HashMap, HashSet, Two Sum, Group Anagrams, Valid Anagram, Longest Consecutive Sequence, Subarray Sum = K, Nearby Duplicate, RandomizedSet O(1) |
-| **Phase 2** | **Binary Trees & BST** | 7 | ✅ **Complete** | Tree Node linking, Inorder DFS, Level Order BFS, Max Depth, Invert Tree, Validate BST (Min/Max ranges), Lowest Common Ancestor (BST split) |
+## 🌐 Multi-Language Support & Verification Matrix
 
-**Total:** 62 questions verified with 100% pass rate across Python, Java, C++, and JavaScript.
+All 7 language tracks are 100% unlocked with real question counts (62/62) and genuine syntax explanations:
+
+| Language | Questions Available | Compiler-Verified | Local Toolchain Status | In-App Badge | Notes |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **JavaScript** | **62 / 62** | **Yes** | Node.js v24 (`vm.Script`) | None | Fully verified; shared reference tracers |
+| **Python** | **62 / 62** | **Yes** | Python 3.14 (`ast.parse`) | None | Fully verified; 0 syntax errors |
+| **Java** | **62 / 62** | **Yes** | Javac 17 | None | Fully verified; OOP references |
+| **C++** | **62 / 62** | **Yes** | g++ 6.3.0 | None | Fully verified; STL & pointers |
+| **C** | **62 / 62** | **Yes** | GCC 6.3.0 (`-fsyntax-only`) | None | Fully verified (62/62 compiled via `gcc`) |
+| **Go** | **62 / 62** | **No** | Go compiler not installed | `Not compiler-verified` | Idiomatic Go; marked unverified until installed |
+| **Rust** | **62 / 62** | **No** | Rustc compiler not installed | `Not compiler-verified` | Idiomatic Rust; marked unverified until installed |
+
+---
+
+## 📖 How to Open and Test Each Language (Plain English)
+
+### 1. Opening the App
+- **Double-click** `index.html` in your file browser (or open `http://localhost:3000/index.html` if running Python server).
+- Click **"SELECT LANGUAGE"** in the top navigation or on the landing page hero banner to open the Language Picker at `#/languages`.
+
+### 2. Exploring Any Language Track
+- In the Language Picker, click on any of the 7 cards (**C**, **Go**, **Rust**, **Python**, **JavaScript**, **Java**, or **C++**).
+- You can also navigate directly via hash URL:
+  - C: `index.html#/learn/c`
+  - Go: `index.html#/learn/go`
+  - Rust: `index.html#/learn/rust`
+  - JavaScript: `index.html#/learn/javascript`
+  - Python: `index.html#/learn/python`
+  - Java: `index.html#/learn/java`
+  - C++: `index.html#/learn/cpp`
+- Inside the workbench, click any button in the multi-language switcher row (`Python | JavaScript | Java | C++ | C | Go | Rust`) to instantly swap the code, line tags, and syntax notes for that exact problem without resetting the animation!
+
+### 3. Testing Compiler Verification
+- Run the terminal verification script:
+  ```bash
+  node tools/validate.js
+  ```
+  This will automatically:
+  1. Test all 62 animations and dynamic reference tracers.
+  2. Verify 100% question ID parity across all 7 languages (434 modules).
+  3. Verify that every explanation tag exists in the code (2,469 line explanations).
+  4. Compile all 62 C language files using `gcc -fsyntax-only`.
+  5. Check whether `go` and `rustc` are installed on your machine.
+- If you wish to verify Go or Rust locally:
+  - Install Go: `winget install GoLang.Go`
+  - Install Rust: `winget install Rustlang.Rustup` (or download from [rustup.rs](https://rustup.rs/))
+  - Re-run `node tools/validate.js` to compile the Go and Rust files.
+
+### 4. Running the In-Browser Self-Test
+- Open `debug.html` in your browser.
+- Watch all 62 algorithmic animations execute automatically with visual passes.

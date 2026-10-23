@@ -166,7 +166,9 @@
     }
 
     selectLanguage(langId) {
-      if (this.langMeta[langId] && !this.langMeta[langId].available) return;
+      const langTopics = (this.langCode && this.langCode[langId]) || {};
+      const qCount = Object.values(langTopics).reduce((acc, list) => acc + (Array.isArray(list) ? list.length : 0), 0);
+      if (qCount === 0 && this.langMeta[langId] && !this.langMeta[langId].available) return;
       this.currentLang = langId;
       localStorage.setItem('synapse_selected_lang', langId);
       this.progress = this.loadProgress();
@@ -247,10 +249,9 @@
       const langs = Object.values(this.langMeta || {});
       langs.forEach(lang => {
         let qCount = 0;
-        if (lang.available) {
-          for (const tKey in this.catalog) {
-            qCount += (this.catalog[tKey].questions || []).length;
-          }
+        const langTopics = (this.langCode && this.langCode[lang.id]) || {};
+        for (const tKey in langTopics) {
+          qCount += (Array.isArray(langTopics[tKey]) ? langTopics[tKey].length : 0);
         }
         const langProgress = this.loadProgress(lang.id);
         const solved = langProgress.size;
@@ -844,7 +845,7 @@
       codeContainer.innerHTML = '';
 
       // Update active language selector tab indicator
-      ['python', 'javascript', 'java', 'cpp'].forEach(l => {
+      ['python', 'javascript', 'java', 'cpp', 'c', 'go', 'rust'].forEach(l => {
         const btn = document.getElementById(`lang-btn-${l}`);
         if (btn) {
           if (l === this.currentLang) {
@@ -854,6 +855,20 @@
           }
         }
       });
+
+      // Update compiler verification status badge
+      const compBadge = document.getElementById('compiler-status-badge');
+      if (compBadge) {
+        if (this.currentLang === 'go' || this.currentLang === 'rust') {
+          compBadge.className = 'inline-block px-2 py-0.5 text-[10px] font-mono font-bold uppercase bg-amber-200 text-zinc-900 border border-black rounded';
+          compBadge.textContent = 'Not compiler-verified';
+          compBadge.title = `${this.currentLang.toUpperCase()} compiler is not installed on this system. Samples marked as unverified.`;
+        } else {
+          compBadge.className = 'inline-block px-2 py-0.5 text-[10px] font-mono font-bold uppercase bg-emerald-200 text-zinc-900 border border-black rounded';
+          compBadge.textContent = 'Compiler-verified';
+          compBadge.title = `${this.currentLang.toUpperCase()} verified with local toolchain.`;
+        }
+      }
 
       if (!langQ || !langQ.code || langQ.code.length === 0) {
         codeContainer.innerHTML = `

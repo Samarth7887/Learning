@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: PYTHON - Hashing & Hash Tables
+ * SynapseCS Language-Specific Implementation: PYTHON - hashing
  */
 (function(window) {
   'use strict';
@@ -217,13 +217,13 @@
     ],
     "rawCode": "class MyHashMap:\n    def __init__(self):\n        self.size = 1009\n        self.buckets = [[] for _ in range(self.size)]\n\n    def _hash(self, key):\n        return key % self.size\n\n    def put(self, key: int, value: int) -> None:\n        idx = self._hash(key)\n        for i, (k, v) in enumerate(self.buckets[idx]):\n            if k == key:\n                self.buckets[idx][i] = (key, value)\n                return\n        self.buckets[idx].append((key, value))\n\n    def get(self, key: int) -> int:\n        idx = self._hash(key)\n        for k, v in self.buckets[idx]:\n            if k == key:\n                return v\n        return -1\n\n    def remove(self, key: int) -> None:\n        idx = self._hash(key)\n        for i, (k, v) in enumerate(self.buckets[idx]):\n            if k == key:\n                del self.buckets[idx][i]\n                return\n\n# Test\nhm = MyHashMap()\nhm.put(1, 1)\nhm.put(2, 2)\nv1 = hm.get(1)\nv2 = hm.get(3)\nhm.put(2, 1)\nv3 = hm.get(2)\nhm.remove(2)\nv4 = hm.get(2)\nprint([v1, v2, v3, v4])",
     "explanations": {
-      "step_1": "Initialize 1009 bucket arrays to spread hashes evenly using prime modulo.",
-      "step_2": "Hash function computes array index: key % size.",
-      "step_3": "Put checks if key already exists to update value; otherwise chains new key-value pair to bucket.",
-      "step_4": "Get hashes key and traverses bucket chain to find matching key.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "mutate": "Executes tagged statement [mutate] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -393,12 +393,12 @@
     ],
     "rawCode": "class MyHashSet:\n    def __init__(self):\n        self.size = 1009\n        self.buckets = [[] for _ in range(self.size)]\n\n    def _hash(self, key):\n        return key % self.size\n\n    def add(self, key: int) -> None:\n        idx = self._hash(key)\n        if key not in self.buckets[idx]:\n            self.buckets[idx].append(key)\n\n    def remove(self, key: int) -> None:\n        idx = self._hash(key)\n        if key in self.buckets[idx]:\n            self.buckets[idx].remove(key)\n\n    def contains(self, key: int) -> bool:\n        idx = self._hash(key)\n        return key in self.buckets[idx]\n\n# Test\nhs = MyHashSet()\nhs.add(1)\nhs.add(2)\nc1 = hs.contains(1)\nc2 = hs.contains(3)\nc3 = hs.contains(2)\nhs.remove(2)\nc4 = hs.contains(2)\nprint([c1, c2, c3, c4])",
     "explanations": {
-      "step_1": "Add checks if key is already present in bucket to guarantee set uniqueness.",
-      "step_2": "Remove deletes key from bucket if present.",
-      "step_3": "Contains hashes key and performs linear search on small bucket list.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "mutate": "Executes tagged statement [mutate] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -463,13 +463,13 @@
     ],
     "rawCode": "def twoSum(nums, target):\n    seen = {}  # val -> index\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []\n\n# Test\nprint(twoSum([2, 7, 11, 15], 9))",
     "explanations": {
-      "step_1": "Initialize hash map to store previously seen numbers and their indices.",
-      "step_2": "Calculate complement needed to reach target: target - num.",
-      "step_3": "If complement exists in map, return stored index and current index i.",
-      "step_4": "Otherwise store current number and index in hash map for future lookups.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -534,12 +534,12 @@
     ],
     "rawCode": "from collections import defaultdict\n\ndef groupAnagrams(strs):\n    groups = defaultdict(list)\n    for s in strs:\n        key = \"\".join(sorted(s))\n        groups[key].append(s)\n    return sorted(list(groups.values()), key=len)\n\n# Test\nprint(groupAnagrams([\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"]))",
     "explanations": {
-      "step_1": "Create hash map mapping canonical sorted key to list of anagrams.",
-      "step_2": "Sort characters of each word to produce canonical signature (e.g. 'ate' -> 'aet').",
-      "step_3": "Return all grouped anagram arrays from the hash map.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "def": "Executes tagged statement [def] in python.",
+      "mutate": "Executes tagged statement [mutate] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -604,12 +604,12 @@
     ],
     "rawCode": "def isAnagram(s: str, t: str) -> bool:\n    if len(s) != len(t):\n        return False\n    counts = [0] * 26\n    for c1, c2 in zip(s, t):\n        counts[ord(c1) - ord('a')] += 1\n        counts[ord(c2) - ord('a')] -= 1\n    return all(c == 0 for c in counts)\n\n# Test\nprint(isAnagram(\"anagram\", \"nagaram\"))",
     "explanations": {
-      "step_1": "Early exit: strings with different lengths cannot be anagrams.",
-      "step_2": "Increment bucket for characters in s and decrement for characters in t.",
-      "step_3": "Verify every bucket returned to exactly 0.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -709,12 +709,13 @@
     ],
     "rawCode": "def longestConsecutive(nums):\n    num_set = set(nums)\n    longest = 0\n    \n    for num in num_set:\n        # Check if num is the start of a streak\n        if num - 1 not in num_set:\n            curr = num\n            streak = 1\n            while curr + 1 in num_set:\n                curr += 1\n                streak += 1\n            longest = max(longest, streak)\n            \n    return longest\n\n# Test\nprint(longestConsecutive([100, 4, 200, 1, 3, 2]))",
     "explanations": {
-      "step_1": "Convert array to hash set for O(1) membership checks.",
-      "step_2": "Crucial optimization: only attempt sequence expansion if num - 1 is absent, ensuring we only start from sequence heads.",
-      "step_3": "Count consecutive numbers in set until gap is reached; update global longest.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "comment": "Executes tagged statement [comment] in python.",
+      "branch": "Executes tagged statement [branch] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -804,12 +805,13 @@
     ],
     "rawCode": "def subarraySum(nums, k):\n    prefix_counts = {0: 1}  # base case: sum 0 occurs once before starting\n    curr_sum = 0\n    count = 0\n    \n    for num in nums:\n        curr_sum += num\n        needed = curr_sum - k\n        if needed in prefix_counts:\n            count += prefix_counts[needed]\n        prefix_counts[curr_sum] = prefix_counts.get(curr_sum, 0) + 1\n        \n    return count\n\n# Test\nprint(subarraySum([1, 1, 1], 2))",
     "explanations": {
-      "step_1": "Base case {0: 1}: handles subarrays starting from index 0 where curr_sum equals k exactly.",
-      "step_2": "Accumulate current running prefix sum and calculate required previous prefix sum: curr_sum - k.",
-      "step_3": "Add occurrences of needed prefix sum to count, then record curr_sum in map.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -879,12 +881,13 @@
     ],
     "rawCode": "def containsNearbyDuplicate(nums, k):\n    seen = set()\n    for i, num in enumerate(nums):\n        if num in seen:\n            return True\n        seen.add(num)\n        if len(seen) > k:\n            seen.remove(nums[i - k])\n    return False\n\n# Test\nprint(containsNearbyDuplicate([1, 2, 3, 1], 3))",
     "explanations": {
-      "step_1": "Maintain a hash set holding elements in the active window of size k.",
-      "step_2": "If current element is already in the window set, nearby duplicate exists; return true.",
-      "step_3": "Add current element. If window exceeds k, evict the element that slid out: nums[i - k].",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "mutate": "Executes tagged statement [mutate] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -1069,12 +1072,13 @@
     ],
     "rawCode": "import random\n\nclass RandomizedSet:\n    def __init__(self):\n        self.nums = []\n        self.val_to_idx = {}\n\n    def insert(self, val: int) -> bool:\n        if val in self.val_to_idx:\n            return False\n        self.val_to_idx[val] = len(self.nums)\n        self.nums.append(val)\n        return True\n\n    def remove(self, val: int) -> bool:\n        if val not in self.val_to_idx:\n            return False\n        idx = self.val_to_idx[val]\n        last_val = self.nums[-1]\n        \n        # Swap with last element\n        self.nums[idx] = last_val\n        self.val_to_idx[last_val] = idx\n        \n        # Pop last\n        self.nums.pop()\n        del self.val_to_idx[val]\n        return True\n\n    def getRandom(self) -> int:\n        return random.choice(self.nums)\n\n# Test\nrs = RandomizedSet()\nprint([rs.insert(1), rs.remove(2), rs.insert(2)])",
     "explanations": {
-      "step_1": "Insert: map records val -> index in array; array appends val in O(1).",
-      "step_2": "O(1) Deletion trick: swap target with last element, update moved element's map index, then pop array tail in O(1).",
-      "step_3": "getRandom: generate random index in [0..len-1] and return array element in O(1).",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "def": "Executes tagged statement [def] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "mutate": "Executes tagged statement [mutate] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   }

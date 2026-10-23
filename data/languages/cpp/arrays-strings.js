@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: CPP - Arrays & Strings
+ * SynapseCS Language-Specific Implementation: CPP - arrays-strings
  */
 (function(window) {
   'use strict';
@@ -82,10 +82,11 @@
     ],
     "rawCode": "#include <vector>\n#include <string>\n#include <cstdio>\nusing namespace std;\n\nvector<string> getAddresses(const vector<int>& arr, int base = 0x1000) {\n    vector<string> res;\n    char buf[32];\n    for (size_t i = 0; i < arr.size(); i++) {\n        snprintf(buf, sizeof(buf), \"0x%04X: %d\", (unsigned int)(base + i * 4), arr[i]);\n        res.push_back(buf);\n    }\n    return res;\n}",
     "explanations": {
-      "step_1": "Iterate through elements and compute hex address offset: base + (i * 4).",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -145,12 +146,8 @@
     ],
     "rawCode": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nvoid rotate(vector<int>& nums, int k) {\n    k %= nums.size();\n    reverse(nums.begin(), nums.end());\n    reverse(nums.begin(), nums.begin() + k);\n    reverse(nums.begin() + k, nums.end());\n}",
     "explanations": {
-      "step_1": "Normalize k with modulo: k %= n so k is within array bounds.",
-      "step_2": "Helper function reversing elements between index l and r in-place.",
-      "step_3": "The magic 3-reversal sequence: reverse all, reverse first k, reverse the rest.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -225,12 +222,12 @@
     ],
     "rawCode": "#include <vector>\nusing namespace std;\n\nvector<int> twoSum(vector<int>& numbers, int target) {\n    int l = 0, r = numbers.size() - 1;\n    while (l < r) {\n        int sum = numbers[l] + numbers[r];\n        if (sum == target) return {l + 1, r + 1};\n        if (sum < target) l++;\n        else r--;\n    }\n    return {};\n}",
     "explanations": {
-      "step_1": "Initialize left pointer at 0 and right pointer at the last index.",
-      "step_2": "If sum equals target, return 1-based indices [l + 1, r + 1].",
-      "step_3": "If sum is smaller, increase left; if sum is larger, decrease right.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -310,12 +307,12 @@
     ],
     "rawCode": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint maxArea(vector<int>& height) {\n    int l = 0, r = height.size() - 1, maxWater = 0;\n    while (l < r) {\n        int h = min(height[l], height[r]);\n        maxWater = max(maxWater, h * (r - l));\n        if (height[l] < height[r]) l++;\n        else r--;\n    }\n    return maxWater;\n}",
     "explanations": {
-      "step_1": "Initialize two pointers at ends and max_water = 0.",
-      "step_2": "Calculate area constrained by shorter line: min(height[l], height[r]) * width.",
-      "step_3": "Move pointer of the shorter line inward, because keeping the shorter line can never yield a larger area with reduced width.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -410,12 +407,12 @@
     ],
     "rawCode": "#include <string>\n#include <unordered_map>\n#include <algorithm>\nusing namespace std;\n\nint lengthOfLongestSubstring(string s) {\n    unordered_map<char, int> lastSeen;\n    int l = 0, maxLen = 0;\n    for (int r = 0; r < (int)s.size(); r++) {\n        if (lastSeen.count(s[r]) && lastSeen[s[r]] >= l) {\n            l = lastSeen[s[r]] + 1;\n        }\n        lastSeen[s[r]] = r;\n        maxLen = max(maxLen, r - l + 1);\n    }\n    return maxLen;\n}",
     "explanations": {
-      "step_1": "Initialize hash map to track last seen index of characters and left pointer l = 0.",
-      "step_2": "If incoming character has been seen within current window (index >= l), jump l to index + 1.",
-      "step_3": "Record current index and update max_len with window size (r - l + 1).",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -530,12 +527,12 @@
     ],
     "rawCode": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint trap(vector<int>& height) {\n    if (height.empty()) return 0;\n    int l = 0, r = height.size() - 1, water = 0;\n    int leftMax = height[l], rightMax = height[r];\n    while (l < r) {\n        if (leftMax < rightMax) {\n            l++;\n            leftMax = max(leftMax, height[l]);\n            water += leftMax - height[l];\n        } else {\n            r--;\n            rightMax = max(rightMax, height[r]);\n            water += rightMax - height[r];\n        }\n    }\n    return water;\n}",
     "explanations": {
-      "step_1": "Initialize two pointers at ends and track left_max and right_max.",
-      "step_2": "When left_max < right_max, water level is bottlenecked by left_max: accumulate water and advance left.",
-      "step_3": "Otherwise water level is bottlenecked by right_max: accumulate water and decrement right.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -605,12 +602,10 @@
     ],
     "rawCode": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint maxSubArray(vector<int>& nums) {\n    int maxSum = nums[0], currSum = nums[0];\n    for (size_t i = 1; i < nums.size(); i++) {\n        currSum = max(nums[i], currSum + nums[i]);\n        maxSum = max(maxSum, currSum);\n    }\n    return maxSum;\n}",
     "explanations": {
-      "step_1": "Initialize max_sum and curr_sum to first element.",
-      "step_2": "Dynamic Choice: Extend existing subarray (curr_sum + x) or start a new subarray from x.",
-      "step_3": "Update global max_sum if curr_sum exceeds it.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -710,11 +705,10 @@
     ],
     "rawCode": "#include <vector>\nusing namespace std;\n\nvector<int> productExceptSelf(vector<int>& nums) {\n    int n = nums.size();\n    vector<int> res(n, 1);\n    int prefix = 1;\n    for (int i = 0; i < n; i++) {\n        res[i] = prefix;\n        prefix *= nums[i];\n    }\n    int suffix = 1;\n    for (int i = n - 1; i >= 0; i--) {\n        res[i] *= suffix;\n        suffix *= nums[i];\n    }\n    return res;\n}",
     "explanations": {
-      "step_1": "First pass: store cumulative product of all elements to the left of index i.",
-      "step_2": "Second pass (backwards): multiply res[i] by cumulative suffix product of elements to the right.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -804,12 +798,11 @@
     ],
     "rawCode": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nvector<vector<int>> merge(vector<vector<int>>& intervals) {\n    sort(intervals.begin(), intervals.end());\n    vector<vector<int>> merged = {intervals[0]};\n    for (size_t i = 1; i < intervals.size(); i++) {\n        if (intervals[i][0] <= merged.back()[1]) {\n            merged.back()[1] = max(merged.back()[1], intervals[i][1]);\n        } else {\n            merged.push_back(intervals[i]);\n        }\n    }\n    return merged;\n}",
     "explanations": {
-      "step_1": "Sort all intervals by their starting times so potential overlaps are adjacent.",
-      "step_2": "If start <= last_end, overlap detected: extend last_end to max(last_end, end).",
-      "step_3": "No overlap: append interval as a new disjoint interval.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   }

@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: PYTHON - Linked List
+ * SynapseCS Language-Specific Implementation: PYTHON - linked-list
  */
 (function(window) {
   'use strict';
@@ -72,13 +72,10 @@
     ],
     "rawCode": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef create_list():\n    head = ListNode(10)\n    second = ListNode(20)\n    third = ListNode(30)\n    head.next = second\n    second.next = third\n    return head",
     "explanations": {
-      "step_1": "Define the fundamental Node constructor storing the element value and a pointer reference.",
-      "step_2": "Instantiate 3 individual nodes with values 10, 20, and 30 in heap memory.",
-      "step_3": "Link node 10 to node 20, and node 20 to node 30 via forward next pointers.",
-      "step_4": "Return the head pointer pointing to the first node in the sequence.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -108,12 +105,10 @@
     ],
     "rawCode": "def insert_at_head(head, val):\n    new_node = ListNode(val)\n    new_node.next = head\n    return new_node",
     "explanations": {
-      "step_1": "Allocate a new heap node holding the target insertion value.",
-      "step_2": "Point the new node's next link to the existing head node.",
-      "step_3": "Return the new node as the updated head of the entire list.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -168,12 +163,12 @@
     ],
     "rawCode": "def insert_at_tail(head, val):\n    new_node = ListNode(val)\n    if not head:\n        return new_node\n    curr = head\n    while curr.next:\n        curr = curr.next\n    curr.next = new_node\n    return head",
     "explanations": {
-      "step_1": "Handle edge case: if list is empty, newly allocated node is returned as head.",
-      "step_2": "Step through the chain with pointer curr until reaching the node where curr.next is null.",
-      "step_3": "Link the final node to the new node and return the unchanged head pointer.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -248,12 +243,12 @@
     ],
     "rawCode": "def insert_at_k(head, index, val):\n    if index == 0:\n        node = ListNode(val)\n        node.next = head\n        return node\n    curr = head\n    for _ in range(index - 1):\n        if not curr: return head\n        curr = curr.next\n    node = ListNode(val)\n    node.next = curr.next\n    curr.next = node\n    return head",
     "explanations": {
-      "step_1": "Handle zero index: delegates directly to O(1) head insertion.",
-      "step_2": "Traverse index-1 steps to stand on the predecessor node right before insertion point.",
-      "step_3": "Crucial order: connect new node to successor first, then connect predecessor to new node.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -283,11 +278,9 @@
     ],
     "rawCode": "def delete_head(head):\n    if not head:\n        return None\n    return head.next",
     "explanations": {
-      "step_1": "Verify non-empty boundary condition to prevent accessing null.",
-      "step_2": "Advance head to head.next, deallocating the evicted node where manual memory management applies.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "branch": "Executes tagged statement [branch] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -337,12 +330,13 @@
     ],
     "rawCode": "def delete_tail(head):\n    if not head or not head.next:\n        return None\n    curr = head\n    while curr.next.next:\n        curr = curr.next\n    curr.next = None\n    return head",
     "explanations": {
-      "step_1": "If list has 0 or 1 node, deleting tail leaves the list empty (NULL).",
-      "step_2": "Scan forward while looking two steps ahead (curr.next.next) to stop on the penultimate node.",
-      "step_3": "Sever the terminal link by setting curr.next to NULL.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -397,12 +391,12 @@
     ],
     "rawCode": "def remove_elements(head, val):\n    dummy = ListNode(0, head)\n    curr = dummy\n    while curr.next:\n        if curr.next.val == val:\n            curr.next = curr.next.next\n        else:\n            curr = curr.next\n    return dummy.next",
     "explanations": {
-      "step_1": "Initialize dummy node pointing to head, eliminating special-casing when head itself matches target.",
-      "step_2": "If curr.next matches target val, bypass it via curr.next = curr.next.next without advancing curr.",
-      "step_3": "Only advance curr when no deletion occurred, ensuring consecutive duplicates are caught.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -457,12 +451,13 @@
     ],
     "rawCode": "def search_list(head, target):\n    curr = head\n    idx = 0\n    while curr:\n        if curr.val == target:\n            return idx\n        curr = curr.next\n        idx += 1\n    return -1",
     "explanations": {
-      "step_1": "Set current pointer to head and initialize zero-based index counter.",
-      "step_2": "Check node value against target; if matched, return the index immediately.",
-      "step_3": "Advance pointer and increment counter. If end of list reached, return -1.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -507,11 +502,13 @@
     ],
     "rawCode": "def traverse(head):\n    res = []\n    curr = head\n    while curr:\n        res.append(curr.val)\n        curr = curr.next\n    return res",
     "explanations": {
-      "step_1": "Allocate dynamic array buffer and set traversal pointer curr = head.",
-      "step_2": "Loop while curr is non-null, appending curr.val and advancing curr to curr.next.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "mutate": "Executes tagged statement [mutate] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -561,11 +558,12 @@
     ],
     "rawCode": "def update_val(head, index, new_val):\n    curr = head\n    for _ in range(index):\n        if not curr: return False\n        curr = curr.next\n    if not curr: return False\n    curr.val = new_val\n    return True",
     "explanations": {
-      "step_1": "Walk forward index times, checking boundary safety.",
-      "step_2": "Mutate node's val directly in memory.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -610,11 +608,12 @@
     ],
     "rawCode": "def get_size(head):\n    count = 0\n    curr = head\n    while curr:\n        count += 1\n        curr = curr.next\n    return count, count == 0",
     "explanations": {
-      "step_1": "Initialize accumulator count to 0 and cursor to head.",
-      "step_2": "Increment count on every node visit until curr becomes null.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -669,13 +668,12 @@
     ],
     "rawCode": "def reverse_list(head):\n    prev = None\n    curr = head\n    while curr:\n        next_temp = curr.next\n        curr.next = prev\n        prev = curr\n        curr = next_temp\n    return prev",
     "explanations": {
-      "step_1": "Initialize prev = null (which will become the new tail's next pointer) and curr = head.",
-      "step_2": "Save the forward node reference (next_temp = curr.next) before breaking the link.",
-      "step_3": "Point current node backwards: curr.next = prev.",
-      "step_4": "Shift both pointers forward: prev becomes curr, and curr becomes next_temp.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -720,12 +718,11 @@
     ],
     "rawCode": "def middle_node(head):\n    slow = head\n    fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    return slow",
     "explanations": {
-      "step_1": "Initialize both slow and fast pointers to the head node.",
-      "step_2": "Loop while fast and fast.next are valid: advance slow by 1 step and fast by 2 steps.",
-      "step_3": "When fast reaches the end, slow is exactly at the midpoint.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -780,12 +777,12 @@
     ],
     "rawCode": "def has_cycle(head):\n    slow = head\n    fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            return True\n    return False",
     "explanations": {
-      "step_1": "Set both pointers to head.",
-      "step_2": "Advance slow by 1 step and fast by 2 steps.",
-      "step_3": "If memory addresses collide (slow == fast), cycle is confirmed. If fast hits null, return false.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "pointer": "Executes tagged statement [pointer] in python.",
+      "branch": "Executes tagged statement [branch] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -860,12 +857,12 @@
     ],
     "rawCode": "def merge_two_lists(l1, l2):\n    dummy = ListNode(0)\n    tail = dummy\n    while l1 and l2:\n        if l1.val <= l2.val:\n            tail.next = l1\n            l1 = l1.next\n        else:\n            tail.next = l2\n            l2 = l2.next\n        tail = tail.next\n    tail.next = l1 if l1 else l2\n    return dummy.next",
     "explanations": {
-      "step_1": "Create dummy anchor node to build the merged list cleanly.",
-      "step_2": "Compare values: wire tail.next to the smaller node and advance that input pointer.",
-      "step_3": "Attach whichever non-empty list remains in O(1) time and return dummy.next.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -930,13 +927,11 @@
     ],
     "rawCode": "def remove_nth_from_end(head, n):\n    dummy = ListNode(0, head)\n    fast = dummy\n    slow = dummy\n    for _ in range(n + 1):\n        fast = fast.next\n    while fast:\n        fast = fast.next\n        slow = slow.next\n    slow.next = slow.next.next\n    return dummy.next",
     "explanations": {
-      "step_1": "Set dummy node before head so deleting the first element requires no special case.",
-      "step_2": "Advance fast n+1 steps ahead to create a fixed gap between fast and slow.",
-      "step_3": "Slide both pointers forward until fast reaches null. slow is now at predecessor.",
-      "step_4": "Bypass the target node: slow.next = slow.next.next.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "pointer": "Executes tagged statement [pointer] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -1051,12 +1046,14 @@
     ],
     "rawCode": "def is_palindrome(head):\n    # 1. Find midpoint\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    # 2. Reverse second half\n    prev = None\n    while slow:\n        nxt = slow.next\n        slow.next = prev\n        prev = slow\n        slow = nxt\n    # 3. Compare first & second halves\n    left, right = head, prev\n    while right:\n        if left.val != right.val:\n            return False\n        left = left.next\n        right = right.next\n    return True",
     "explanations": {
-      "step_1": "Find middle node using slow and fast pointers.",
-      "step_2": "Reverse the second half of the list in-place starting from slow.",
-      "step_3": "Compare front half against reversed tail half. If all match, return true.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "comment": "Executes tagged statement [comment] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "pointer": "Executes tagged statement [pointer] in python.",
+      "branch": "Executes tagged statement [branch] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -1266,13 +1263,12 @@
     ],
     "rawCode": "class DNode:\n    def __init__(self, k=0, v=0):\n        self.k, self.v = k, v\n        self.prev = self.next = None\n\nclass LRUCache:\n    def __init__(self, capacity: int):\n        self.cap = capacity\n        self.cache = {}\n        self.head, self.tail = DNode(), DNode()\n        self.head.next, self.tail.prev = self.tail, self.head\n\n    def _remove(self, node):\n        node.prev.next = node.next\n        node.next.prev = node.prev\n\n    def _add(self, node):\n        node.next = self.head.next\n        node.prev = self.head\n        self.head.next.prev = node\n        self.head.next = node\n\n    def get(self, key: int) -> int:\n        if key in self.cache:\n            node = self.cache[key]\n            self._remove(node)\n            self._add(node)\n            return node.v\n        return -1\n\n    def put(self, key: int, value: int) -> None:\n        if key in self.cache:\n            self._remove(self.cache[key])\n        node = DNode(key, value)\n        self._add(node)\n        self.cache[key] = node\n        if len(self.cache) > self.cap:\n            lru = self.tail.prev\n            self._remove(lru)\n            del self.cache[lru.k]",
     "explanations": {
-      "step_1": "Maintain dummy head (most recently used) and dummy tail (least recently used).",
-      "step_2": "_remove detaches node in O(1); _add splices node right after head in O(1).",
-      "step_3": "get(key): lookup node in hash map, promote to head, return value in O(1).",
-      "step_4": "put(key, val): insert/update node, promote to front, and evict tail.prev if capacity exceeded.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "pointer": "Executes tagged statement [pointer] in python.",
+      "branch": "Executes tagged statement [branch] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   }

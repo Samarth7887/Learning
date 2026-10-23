@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: JAVA - Linked List
+ * SynapseCS Language-Specific Implementation: JAVA - linked-list
  */
 (function(window) {
   'use strict';
@@ -87,13 +87,11 @@
     ],
     "rawCode": "class ListNode {\n    int val;\n    ListNode next;\n    ListNode(int val) { this.val = val; this.next = null; }\n}\npublic class Solution {\n    public static ListNode createList() {\n        ListNode head = new ListNode(10);\n        ListNode second = new ListNode(20);\n        ListNode third = new ListNode(30);\n        head.next = second;\n        second.next = third;\n        return head;\n    }\n}",
     "explanations": {
-      "step_1": "Define the fundamental Node constructor storing the element value and a pointer reference.",
-      "step_2": "Instantiate 3 individual nodes with values 10, 20, and 30 in heap memory.",
-      "step_3": "Link node 10 to node 20, and node 20 to node 30 via forward next pointers.",
-      "step_4": "Return the head pointer pointing to the first node in the sequence.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "pointer": "Executes tagged statement [pointer] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -128,12 +126,11 @@
     ],
     "rawCode": "public static ListNode insertAtHead(ListNode head, int val) {\n    ListNode newNode = new ListNode(val);\n    newNode.next = head;\n    return newNode;\n}",
     "explanations": {
-      "step_1": "Allocate a new heap node holding the target insertion value.",
-      "step_2": "Point the new node's next link to the existing head node.",
-      "step_3": "Return the new node as the updated head of the entire list.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "pointer": "Executes tagged statement [pointer] in java.",
+      "exec": "Executes tagged statement [exec] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -183,12 +180,13 @@
     ],
     "rawCode": "public static ListNode insertAtTail(ListNode head, int val) {\n    ListNode newNode = new ListNode(val);\n    if (head == null) return newNode;\n    ListNode curr = head;\n    while (curr.next != null) curr = curr.next;\n    curr.next = newNode;\n    return head;\n}",
     "explanations": {
-      "step_1": "Handle edge case: if list is empty, newly allocated node is returned as head.",
-      "step_2": "Step through the chain with pointer curr until reaching the node where curr.next is null.",
-      "step_3": "Link the final node to the new node and return the unchanged head pointer.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "pointer": "Executes tagged statement [pointer] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -268,12 +266,13 @@
     ],
     "rawCode": "public static ListNode insertAtK(ListNode head, int index, int val) {\n    if (index == 0) {\n        ListNode n = new ListNode(val);\n        n.next = head;\n        return n;\n    }\n    ListNode curr = head;\n    for (int i = 0; i < index - 1 && curr != null; i++) curr = curr.next;\n    if (curr == null) return head;\n    ListNode n = new ListNode(val);\n    n.next = curr.next;\n    curr.next = n;\n    return head;\n}",
     "explanations": {
-      "step_1": "Handle zero index: delegates directly to O(1) head insertion.",
-      "step_2": "Traverse index-1 steps to stand on the predecessor node right before insertion point.",
-      "step_3": "Crucial order: connect new node to successor first, then connect predecessor to new node.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "pointer": "Executes tagged statement [pointer] in java.",
+      "exec": "Executes tagged statement [exec] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -303,11 +302,10 @@
     ],
     "rawCode": "public static ListNode deleteHead(ListNode head) {\n    if (head == null) return null;\n    return head.next;\n}",
     "explanations": {
-      "step_1": "Verify non-empty boundary condition to prevent accessing null.",
-      "step_2": "Advance head to head.next, deallocating the evicted node where manual memory management applies.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "exec": "Executes tagged statement [exec] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -352,12 +350,12 @@
     ],
     "rawCode": "public static ListNode deleteTail(ListNode head) {\n    if (head == null || head.next == null) return null;\n    ListNode curr = head;\n    while (curr.next.next != null) curr = curr.next;\n    curr.next = null;\n    return head;\n}",
     "explanations": {
-      "step_1": "If list has 0 or 1 node, deleting tail leaves the list empty (NULL).",
-      "step_2": "Scan forward while looking two steps ahead (curr.next.next) to stop on the penultimate node.",
-      "step_3": "Sever the terminal link by setting curr.next to NULL.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "exec": "Executes tagged statement [exec] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -417,12 +415,13 @@
     ],
     "rawCode": "public static ListNode removeElements(ListNode head, int val) {\n    ListNode dummy = new ListNode(0);\n    dummy.next = head;\n    ListNode curr = dummy;\n    while (curr.next != null) {\n        if (curr.next.val == val) curr.next = curr.next.next;\n        else curr = curr.next;\n    }\n    return dummy.next;\n}",
     "explanations": {
-      "step_1": "Initialize dummy node pointing to head, eliminating special-casing when head itself matches target.",
-      "step_2": "If curr.next matches target val, bypass it via curr.next = curr.next.next without advancing curr.",
-      "step_3": "Only advance curr when no deletion occurred, ensuring consecutive duplicates are caught.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "pointer": "Executes tagged statement [pointer] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -482,12 +481,13 @@
     ],
     "rawCode": "public static int searchList(ListNode head, int target) {\n    ListNode curr = head;\n    int idx = 0;\n    while (curr != null) {\n        if (curr.val == target) return idx;\n        curr = curr.next;\n        idx++;\n    }\n    return -1;\n}",
     "explanations": {
-      "step_1": "Set current pointer to head and initialize zero-based index counter.",
-      "step_2": "Check node value against target; if matched, return the index immediately.",
-      "step_3": "Advance pointer and increment counter. If end of list reached, return -1.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "pointer": "Executes tagged statement [pointer] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -542,11 +542,13 @@
     ],
     "rawCode": "public static List<Integer> traverse(ListNode head) {\n    List<Integer> res = new ArrayList<>();\n    ListNode curr = head;\n    while (curr != null) {\n        res.add(curr.val);\n        curr = curr.next;\n    }\n    return res;\n}",
     "explanations": {
-      "step_1": "Allocate dynamic array buffer and set traversal pointer curr = head.",
-      "step_2": "Loop while curr is non-null, appending curr.val and advancing curr to curr.next.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "mutate": "Executes tagged statement [mutate] in java.",
+      "pointer": "Executes tagged statement [pointer] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -591,11 +593,11 @@
     ],
     "rawCode": "public static boolean updateVal(ListNode head, int index, int newVal) {\n    ListNode curr = head;\n    for (int i = 0; i < index && curr != null; i++) curr = curr.next;\n    if (curr == null) return false;\n    curr.val = newVal;\n    return true;\n}",
     "explanations": {
-      "step_1": "Walk forward index times, checking boundary safety.",
-      "step_2": "Mutate node's val directly in memory.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -650,11 +652,12 @@
     ],
     "rawCode": "public static int getSize(ListNode head) {\n    int count = 0;\n    ListNode curr = head;\n    while (curr != null) {\n        count++;\n        curr = curr.next;\n    }\n    return count;\n}",
     "explanations": {
-      "step_1": "Initialize accumulator count to 0 and cursor to head.",
-      "step_2": "Increment count on every node visit until curr becomes null.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "pointer": "Executes tagged statement [pointer] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -719,13 +722,12 @@
     ],
     "rawCode": "public static ListNode reverseList(ListNode head) {\n    ListNode prev = null;\n    ListNode curr = head;\n    while (curr != null) {\n        ListNode nextTemp = curr.next;\n        curr.next = prev;\n        prev = curr;\n        curr = nextTemp;\n    }\n    return prev;\n}",
     "explanations": {
-      "step_1": "Initialize prev = null (which will become the new tail's next pointer) and curr = head.",
-      "step_2": "Save the forward node reference (next_temp = curr.next) before breaking the link.",
-      "step_3": "Point current node backwards: curr.next = prev.",
-      "step_4": "Shift both pointers forward: prev becomes curr, and curr becomes next_temp.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "pointer": "Executes tagged statement [pointer] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -775,12 +777,11 @@
     ],
     "rawCode": "public static ListNode middleNode(ListNode head) {\n    ListNode slow = head, fast = head;\n    while (fast != null && fast.next != null) {\n        slow = slow.next;\n        fast = fast.next.next;\n    }\n    return slow;\n}",
     "explanations": {
-      "step_1": "Initialize both slow and fast pointers to the head node.",
-      "step_2": "Loop while fast and fast.next are valid: advance slow by 1 step and fast by 2 steps.",
-      "step_3": "When fast reaches the end, slow is exactly at the midpoint.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "pointer": "Executes tagged statement [pointer] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -835,12 +836,12 @@
     ],
     "rawCode": "public static boolean hasCycle(ListNode head) {\n    ListNode slow = head, fast = head;\n    while (fast != null && fast.next != null) {\n        slow = slow.next;\n        fast = fast.next.next;\n        if (slow == fast) return true;\n    }\n    return false;\n}",
     "explanations": {
-      "step_1": "Set both pointers to head.",
-      "step_2": "Advance slow by 1 step and fast by 2 steps.",
-      "step_3": "If memory addresses collide (slow == fast), cycle is confirmed. If fast hits null, return false.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "pointer": "Executes tagged statement [pointer] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -920,12 +921,13 @@
     ],
     "rawCode": "public static ListNode mergeTwoLists(ListNode l1, ListNode l2) {\n    ListNode dummy = new ListNode(0);\n    ListNode tail = dummy;\n    while (l1 != null && l2 != null) {\n        if (l1.val <= l2.val) {\n            tail.next = l1; l1 = l1.next;\n        } else {\n            tail.next = l2; l2 = l2.next;\n        }\n        tail = tail.next;\n    }\n    tail.next = (l1 != null) ? l1 : l2;\n    return dummy.next;\n}",
     "explanations": {
-      "step_1": "Create dummy anchor node to build the merged list cleanly.",
-      "step_2": "Compare values: wire tail.next to the smaller node and advance that input pointer.",
-      "step_3": "Attach whichever non-empty list remains in O(1) time and return dummy.next.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "pointer": "Executes tagged statement [pointer] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -995,13 +997,12 @@
     ],
     "rawCode": "public static ListNode removeNthFromEnd(ListNode head, int n) {\n    ListNode dummy = new ListNode(0);\n    dummy.next = head;\n    ListNode fast = dummy, slow = dummy;\n    for (int i = 0; i <= n; i++) fast = fast.next;\n    while (fast != null) {\n        fast = fast.next;\n        slow = slow.next;\n    }\n    slow.next = slow.next.next;\n    return dummy.next;\n}",
     "explanations": {
-      "step_1": "Set dummy node before head so deleting the first element requires no special case.",
-      "step_2": "Advance fast n+1 steps ahead to create a fixed gap between fast and slow.",
-      "step_3": "Slide both pointers forward until fast reaches null. slow is now at predecessor.",
-      "step_4": "Bypass the target node: slow.next = slow.next.next.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "pointer": "Executes tagged statement [pointer] in java.",
+      "exec": "Executes tagged statement [exec] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -1106,12 +1107,13 @@
     ],
     "rawCode": "public static boolean isPalindrome(ListNode head) {\n    ListNode slow = head, fast = head;\n    while (fast != null && fast.next != null) {\n        slow = slow.next; fast = fast.next.next;\n    }\n    ListNode prev = null;\n    while (slow != null) {\n        ListNode nxt = slow.next;\n        slow.next = prev;\n        prev = slow;\n        slow = nxt;\n    }\n    ListNode left = head, right = prev;\n    while (right != null) {\n        if (left.val != right.val) return false;\n        left = left.next; right = right.next;\n    }\n    return true;\n}",
     "explanations": {
-      "step_1": "Find middle node using slow and fast pointers.",
-      "step_2": "Reverse the second half of the list in-place starting from slow.",
-      "step_3": "Compare front half against reversed tail half. If all match, return true.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "pointer": "Executes tagged statement [pointer] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -1266,13 +1268,12 @@
     ],
     "rawCode": "class LRUCache {\n    class DNode { int k, v; DNode prev, next; DNode(int k, int v) { this.k = k; this.v = v; } }\n    private int cap;\n    private Map<Integer, DNode> map = new HashMap<>();\n    private DNode head = new DNode(0, 0), tail = new DNode(0, 0);\n\n    public LRUCache(int capacity) {\n        this.cap = capacity;\n        head.next = tail; tail.prev = head;\n    }\n    private void remove(DNode n) { n.prev.next = n.next; n.next.prev = n.prev; }\n    private void add(DNode n) { n.next = head.next; n.prev = head; head.next.prev = n; head.next = n; }\n\n    public int get(int key) {\n        if (!map.containsKey(key)) return -1;\n        DNode n = map.get(key);\n        remove(n); add(n);\n        return n.v;\n    }\n    public void put(int key, int value) {\n        if (map.containsKey(key)) remove(map.get(key));\n        DNode n = new DNode(key, value);\n        add(n); map.put(key, n);\n        if (map.size() > cap) {\n            DNode lru = tail.prev;\n            remove(lru); map.remove(lru.k);\n        }\n    }\n}",
     "explanations": {
-      "step_1": "Maintain dummy head (most recently used) and dummy tail (least recently used).",
-      "step_2": "_remove detaches node in O(1); _add splices node right after head in O(1).",
-      "step_3": "get(key): lookup node in hash map, promote to head, return value in O(1).",
-      "step_4": "put(key, val): insert/update node, promote to front, and evict tail.prev if capacity exceeded.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "pointer": "Executes tagged statement [pointer] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   }

@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: JAVA - Hashing & Hash Tables
+ * SynapseCS Language-Specific Implementation: JAVA - hashing
  */
 (function(window) {
   'use strict';
@@ -157,13 +157,12 @@
     ],
     "rawCode": "import java.util.*;\n\nclass MyHashMap {\n    static class Node { int k, v; Node(int k, int v) { this.k = k; this.v = v; } }\n    private final int SIZE = 1009;\n    private List<Node>[] buckets = new LinkedList[SIZE];\n\n    public MyHashMap() {\n        for (int i = 0; i < SIZE; i++) buckets[i] = new LinkedList<>();\n    }\n    public void put(int key, int value) {\n        int idx = key % SIZE;\n        for (Node n : buckets[idx]) {\n            if (n.k == key) { n.v = value; return; }\n        }\n        buckets[idx].add(new Node(key, value));\n    }\n    public int get(int key) {\n        int idx = key % SIZE;\n        for (Node n : buckets[idx]) {\n            if (n.k == key) return n.v;\n        }\n        return -1;\n    }\n    public void remove(int key) {\n        int idx = key % SIZE;\n        buckets[idx].removeIf(n -> n.k == key);\n    }\n}",
     "explanations": {
-      "step_1": "Initialize 1009 bucket arrays to spread hashes evenly using prime modulo.",
-      "step_2": "Hash function computes array index: key % size.",
-      "step_3": "Put checks if key already exists to update value; otherwise chains new key-value pair to bucket.",
-      "step_4": "Get hashes key and traverses bucket chain to find matching key.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -278,12 +277,12 @@
     ],
     "rawCode": "import java.util.*;\n\nclass MyHashSet {\n    private final int SIZE = 1009;\n    private List<Integer>[] buckets = new LinkedList[SIZE];\n\n    public MyHashSet() {\n        for (int i = 0; i < SIZE; i++) buckets[i] = new LinkedList<>();\n    }\n    public void add(int key) {\n        int idx = key % SIZE;\n        if (!buckets[idx].contains(key)) buckets[idx].add(key);\n    }\n    public void remove(int key) {\n        int idx = key % SIZE;\n        buckets[idx].remove((Integer)key);\n    }\n    public boolean contains(int key) {\n        return buckets[key % SIZE].contains(key);\n    }\n}",
     "explanations": {
-      "step_1": "Add checks if key is already present in bucket to guarantee set uniqueness.",
-      "step_2": "Remove deletes key from bucket if present.",
-      "step_3": "Contains hashes key and performs linear search on small bucket list.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -358,13 +357,12 @@
     ],
     "rawCode": "import java.util.*;\n\nclass Solution {\n    public int[] twoSum(int[] nums, int target) {\n        Map<Integer, Integer> seen = new HashMap<>();\n        for (int i = 0; i < nums.length; i++) {\n            int comp = target - nums[i];\n            if (seen.containsKey(comp)) return new int[]{seen.get(comp), i};\n            seen.put(nums[i], i);\n        }\n        return new int[]{};\n    }\n}",
     "explanations": {
-      "step_1": "Initialize hash map to store previously seen numbers and their indices.",
-      "step_2": "Calculate complement needed to reach target: target - num.",
-      "step_3": "If complement exists in map, return stored index and current index i.",
-      "step_4": "Otherwise store current number and index in hash map for future lookups.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -444,12 +442,11 @@
     ],
     "rawCode": "import java.util.*;\n\nclass Solution {\n    public List<List<String>> groupAnagrams(String[] strs) {\n        Map<String, List<String>> map = new HashMap<>();\n        for (String s : strs) {\n            char[] chars = s.toCharArray();\n            Arrays.sort(chars);\n            String key = new String(chars);\n            map.computeIfAbsent(key, k -> new ArrayList<>()).add(s);\n        }\n        return new ArrayList<>(map.values());\n    }\n}",
     "explanations": {
-      "step_1": "Create hash map mapping canonical sorted key to list of anagrams.",
-      "step_2": "Sort characters of each word to produce canonical signature (e.g. 'ate' -> 'aet').",
-      "step_3": "Return all grouped anagram arrays from the hash map.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -519,12 +516,12 @@
     ],
     "rawCode": "class Solution {\n    public boolean isAnagram(String s, String t) {\n        if (s.length() != t.length()) return false;\n        int[] counts = new int[26];\n        for (int i = 0; i < s.length(); i++) {\n            counts[s.charAt(i) - 'a']++;\n            counts[t.charAt(i) - 'a']--;\n        }\n        for (int c : counts) if (c != 0) return false;\n        return true;\n    }\n}",
     "explanations": {
-      "step_1": "Early exit: strings with different lengths cannot be anagrams.",
-      "step_2": "Increment bucket for characters in s and decrement for characters in t.",
-      "step_3": "Verify every bucket returned to exactly 0.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -619,12 +616,12 @@
     ],
     "rawCode": "import java.util.*;\n\nclass Solution {\n    public int longestConsecutive(int[] nums) {\n        Set<Integer> set = new HashSet<>();\n        for (int n : nums) set.add(n);\n        int longest = 0;\n        for (int n : set) {\n            if (!set.contains(n - 1)) {\n                int curr = n, streak = 1;\n                while (set.contains(curr + 1)) { curr++; streak++; }\n                longest = Math.max(longest, streak);\n            }\n        }\n        return longest;\n    }\n}",
     "explanations": {
-      "step_1": "Convert array to hash set for O(1) membership checks.",
-      "step_2": "Crucial optimization: only attempt sequence expansion if num - 1 is absent, ensuring we only start from sequence heads.",
-      "step_3": "Count consecutive numbers in set until gap is reached; update global longest.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -709,12 +706,11 @@
     ],
     "rawCode": "import java.util.*;\n\nclass Solution {\n    public int subarraySum(int[] nums, int k) {\n        Map<Integer, Integer> map = new HashMap<>();\n        map.put(0, 1);\n        int sum = 0, count = 0;\n        for (int n : nums) {\n            sum += n;\n            count += map.getOrDefault(sum - k, 0);\n            map.put(sum, map.getOrDefault(sum, 0) + 1);\n        }\n        return count;\n    }\n}",
     "explanations": {
-      "step_1": "Base case {0: 1}: handles subarrays starting from index 0 where curr_sum equals k exactly.",
-      "step_2": "Accumulate current running prefix sum and calculate required previous prefix sum: curr_sum - k.",
-      "step_3": "Add occurrences of needed prefix sum to count, then record curr_sum in map.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -789,12 +785,13 @@
     ],
     "rawCode": "import java.util.*;\n\nclass Solution {\n    public boolean containsNearbyDuplicate(int[] nums, int k) {\n        Set<Integer> set = new HashSet<>();\n        for (int i = 0; i < nums.length; i++) {\n            if (set.contains(nums[i])) return true;\n            set.add(nums[i]);\n            if (set.size() > k) set.remove(nums[i - k]);\n        }\n        return false;\n    }\n}",
     "explanations": {
-      "step_1": "Maintain a hash set holding elements in the active window of size k.",
-      "step_2": "If current element is already in the window set, nearby duplicate exists; return true.",
-      "step_3": "Add current element. If window exceeds k, evict the element that slid out: nums[i - k].",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "mutate": "Executes tagged statement [mutate] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -939,12 +936,12 @@
     ],
     "rawCode": "import java.util.*;\n\nclass RandomizedSet {\n    private List<Integer> nums = new ArrayList<>();\n    private Map<Integer, Integer> map = new HashMap<>();\n    private Random rand = new Random();\n\n    public boolean insert(int val) {\n        if (map.containsKey(val)) return false;\n        map.put(val, nums.size());\n        nums.add(val);\n        return true;\n    }\n    public boolean remove(int val) {\n        if (!map.containsKey(val)) return false;\n        int idx = map.get(val);\n        int last = nums.get(nums.size() - 1);\n        nums.set(idx, last);\n        map.put(last, idx);\n        nums.remove(nums.size() - 1);\n        map.remove(val);\n        return true;\n    }\n    public int getRandom() {\n        return nums.get(rand.nextInt(nums.size()));\n    }\n}",
     "explanations": {
-      "step_1": "Insert: map records val -> index in array; array appends val in O(1).",
-      "step_2": "O(1) Deletion trick: swap target with last element, update moved element's map index, then pop array tail in O(1).",
-      "step_3": "getRandom: generate random index in [0..len-1] and return array element in O(1).",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "mutate": "Executes tagged statement [mutate] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   }

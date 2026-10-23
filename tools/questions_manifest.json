@@ -1,0 +1,448 @@
+{
+  "arrays-strings": [
+    {
+      "id": "arr-basics-create",
+      "title": "Array Memory Layout & Contiguous Allocation",
+      "difficulty": "Basic",
+      "sampleInput": "arr = [10, 20, 30, 40], base = 0x1000",
+      "tracer": "arr-basics-create"
+    },
+    {
+      "id": "arr-rotate",
+      "title": "Rotate Array by K Steps",
+      "difficulty": "Medium",
+      "sampleInput": "nums = [1, 2, 3, 4, 5, 6, 7], k = 3",
+      "tracer": "arr-rotate"
+    },
+    {
+      "id": "two-sum-ii-sorted",
+      "title": "Two Sum II - Input Array Is Sorted",
+      "difficulty": "Medium",
+      "sampleInput": "numbers = [2, 7, 11, 15], target = 9",
+      "tracer": "two-sum-ii-sorted"
+    },
+    {
+      "id": "container-with-most-water",
+      "title": "Container With Most Water",
+      "difficulty": "Medium",
+      "sampleInput": "height = [1,8,6,2,5,4,8,3,7]",
+      "tracer": "container-with-most-water"
+    },
+    {
+      "id": "longest-substring-no-repeat",
+      "title": "Longest Substring Without Repeating Characters",
+      "difficulty": "Medium",
+      "sampleInput": "s = 'abcabcbb'",
+      "tracer": "longest-substring-no-repeat"
+    },
+    {
+      "id": "trapping-rain-water",
+      "title": "Trapping Rain Water",
+      "difficulty": "Hard",
+      "sampleInput": "height = [0,1,0,2,1,0,1,3,2,1,2,1]",
+      "tracer": "trapping-rain-water"
+    },
+    {
+      "id": "maximum-subarray-kadane",
+      "title": "Maximum Subarray (Kadane's Algorithm)",
+      "difficulty": "Medium",
+      "sampleInput": "nums = [-2,1,-3,4,-1,2,1,-5,4]",
+      "tracer": "maximum-subarray-kadane"
+    },
+    {
+      "id": "product-except-self",
+      "title": "Product of Array Except Self",
+      "difficulty": "Medium",
+      "sampleInput": "nums = [1, 2, 3, 4]",
+      "tracer": "product-except-self"
+    },
+    {
+      "id": "merge-intervals",
+      "title": "Merge Intervals",
+      "difficulty": "Medium",
+      "sampleInput": "intervals = [[1,3],[2,6],[8,10],[15,18]]",
+      "tracer": "merge-intervals"
+    }
+  ],
+  "hashing": [
+    {
+      "id": "hash-map-chaining",
+      "title": "Design Hash Map (Separate Chaining)",
+      "difficulty": "Easy",
+      "sampleInput": "put(1, 1), put(2, 2), get(1), get(3), put(2, 1), get(2), remove(2), get(2)",
+      "tracer": "hash-map-chaining"
+    },
+    {
+      "id": "hash-set-impl",
+      "title": "Design Hash Set",
+      "difficulty": "Easy",
+      "sampleInput": "add(1), add(2), contains(1), contains(3), add(2), contains(2), remove(2), contains(2)",
+      "tracer": "hash-set-impl"
+    },
+    {
+      "id": "two-sum",
+      "title": "Two Sum",
+      "difficulty": "Easy",
+      "sampleInput": "nums = [2,7,11,15], target = 9",
+      "tracer": "two-sum"
+    },
+    {
+      "id": "group-anagrams",
+      "title": "Group Anagrams",
+      "difficulty": "Medium",
+      "sampleInput": "strs = ['eat','tea','tan','ate','nat','bat']",
+      "tracer": "group-anagrams"
+    },
+    {
+      "id": "valid-anagram",
+      "title": "Valid Anagram",
+      "difficulty": "Easy",
+      "sampleInput": "s = 'anagram', t = 'nagaram'",
+      "tracer": "valid-anagram"
+    },
+    {
+      "id": "longest-consecutive-sequence",
+      "title": "Longest Consecutive Sequence",
+      "difficulty": "Medium",
+      "sampleInput": "nums = [100, 4, 200, 1, 3, 2]",
+      "tracer": "longest-consecutive-sequence"
+    },
+    {
+      "id": "subarray-sum-equals-k",
+      "title": "Subarray Sum Equals K",
+      "difficulty": "Medium",
+      "sampleInput": "nums = [1, 1, 1], k = 2",
+      "tracer": "subarray-sum-equals-k"
+    },
+    {
+      "id": "contains-duplicate-ii",
+      "title": "Contains Duplicate II (Sliding Window Hash Set)",
+      "difficulty": "Easy",
+      "sampleInput": "nums = [1, 2, 3, 1], k = 3",
+      "tracer": "contains-duplicate-ii"
+    },
+    {
+      "id": "insert-delete-getrandom",
+      "title": "Insert Delete GetRandom O(1)",
+      "difficulty": "Medium",
+      "sampleInput": "insert(1), remove(2), insert(2), getRandom(), remove(1), insert(2), getRandom()",
+      "tracer": "insert-delete-getrandom"
+    }
+  ],
+  "linked-list": [
+    {
+      "id": "ll-create",
+      "title": "Define Node & Initialize Linked List",
+      "difficulty": "Basic",
+      "sampleInput": "[10, 20, 30]",
+      "tracer": "ll-create"
+    },
+    {
+      "id": "ll-insert-head",
+      "title": "Insert Node at Beginning (Head)",
+      "difficulty": "Basic",
+      "sampleInput": "head = [20, 30], val = 5",
+      "tracer": "ll-insert-head"
+    },
+    {
+      "id": "ll-insert-tail",
+      "title": "Insert Node at End (Tail)",
+      "difficulty": "Basic",
+      "sampleInput": "head = [10, 20], val = 30",
+      "tracer": "ll-insert-tail"
+    },
+    {
+      "id": "ll-insert-kth",
+      "title": "Insert Node at Given Index",
+      "difficulty": "Easy",
+      "sampleInput": "head = [10, 30], index = 1, val = 20",
+      "tracer": "ll-insert-kth"
+    },
+    {
+      "id": "ll-delete-head",
+      "title": "Delete Node from Beginning (Head)",
+      "difficulty": "Basic",
+      "sampleInput": "head = [10, 20, 30]",
+      "tracer": "ll-delete-head"
+    },
+    {
+      "id": "ll-delete-tail",
+      "title": "Delete Node from End (Tail)",
+      "difficulty": "Basic",
+      "sampleInput": "head = [10, 20, 30]",
+      "tracer": "ll-delete-tail"
+    },
+    {
+      "id": "ll-delete-val",
+      "title": "Delete Node by Target Value",
+      "difficulty": "Easy",
+      "sampleInput": "head = [1, 2, 6, 3, 4, 5, 6], val = 6",
+      "tracer": "ll-delete-val"
+    },
+    {
+      "id": "ll-search",
+      "title": "Search for an Element in Linked List",
+      "difficulty": "Basic",
+      "sampleInput": "head = [10, 20, 30, 40], target = 30",
+      "tracer": "ll-search"
+    },
+    {
+      "id": "ll-traverse",
+      "title": "Traverse and Collect Values",
+      "difficulty": "Basic",
+      "sampleInput": "head = [4, 8, 15, 16]",
+      "tracer": "ll-traverse"
+    },
+    {
+      "id": "ll-update",
+      "title": "Update Node Value at Index",
+      "difficulty": "Basic",
+      "sampleInput": "head = [10, 20, 30], index = 1, newVal = 99",
+      "tracer": "ll-update"
+    },
+    {
+      "id": "ll-size",
+      "title": "Calculate Length & Check If Empty",
+      "difficulty": "Basic",
+      "sampleInput": "head = [10, 20, 30]",
+      "tracer": "ll-size"
+    },
+    {
+      "id": "ll-reverse",
+      "title": "Reverse Linked List",
+      "difficulty": "Easy",
+      "sampleInput": "head = [1, 2, 3, 4, 5]",
+      "tracer": "ll-reverse"
+    },
+    {
+      "id": "ll-middle",
+      "title": "Middle of the Linked List",
+      "difficulty": "Easy",
+      "sampleInput": "head = [1, 2, 3, 4, 5]",
+      "tracer": "ll-middle"
+    },
+    {
+      "id": "ll-cycle",
+      "title": "Linked List Cycle Detection",
+      "difficulty": "Easy",
+      "sampleInput": "head = [3, 2, 0, -4], pos = 1 (tail connects to node 1)",
+      "tracer": "ll-cycle"
+    },
+    {
+      "id": "ll-merge",
+      "title": "Merge Two Sorted Lists",
+      "difficulty": "Easy",
+      "sampleInput": "list1 = [1, 2, 4], list2 = [1, 3, 4]",
+      "tracer": "ll-merge"
+    },
+    {
+      "id": "ll-remove-nth-end",
+      "title": "Remove Nth Node From End of List",
+      "difficulty": "Medium",
+      "sampleInput": "head = [1, 2, 3, 4, 5], n = 2",
+      "tracer": "ll-remove-nth-end"
+    },
+    {
+      "id": "ll-palindrome",
+      "title": "Palindrome Linked List",
+      "difficulty": "Easy",
+      "sampleInput": "head = [1, 2, 2, 1]",
+      "tracer": "ll-palindrome"
+    },
+    {
+      "id": "ll-lru-cache",
+      "title": "LRU Cache (Doubly Linked List + Hash Map)",
+      "difficulty": "Medium",
+      "sampleInput": "LRUCache(2); put(1,1); put(2,2); get(1); put(3,3); get(2);",
+      "tracer": "ll-lru-cache"
+    }
+  ],
+  "queue": [
+    {
+      "id": "queue-array-impl",
+      "title": "Implement Queue using Dynamic Array",
+      "difficulty": "Basic",
+      "sampleInput": "enqueue(10), enqueue(20), enqueue(30), dequeue(), front()",
+      "tracer": "queue-array-impl"
+    },
+    {
+      "id": "queue-linkedlist-impl",
+      "title": "Implement Queue using Singly Linked List",
+      "difficulty": "Easy",
+      "sampleInput": "enqueue(5), enqueue(15), enqueue(25), dequeue()",
+      "tracer": "queue-linkedlist-impl"
+    },
+    {
+      "id": "queue-circular-array",
+      "title": "Design Circular Queue",
+      "difficulty": "Medium",
+      "sampleInput": "CircularQueue(3): enq(1), enq(2), enq(3), deq(), enq(4), Rear()",
+      "tracer": "queue-circular-array"
+    },
+    {
+      "id": "queue-circular-deque",
+      "title": "Design Circular Deque",
+      "difficulty": "Medium",
+      "sampleInput": "CircularDeque(3): insertLast(1), insertLast(2), insertFront(3), getFront(), getRear()",
+      "tracer": "queue-circular-deque"
+    },
+    {
+      "id": "stack-using-queues",
+      "title": "Implement Stack using Queues",
+      "difficulty": "Easy",
+      "sampleInput": "push(1), push(2), top(), pop(), empty()",
+      "tracer": "stack-using-queues"
+    },
+    {
+      "id": "sliding-window-max",
+      "title": "Sliding Window Maximum",
+      "difficulty": "Hard",
+      "sampleInput": "nums = [1,3,-1,-3,5,3,6,7], k = 3",
+      "tracer": "sliding-window-max"
+    },
+    {
+      "id": "first-unique-char",
+      "title": "First Unique Character in a String",
+      "difficulty": "Easy",
+      "sampleInput": "s = 'leetcode'",
+      "tracer": "first-unique-char"
+    },
+    {
+      "id": "recent-counter",
+      "title": "Number of Recent Calls (Rate Limiter Queue)",
+      "difficulty": "Easy",
+      "sampleInput": "ping(1), ping(100), ping(3001), ping(3002)",
+      "tracer": "recent-counter"
+    },
+    {
+      "id": "rotting-oranges",
+      "title": "Rotting Oranges (Multi-Source BFS)",
+      "difficulty": "Medium",
+      "sampleInput": "grid = [[2,1,1],[1,1,0],[0,1,1]]",
+      "tracer": "rotting-oranges"
+    }
+  ],
+  "stack": [
+    {
+      "id": "stack-array-impl",
+      "title": "Implement Stack using Dynamic Array",
+      "difficulty": "Basic",
+      "sampleInput": "push(10); push(20); pop(); top();",
+      "tracer": "stack-array-impl"
+    },
+    {
+      "id": "stack-ll-impl",
+      "title": "Implement Stack using Singly Linked List",
+      "difficulty": "Basic",
+      "sampleInput": "push(5); push(15); pop();",
+      "tracer": "stack-ll-impl"
+    },
+    {
+      "id": "stack-valid-parens",
+      "title": "Valid Parentheses",
+      "difficulty": "Easy",
+      "sampleInput": "s = \"()[]{}\"",
+      "tracer": "stack-valid-parens"
+    },
+    {
+      "id": "stack-min",
+      "title": "Min Stack with O(1) getMin()",
+      "difficulty": "Medium",
+      "sampleInput": "push(-2); push(0); push(-3); getMin(); pop(); top(); getMin();",
+      "tracer": "stack-min"
+    },
+    {
+      "id": "stack-next-greater",
+      "title": "Next Greater Element I",
+      "difficulty": "Easy",
+      "sampleInput": "nums1 = [4, 1, 2], nums2 = [1, 3, 4, 2]",
+      "tracer": "stack-next-greater"
+    },
+    {
+      "id": "stack-daily-temperatures",
+      "title": "Daily Temperatures (Days to Warmer Weather)",
+      "difficulty": "Medium",
+      "sampleInput": "temperatures = [73, 74, 75, 71, 69, 72, 76, 73]",
+      "tracer": "stack-daily-temperatures"
+    },
+    {
+      "id": "stack-eval-rpn",
+      "title": "Evaluate Reverse Polish Notation (Postfix)",
+      "difficulty": "Medium",
+      "sampleInput": "tokens = [\"2\", \"1\", \"+\", \"3\", \"*\"]",
+      "tracer": "stack-eval-rpn"
+    },
+    {
+      "id": "stack-queue-using-stacks",
+      "title": "Implement Queue using Stacks",
+      "difficulty": "Easy",
+      "sampleInput": "push(1); push(2); peek(); pop(); empty();",
+      "tracer": "stack-queue-using-stacks"
+    },
+    {
+      "id": "stack-simplify-path",
+      "title": "Simplify Unix File Path",
+      "difficulty": "Medium",
+      "sampleInput": "path = \"/home//foo/\"",
+      "tracer": "stack-simplify-path"
+    },
+    {
+      "id": "stack-histogram",
+      "title": "Largest Rectangle in Histogram",
+      "difficulty": "Hard",
+      "sampleInput": "heights = [2, 1, 5, 6, 2, 3]",
+      "tracer": "stack-histogram"
+    }
+  ],
+  "trees": [
+    {
+      "id": "tree-node-create",
+      "title": "Define Tree Node & Build Binary Tree",
+      "difficulty": "Basic",
+      "sampleInput": "root = TreeNode(1); root.left = TreeNode(2); root.right = TreeNode(3)",
+      "tracer": "tree-node-create"
+    },
+    {
+      "id": "tree-inorder-traversal",
+      "title": "Binary Tree Inorder Traversal",
+      "difficulty": "Easy",
+      "sampleInput": "root = [1, null, 2, 3]",
+      "tracer": "tree-inorder-traversal"
+    },
+    {
+      "id": "tree-level-order",
+      "title": "Binary Tree Level Order Traversal (BFS)",
+      "difficulty": "Medium",
+      "sampleInput": "root = [3,9,20,null,null,15,7]",
+      "tracer": "tree-level-order"
+    },
+    {
+      "id": "tree-max-depth",
+      "title": "Maximum Depth of Binary Tree",
+      "difficulty": "Easy",
+      "sampleInput": "root = [3,9,20,null,null,15,7]",
+      "tracer": "tree-max-depth"
+    },
+    {
+      "id": "tree-invert",
+      "title": "Invert / Flip Binary Tree",
+      "difficulty": "Easy",
+      "sampleInput": "root = [4,2,7,1,3,6,9]",
+      "tracer": "tree-invert"
+    },
+    {
+      "id": "tree-validate-bst",
+      "title": "Validate Binary Search Tree",
+      "difficulty": "Medium",
+      "sampleInput": "root = [2, 1, 3]",
+      "tracer": "tree-validate-bst"
+    },
+    {
+      "id": "tree-lca-bst",
+      "title": "Lowest Common Ancestor of a BST",
+      "difficulty": "Medium",
+      "sampleInput": "root = [6,2,8,0,4,7,9], p = 2, q = 8",
+      "tracer": "tree-lca-bst"
+    }
+  ]
+}

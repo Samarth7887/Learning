@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: JAVASCRIPT - Queue & Deque
+ * SynapseCS Language-Specific Implementation: JAVASCRIPT - queue
  */
 (function(window) {
   'use strict';
@@ -127,13 +127,12 @@
     ],
     "rawCode": "class ArrayQueue {\n  constructor() {\n    this.items = [];\n    this.frontIdx = 0;\n  }\n  enqueue(val) { this.items.push(val); }\n  dequeue() {\n    if (this.isEmpty()) return null;\n    return this.items[this.frontIdx++];\n  }\n  front() {\n    return this.isEmpty() ? null : this.items[this.frontIdx];\n  }\n  isEmpty() { return this.frontIdx >= this.items.length; }\n  toList() { return this.items.slice(this.frontIdx); }\n}\n\nconst q = new ArrayQueue();\nq.enqueue(10);\nq.enqueue(20);\nq.enqueue(30);\nq.dequeue();\nconsole.log(JSON.stringify(q.toList()));",
     "explanations": {
-      "step_1": "Initialize an empty list for storage and front_idx = 0 to track the head.",
-      "step_2": "Enqueue simply appends to the end of the array in O(1) time.",
-      "step_3": "Dequeue returns the element at front_idx and increments front_idx by 1, avoiding slow O(N) array shifts.",
-      "step_4": "Front returns the current item at front_idx if the queue is not empty.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "mutate": "Executes tagged statement [mutate] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -298,13 +297,13 @@
     ],
     "rawCode": "class Node {\n  constructor(val) { this.val = val; this.next = null; }\n}\nclass LinkedQueue {\n  constructor() { this.head = null; this.tail = null; }\n  enqueue(val) {\n    const node = new Node(val);\n    if (!this.tail) this.head = this.tail = node;\n    else { this.tail.next = node; this.tail = node; }\n  }\n  dequeue() {\n    if (!this.head) return null;\n    const v = this.head.val;\n    this.head = this.head.next;\n    if (!this.head) this.tail = null;\n    return v;\n  }\n  toList() {\n    const res = [];\n    let curr = this.head;\n    while (curr) { res.push(curr.val); curr = curr.next; }\n    return res;\n  }\n}\n\nconst q = new LinkedQueue();\nq.enqueue(5);\nq.enqueue(15);\nq.enqueue(25);\nq.dequeue();\nconsole.log(JSON.stringify(q.toList()));",
     "explanations": {
-      "step_1": "Standard Node object holding val and pointer to next node.",
-      "step_2": "Initialize queue with head = None and tail = None.",
-      "step_3": "Enqueue: link new node to tail.next and advance tail. If queue was empty, head and tail both become the new node.",
-      "step_4": "Dequeue: advance head to head.next. If head becomes None, clear tail to prevent dangling references.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -494,13 +493,11 @@
     ],
     "rawCode": "class MyCircularQueue {\n  constructor(k) {\n    this.k = k;\n    this.queue = new Array(k);\n    this.head = 0;\n    this.count = 0;\n  }\n  enQueue(val) {\n    if (this.isFull()) return false;\n    const tail = (this.head + this.count) % this.k;\n    this.queue[tail] = val;\n    this.count++;\n    return true;\n  }\n  deQueue() {\n    if (this.isEmpty()) return false;\n    this.head = (this.head + 1) % this.k;\n    this.count--;\n    return true;\n  }\n  Front() { return this.isEmpty() ? -1 : this.queue[this.head]; }\n  Rear() {\n    if (this.isEmpty()) return -1;\n    return this.queue[(this.head + this.count - 1) % this.k];\n  }\n  isEmpty() { return this.count === 0; }\n  isFull() { return this.count === this.k; }\n}\n\nconst cq = new MyCircularQueue(3);\ncq.enQueue(1);\ncq.enQueue(2);\ncq.enQueue(3);\ncq.deQueue();\ncq.enQueue(4);\nconsole.log(cq.Rear());",
     "explanations": {
-      "step_1": "Allocate fixed buffer of size k with head = 0 and counter count = 0.",
-      "step_2": "Calculate tail index as (head + count) % k to wrap back to 0 when reaching end.",
-      "step_3": "Dequeue increments head circularly: (head + 1) % k.",
-      "step_4": "Rear element is located at (head + count - 1) % k.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -735,13 +732,11 @@
     ],
     "rawCode": "class MyCircularDeque {\n  constructor(k) {\n    this.k = k;\n    this.data = new Array(k);\n    this.front = 0;\n    this.count = 0;\n  }\n  insertFront(v) {\n    if (this.isFull()) return false;\n    this.front = (this.front - 1 + this.k) % this.k;\n    this.data[this.front] = v;\n    this.count++;\n    return true;\n  }\n  insertLast(v) {\n    if (this.isFull()) return false;\n    this.data[(this.front + this.count) % this.k] = v;\n    this.count++;\n    return true;\n  }\n  deleteFront() {\n    if (this.isEmpty()) return false;\n    this.front = (this.front + 1) % this.k;\n    this.count--;\n    return true;\n  }\n  deleteLast() {\n    if (this.isEmpty()) return false;\n    this.count--;\n    return true;\n  }\n  getFront() { return this.isEmpty() ? -1 : this.data[this.front]; }\n  getRear() {\n    if (this.isEmpty()) return -1;\n    return this.data[(this.front + this.count - 1) % this.k];\n  }\n  isEmpty() { return this.count === 0; }\n  isFull() { return this.count === this.k; }\n}\n\nconst cd = new MyCircularDeque(3);\ncd.insertLast(1);\ncd.insertLast(2);\ncd.insertFront(3);\nconsole.log(JSON.stringify([cd.getFront(), cd.getRear()]));",
     "explanations": {
-      "step_1": "insertFront steps backwards circularly: (front - 1 + k) % k and places value at the new front.",
-      "step_2": "insertLast calculates the next tail slot as (front + count) % k.",
-      "step_3": "deleteFront moves front forward circularly: (front + 1) % k.",
-      "step_4": "deleteLast simply decrements count without moving front.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -836,12 +831,11 @@
     ],
     "rawCode": "class MyStack {\n  constructor() { this.q = []; }\n  push(x) {\n    this.q.push(x);\n    for (let i = 0; i < this.q.length - 1; i++) {\n      this.q.push(this.q.shift());\n    }\n  }\n  pop() { return this.q.shift(); }\n  top() { return this.q[0]; }\n  empty() { return this.q.length === 0; }\n}\n\nconst s = new MyStack();\ns.push(1);\ns.push(2);\nconsole.log(JSON.stringify([s.top(), s.pop(), s.empty()]));",
     "explanations": {
-      "step_1": "Push new element to queue, then rotate (size - 1) elements by popping from front and appending to rear.",
-      "step_2": "Pop simply dequeues from the front of the queue in O(1) time.",
-      "step_3": "Top inspects the front element.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "mutate": "Executes tagged statement [mutate] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -916,12 +910,13 @@
     ],
     "rawCode": "function maxSlidingWindow(nums, k) {\n  const q = []; // deque of indices\n  const res = [];\n  for (let i = 0; i < nums.length; i++) {\n    if (q.length && q[0] < i - k + 1) q.shift();\n    while (q.length && nums[q[q.length - 1]] < nums[i]) q.pop();\n    q.push(i);\n    if (i >= k - 1) res.push(nums[q[0]]);\n  }\n  return res;\n}\n\nconsole.log(JSON.stringify(maxSlidingWindow([1,3,-1,-3,5,3,6,7], 3)));",
     "explanations": {
-      "step_1": "If front index is older than i - k + 1, it has slipped out of the window; remove it.",
-      "step_2": "While current number is greater than numbers at rear of deque, pop them. They can never be maximums again.",
-      "step_3": "Append current index. Once window size >= k, record nums[q[0]] as window max.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "mutate": "Executes tagged statement [mutate] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -981,12 +976,12 @@
     ],
     "rawCode": "function firstUniqChar(s) {\n  const counts = {};\n  for (const ch of s) counts[ch] = (counts[ch] || 0) + 1;\n  for (let i = 0; i < s.length; i++) {\n    if (counts[s[i]] === 1) return i;\n  }\n  return -1;\n}\n\nconsole.log(firstUniqChar(\"leetcode\"));",
     "explanations": {
-      "step_1": "Build frequency hash map counting occurrences of each character.",
-      "step_2": "Traverse the string from left to right; return index of first character with frequency 1.",
-      "step_3": "If no unique character is found, return -1.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -1051,12 +1046,12 @@
     ],
     "rawCode": "class RecentCounter {\n  constructor() { this.q = []; }\n  ping(t) {\n    this.q.push(t);\n    while (this.q[0] < t - 3000) this.q.shift();\n    return this.q.length;\n  }\n}\n\nconst rc = new RecentCounter();\nconsole.log(JSON.stringify([rc.ping(1), rc.ping(100), rc.ping(3001), rc.ping(3002)]));",
     "explanations": {
-      "step_1": "Enqueue incoming request timestamp t into the queue.",
-      "step_2": "Evict older calls that fall before the sliding 3000ms window (t - 3000).",
-      "step_3": "Return current queue length representing active calls in the window.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "mutate": "Executes tagged statement [mutate] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -1226,12 +1221,13 @@
     ],
     "rawCode": "function orangesRotting(grid) {\n  const rows = grid.length, cols = grid[0].length;\n  const q = [];\n  let fresh = 0;\n  for (let r = 0; r < rows; r++) {\n    for (let c = 0; c < cols; c++) {\n      if (grid[r][c] === 2) q.push([r, c]);\n      else if (grid[r][c] === 1) fresh++;\n    }\n  }\n  if (fresh === 0) return 0;\n  let minutes = 0;\n  const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];\n  while (q.length && fresh > 0) {\n    minutes++;\n    const sz = q.length;\n    for (let i = 0; i < sz; i++) {\n      const [r, c] = q.shift();\n      for (const [dr, dc] of dirs) {\n        const nr = r + dr, nc = c + dc;\n        if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] === 1) {\n          grid[nr][nc] = 2;\n          fresh--;\n          q.push([nr, nc]);\n        }\n      }\n    }\n  }\n  return fresh === 0 ? minutes : -1;\n}\n\nconsole.log(orangesRotting([[2,1,1],[1,1,0],[0,1,1]]));",
     "explanations": {
-      "step_1": "Scan grid: enqueue all rotten oranges (multi-source seeds) and count fresh ones.",
-      "step_2": "Process BFS layer by layer: each while iteration corresponds to 1 minute of rotting propagation.",
-      "step_3": "Infect adjacent fresh neighbors (4 directions), mark them rotten (2), decrement fresh count, and enqueue.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "mutate": "Executes tagged statement [mutate] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   }

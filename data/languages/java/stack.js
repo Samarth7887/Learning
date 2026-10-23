@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: JAVA - Stack
+ * SynapseCS Language-Specific Implementation: JAVA - stack
  */
 (function(window) {
   'use strict';
@@ -82,13 +82,12 @@
     ],
     "rawCode": "public class ArrayStack {\n    private List<Integer> data = new ArrayList<>();\n    public void push(int val) { data.add(val); }\n    public int pop() {\n        if (isEmpty()) throw new EmptyStackException();\n        return data.remove(data.size() - 1);\n    }\n    public int top() {\n        if (isEmpty()) throw new EmptyStackException();\n        return data.get(data.size() - 1);\n    }\n    public boolean isEmpty() { return data.isEmpty(); }\n    public int size() { return data.size(); }\n}",
     "explanations": {
-      "step_1": "Initialize underlying contiguous array buffer.",
-      "step_2": "push: append item to the end of the array buffer in O(1) amortized time.",
-      "step_3": "pop: remove and return the last item in O(1) time after checking non-empty.",
-      "step_4": "top: peek at index data.length - 1 without removing it.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "mutate": "Executes tagged statement [mutate] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -158,11 +157,12 @@
     ],
     "rawCode": "public class LLStack {\n    private class Node { int val; Node next; Node(int v, Node n) { val = v; next = n; } }\n    private Node head = null;\n    private int count = 0;\n    public void push(int val) { head = new Node(val, head); count++; }\n    public int pop() {\n        if (head == null) throw new EmptyStackException();\n        int val = head.val; head = head.next; count--;\n        return val;\n    }\n    public int top() { return (head != null) ? head.val : -1; }\n}",
     "explanations": {
-      "step_1": "push: allocate new node whose next points to current head, re-anchoring head to the new node in O(1).",
-      "step_2": "pop: save head.val, advance head = head.next, and decrement count in O(1).",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "pointer": "Executes tagged statement [pointer] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -222,13 +222,12 @@
     ],
     "rawCode": "public static boolean isValid(String s) {\n    Deque<Character> stack = new ArrayDeque<>();\n    for (char c : s.toCharArray()) {\n        if (c == '(') stack.push(')');\n        else if (c == '{') stack.push('}');\n        else if (c == '[') stack.push(']');\n        else if (stack.isEmpty() || stack.pop() != c) return false;\n    }\n    return stack.isEmpty();\n}",
     "explanations": {
-      "step_1": "Initialize LIFO stack and opening/closing bracket pairing map.",
-      "step_2": "If current character is a closing bracket, pop from stack and verify matching pair.",
-      "step_3": "If current character is an opening bracket, push onto stack.",
-      "step_4": "At completion, stack must be completely empty (all opened brackets resolved).",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "exec": "Executes tagged statement [exec] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -298,13 +297,10 @@
     ],
     "rawCode": "class MinStack {\n    private Deque<Integer> stack = new ArrayDeque<>();\n    private Deque<Integer> minStack = new ArrayDeque<>();\n    public void push(int val) {\n        stack.push(val);\n        int curMin = minStack.isEmpty() ? val : Math.min(val, minStack.peek());\n        minStack.push(curMin);\n    }\n    public void pop() { stack.pop(); minStack.pop(); }\n    public int top() { return stack.peek(); }\n    public int getMin() { return minStack.peek(); }\n}",
     "explanations": {
-      "step_1": "Maintain main storage stack and parallel minimum tracker stack.",
-      "step_2": "push: append new element and compute new minimum relative to previous minStack top.",
-      "step_3": "pop: remove from both stacks in lockstep, preserving previous minimum context.",
-      "step_4": "getMin: return top of minStack in O(1) without scanning.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "mutate": "Executes tagged statement [mutate] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -379,12 +375,12 @@
     ],
     "rawCode": "public static int[] nextGreaterElement(int[] nums1, int[] nums2) {\n    Map<Integer, Integer> map = new HashMap<>();\n    Deque<Integer> stack = new ArrayDeque<>();\n    for (int num : nums2) {\n        while (!stack.isEmpty() && stack.peek() < num) {\n            map.put(stack.pop(), num);\n        }\n        stack.push(num);\n    }\n    int[] res = new int[nums1.length];\n    for (int i = 0; i < nums1.length; i++) res[i] = map.getOrDefault(nums1[i], -1);\n    return res;\n}",
     "explanations": {
-      "step_1": "Initialize hash map to store results and stack to maintain decreasing elements.",
-      "step_2": "Whenever current number is greater than stack top, resolve top's next greater element and pop it.",
-      "step_3": "Map queries in nums1 directly to O(1) results from hash map.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "mutate": "Executes tagged statement [mutate] in java.",
+      "exec": "Executes tagged statement [exec] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -459,12 +455,12 @@
     ],
     "rawCode": "public static int[] dailyTemperatures(int[] temperatures) {\n    int n = temperatures.length;\n    int[] res = new int[n];\n    Deque<Integer> stack = new ArrayDeque<>();\n    for (int i = 0; i < n; i++) {\n        while (!stack.isEmpty() && temperatures[stack.peek()] < temperatures[i]) {\n            int prevI = stack.pop();\n            res[prevI] = i - prevI;\n        }\n        stack.push(i);\n    }\n    return res;\n}",
     "explanations": {
-      "step_1": "Allocate answer array initialized with 0s and initialize monotonic stack of indices.",
-      "step_2": "When today is warmer than stack top day, pop previous day and compute elapsed days (i - prev_i).",
-      "step_3": "Push today's index onto the stack.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "mutate": "Executes tagged statement [mutate] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -549,11 +545,13 @@
     ],
     "rawCode": "public static int evalRPN(String[] tokens) {\n    Deque<Integer> stack = new ArrayDeque<>();\n    for (String s : tokens) {\n        if (\"+-*/\".contains(s) && s.length() == 1) {\n            int b = stack.pop(), a = stack.pop();\n            if (s.equals(\"+\")) stack.push(a + b);\n            else if (s.equals(\"-\")) stack.push(a - b);\n            else if (s.equals(\"*\")) stack.push(a * b);\n            else stack.push(a / b);\n        } else {\n            stack.push(Integer.parseInt(s));\n        }\n    }\n    return stack.pop();\n}",
     "explanations": {
-      "step_1": "Pop second operand (b) first, then first operand (a). Order matters for subtraction and division.",
-      "step_2": "Apply operation (a op b) and push computed result back onto the stack.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "mutate": "Executes tagged statement [mutate] in java.",
+      "exec": "Executes tagged statement [exec] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -628,11 +626,13 @@
     ],
     "rawCode": "class MyQueue {\n    private Deque<Integer> inSt = new ArrayDeque<>();\n    private Deque<Integer> outSt = new ArrayDeque<>();\n    public void push(int x) { inSt.push(x); }\n    public int pop() { peek(); return outSt.pop(); }\n    public int peek() {\n        if (outSt.isEmpty()) {\n            while (!inSt.isEmpty()) outSt.push(inSt.pop());\n        }\n        return outSt.peek();\n    }\n    public boolean empty() { return inSt.isEmpty() && outSt.isEmpty(); }\n}",
     "explanations": {
-      "step_1": "push: simply append to in_stack in O(1).",
-      "step_2": "peek/pop: if out_stack is dry, dump in_stack into out_stack, reversing the stack order into FIFO order.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "mutate": "Executes tagged statement [mutate] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -712,13 +712,13 @@
     ],
     "rawCode": "public static String simplifyPath(String path) {\n    Deque<String> stack = new ArrayDeque<>();\n    for (String part : path.split(\"/\")) {\n        if (part.isEmpty() || part.equals(\".\")) continue;\n        if (part.equals(\"..\")) {\n            if (!stack.isEmpty()) stack.pop();\n        } else {\n            stack.push(part);\n        }\n    }\n    List<String> list = new ArrayList<>(stack);\n    Collections.reverse(list);\n    return \"/\" + String.join(\"/\", list);\n}",
     "explanations": {
-      "step_1": "Ignore consecutive slashes (empty string) and '.' current directory tokens.",
-      "step_2": "When '..' appears, pop the parent directory from stack if stack is not at root.",
-      "step_3": "Push actual directory names onto the stack.",
-      "step_4": "Assemble canonical path by joining stack elements with leading root '/'.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "mutate": "Executes tagged statement [mutate] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -798,11 +798,12 @@
     ],
     "rawCode": "public static int largestRectangleArea(int[] heights) {\n    int n = heights.length, maxArea = 0;\n    Deque<Integer> stack = new ArrayDeque<>();\n    for (int i = 0; i <= n; i++) {\n        int h = (i == n) ? 0 : heights[i];\n        while (!stack.isEmpty() && heights[stack.peek()] >= h) {\n            int height = heights[stack.pop()];\n            int width = stack.isEmpty() ? i : i - stack.peek() - 1;\n            maxArea = Math.max(maxArea, height * width);\n        }\n        stack.push(i);\n    }\n    return maxArea;\n}",
     "explanations": {
-      "step_1": "Append 0-height sentinel at end so all pending bars in stack are flushed.",
-      "step_2": "While current bar is shorter than stack top, pop top: height is heights[popped], width extends between left boundary (stack.top) and right boundary (i).",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "mutate": "Executes tagged statement [mutate] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   }

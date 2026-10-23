@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: JAVA - Queue & Deque
+ * SynapseCS Language-Specific Implementation: JAVA - queue
  */
 (function(window) {
   'use strict';
@@ -112,13 +112,12 @@
     ],
     "rawCode": "import java.util.*;\n\npublic class ArrayQueue {\n    private List<Integer> items = new ArrayList<>();\n    private int frontIdx = 0;\n\n    public void enqueue(int val) { items.add(val); }\n    public Integer dequeue() {\n        if (isEmpty()) return null;\n        return items.get(frontIdx++);\n    }\n    public Integer front() {\n        if (isEmpty()) return null;\n        return items.get(frontIdx);\n    }\n    public boolean isEmpty() { return frontIdx >= items.size(); }\n    public List<Integer> toList() {\n        return items.subList(frontIdx, items.size());\n    }\n}",
     "explanations": {
-      "step_1": "Initialize an empty list for storage and front_idx = 0 to track the head.",
-      "step_2": "Enqueue simply appends to the end of the array in O(1) time.",
-      "step_3": "Dequeue returns the element at front_idx and increments front_idx by 1, avoiding slow O(N) array shifts.",
-      "step_4": "Front returns the current item at front_idx if the queue is not empty.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java.",
+      "mutate": "Executes tagged statement [mutate] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -228,13 +227,12 @@
     ],
     "rawCode": "public class LinkedQueue {\n    static class Node {\n        int val; Node next;\n        Node(int v) { val = v; }\n    }\n    private Node head = null, tail = null;\n\n    public void enqueue(int v) {\n        Node n = new Node(v);\n        if (tail == null) head = tail = n;\n        else { tail.next = n; tail = n; }\n    }\n    public Integer dequeue() {\n        if (head == null) return null;\n        int v = head.val;\n        head = head.next;\n        if (head == null) tail = null;\n        return v;\n    }\n}",
     "explanations": {
-      "step_1": "Standard Node object holding val and pointer to next node.",
-      "step_2": "Initialize queue with head = None and tail = None.",
-      "step_3": "Enqueue: link new node to tail.next and advance tail. If queue was empty, head and tail both become the new node.",
-      "step_4": "Dequeue: advance head to head.next. If head becomes None, clear tail to prevent dangling references.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "branch": "Executes tagged statement [branch] in java.",
+      "pointer": "Executes tagged statement [pointer] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -369,13 +367,11 @@
     ],
     "rawCode": "class MyCircularQueue {\n    private int[] data;\n    private int head = 0, count = 0, capacity;\n\n    public MyCircularQueue(int k) {\n        data = new int[k];\n        capacity = k;\n    }\n    public boolean enQueue(int value) {\n        if (isFull()) return false;\n        data[(head + count) % capacity] = value;\n        count++;\n        return true;\n    }\n    public boolean deQueue() {\n        if (isEmpty()) return false;\n        head = (head + 1) % capacity;\n        count--;\n        return true;\n    }\n    public int Front() { return isEmpty() ? -1 : data[head]; }\n    public int Rear() { return isEmpty() ? -1 : data[(head + count - 1) % capacity]; }\n    public boolean isEmpty() { return count == 0; }\n    public boolean isFull() { return count == capacity; }\n}",
     "explanations": {
-      "step_1": "Allocate fixed buffer of size k with head = 0 and counter count = 0.",
-      "step_2": "Calculate tail index as (head + count) % k to wrap back to 0 when reaching end.",
-      "step_3": "Dequeue increments head circularly: (head + 1) % k.",
-      "step_4": "Rear element is located at (head + count - 1) % k.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -550,13 +546,11 @@
     ],
     "rawCode": "class MyCircularDeque {\n    private int[] data;\n    private int front = 0, count = 0, k;\n    public MyCircularDeque(int k) { this.k = k; data = new int[k]; }\n    public boolean insertFront(int v) {\n        if (isFull()) return false;\n        front = (front - 1 + k) % k;\n        data[front] = v;\n        count++;\n        return true;\n    }\n    public boolean insertLast(int v) {\n        if (isFull()) return false;\n        data[(front + count) % k] = v;\n        count++;\n        return true;\n    }\n    public boolean deleteFront() {\n        if (isEmpty()) return false;\n        front = (front + 1) % k;\n        count--;\n        return true;\n    }\n    public boolean deleteLast() {\n        if (isEmpty()) return false;\n        count--;\n        return true;\n    }\n    public int getFront() { return isEmpty() ? -1 : data[front]; }\n    public int getRear() { return isEmpty() ? -1 : data[(front + count - 1) % k]; }\n    public boolean isEmpty() { return count == 0; }\n    public boolean isFull() { return count == k; }\n}",
     "explanations": {
-      "step_1": "insertFront steps backwards circularly: (front - 1 + k) % k and places value at the new front.",
-      "step_2": "insertLast calculates the next tail slot as (front + count) % k.",
-      "step_3": "deleteFront moves front forward circularly: (front + 1) % k.",
-      "step_4": "deleteLast simply decrements count without moving front.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -641,12 +635,11 @@
     ],
     "rawCode": "import java.util.*;\n\nclass MyStack {\n    private Queue<Integer> q = new LinkedList<>();\n\n    public void push(int x) {\n        q.add(x);\n        for (int i = 0; i < q.size() - 1; i++) {\n            q.add(q.remove());\n        }\n    }\n    public int pop() { return q.remove(); }\n    public int top() { return q.peek(); }\n    public boolean empty() { return q.isEmpty(); }\n}",
     "explanations": {
-      "step_1": "Push new element to queue, then rotate (size - 1) elements by popping from front and appending to rear.",
-      "step_2": "Pop simply dequeues from the front of the queue in O(1) time.",
-      "step_3": "Top inspects the front element.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java.",
+      "mutate": "Executes tagged statement [mutate] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -741,12 +734,12 @@
     ],
     "rawCode": "import java.util.*;\n\nclass Solution {\n    public int[] maxSlidingWindow(int[] nums, int k) {\n        Deque<Integer> q = new ArrayDeque<>();\n        int[] res = new int[nums.length - k + 1];\n        int ri = 0;\n        \n        for (int i = 0; i < nums.length; i++) {\n            if (!q.isEmpty() && q.peekFirst() < i - k + 1) q.pollFirst();\n            while (!q.isEmpty() && nums[q.peekLast()] < nums[i]) q.pollLast();\n            q.offerLast(i);\n            if (i >= k - 1) res[ri++] = nums[q.peekFirst()];\n        }\n        return res;\n    }\n}",
     "explanations": {
-      "step_1": "If front index is older than i - k + 1, it has slipped out of the window; remove it.",
-      "step_2": "While current number is greater than numbers at rear of deque, pop them. They can never be maximums again.",
-      "step_3": "Append current index. Once window size >= k, record nums[q[0]] as window max.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -806,12 +799,12 @@
     ],
     "rawCode": "class Solution {\n    public int firstUniqChar(String s) {\n        int[] freq = new int[26];\n        for (char c : s.toCharArray()) freq[c - 'a']++;\n        for (int i = 0; i < s.length(); i++) {\n            if (freq[s.charAt(i) - 'a'] == 1) return i;\n        }\n        return -1;\n    }\n}",
     "explanations": {
-      "step_1": "Build frequency hash map counting occurrences of each character.",
-      "step_2": "Traverse the string from left to right; return index of first character with frequency 1.",
-      "step_3": "If no unique character is found, return -1.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in java.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -871,12 +864,12 @@
     ],
     "rawCode": "import java.util.*;\n\nclass RecentCounter {\n    private Queue<Integer> q = new LinkedList<>();\n    public int ping(int t) {\n        q.add(t);\n        while (q.peek() < t - 3000) q.poll();\n        return q.size();\n    }\n}",
     "explanations": {
-      "step_1": "Enqueue incoming request timestamp t into the queue.",
-      "step_2": "Evict older calls that fall before the sliding 3000ms window (t - 3000).",
-      "step_3": "Return current queue length representing active calls in the window.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java.",
+      "mutate": "Executes tagged statement [mutate] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   },
@@ -1046,12 +1039,12 @@
     ],
     "rawCode": "import java.util.*;\n\nclass Solution {\n    public int orangesRotting(int[][] grid) {\n        int rows = grid.length, cols = grid[0].length;\n        Queue<int[]> q = new LinkedList<>();\n        int fresh = 0;\n        for (int r = 0; r < rows; r++) {\n            for (int c = 0; c < cols; c++) {\n                if (grid[r][c] == 2) q.offer(new int[]{r, c});\n                else if (grid[r][c] == 1) fresh++;\n            }\n        }\n        if (fresh == 0) return 0;\n        int minutes = 0;\n        int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};\n        while (!q.isEmpty() && fresh > 0) {\n            minutes++;\n            int size = q.size();\n            for (int i = 0; i < size; i++) {\n                int[] curr = q.poll();\n                for (int[] d : dirs) {\n                    int nr = curr[0] + d[0], nc = curr[1] + d[1];\n                    if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] == 1) {\n                        grid[nr][nc] = 2; fresh--; q.offer(new int[]{nr, nc});\n                    }\n                }\n            }\n        }\n        return fresh == 0 ? minutes : -1;\n    }\n}",
     "explanations": {
-      "step_1": "Scan grid: enqueue all rotten oranges (multi-source seeds) and count fresh ones.",
-      "step_2": "Process BFS layer by layer: each while iteration corresponds to 1 minute of rotting propagation.",
-      "step_3": "Infect adjacent fresh neighbors (4 directions), mark them rotten (2), decrement fresh count, and enqueue.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in java.",
+      "def": "Executes tagged statement [def] in java.",
+      "branch": "Executes tagged statement [branch] in java."
     },
     "notes": "Java garbage collector manages object lifecycles on the JVM heap."
   }

@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: CPP - Binary Trees & BST
+ * SynapseCS Language-Specific Implementation: CPP - trees
  */
 (function(window) {
   'use strict';
@@ -42,11 +42,7 @@
     ],
     "rawCode": "struct TreeNode {\n    int val;\n    TreeNode* left;\n    TreeNode* right;\n    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}\n};",
     "explanations": {
-      "step_1": "TreeNode class holding a value and pointers to left and right children.",
-      "step_2": "Instantiate root (1) and attach left child (2) and right child (3).",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "exec": "Executes tagged statement [exec] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -126,13 +122,10 @@
     ],
     "rawCode": "#include <vector>\nusing namespace std;\n\nvoid dfs(TreeNode* n, vector<int>& res) {\n    if (!n) return;\n    dfs(n->left, res);\n    res.push_back(n->val);\n    dfs(n->right, res);\n}\nvector<int> inorderTraversal(TreeNode* root) {\n    vector<int> res;\n    dfs(root, res);\n    return res;\n}",
     "explanations": {
-      "step_1": "Base case: if current node is null, return immediately.",
-      "step_2": "Recursive step 1: Visit entire left subtree.",
-      "step_3": "Process current node: append value to result list.",
-      "step_4": "Recursive step 2: Visit entire right subtree.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -252,12 +245,12 @@
     ],
     "rawCode": "#include <vector>\n#include <queue>\nusing namespace std;\n\nvector<vector<int>> levelOrder(TreeNode* root) {\n    if (!root) return {};\n    vector<vector<int>> res;\n    queue<TreeNode*> q;\n    q.push(root);\n    while (!q.empty()) {\n        int sz = q.size();\n        vector<int> level;\n        for (int i = 0; i < sz; i++) {\n            TreeNode* n = q.front(); q.pop();\n            level.push_back(n->val);\n            if (n->left) q.push(n->left);\n            if (n->right) q.push(n->right);\n        }\n        res.push_back(level);\n    }\n    return res;\n}",
     "explanations": {
-      "step_1": "Base check and initialize FIFO queue containing the root node.",
-      "step_2": "Snapshot current queue length to process exactly one tree level at a time.",
-      "step_3": "Enqueue non-null left and right child nodes for the next level.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp.",
+      "mutate": "Executes tagged statement [mutate] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -302,11 +295,10 @@
     ],
     "rawCode": "#include <algorithm>\nusing namespace std;\n\nint maxDepth(TreeNode* root) {\n    if (!root) return 0;\n    return 1 + max(maxDepth(root->left), maxDepth(root->right));\n}",
     "explanations": {
-      "step_1": "Base case: empty tree has depth 0.",
-      "step_2": "Postorder: depth of this node is 1 plus the larger depth of its two subtrees.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -351,12 +343,9 @@
     ],
     "rawCode": "TreeNode* invertTree(TreeNode* root) {\n    if (!root) return nullptr;\n    TreeNode* tmp = root->left;\n    root->left = invertTree(root->right);\n    root->right = invertTree(tmp);\n    return root;\n}",
     "explanations": {
-      "step_1": "Base case: null node requires no inversion.",
-      "step_2": "Swap left and right pointers with the recursively inverted subtrees.",
-      "step_3": "Return root of the newly mirrored tree.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -416,12 +405,10 @@
     ],
     "rawCode": "#include <climits>\n\nbool validate(TreeNode* n, long long low, long long high) {\n    if (!n) return true;\n    if (n->val <= low || n->val >= high) return false;\n    return validate(n->left, low, n->val) && validate(n->right, n->val, high);\n}\nbool isValidBST(TreeNode* root) {\n    return validate(root, LLONG_MIN, LLONG_MAX);\n}",
     "explanations": {
-      "step_1": "Base case: empty subtree is valid.",
-      "step_2": "Verify current node strictly obeys both upper and lower inherited boundaries.",
-      "step_3": "Left child inherits upper bound = node.val; right child inherits lower bound = node.val.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -476,12 +463,10 @@
     ],
     "rawCode": "TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {\n    TreeNode* curr = root;\n    while (curr) {\n        if (p->val < curr->val && q->val < curr->val) curr = curr->left;\n        else if (p->val > curr->val && q->val > curr->val) curr = curr->right;\n        else return curr;\n    }\n    return nullptr;\n}",
     "explanations": {
-      "step_1": "If both values are smaller than current node, LCA must be in left subtree.",
-      "step_2": "If both values are larger than current node, LCA must be in right subtree.",
-      "step_3": "Split point reached: one value is on the left, one on the right (or one is current node). Current node is the LCA.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   }

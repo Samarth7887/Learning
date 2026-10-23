@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: CPP - Queue & Deque
+ * SynapseCS Language-Specific Implementation: CPP - queue
  */
 (function(window) {
   'use strict';
@@ -102,13 +102,12 @@
     ],
     "rawCode": "#include <vector>\nusing namespace std;\n\nclass ArrayQueue {\n    vector<int> items;\n    int frontIdx = 0;\npublic:\n    void enqueue(int val) { items.push_back(val); }\n    int dequeue() {\n        if (isEmpty()) return -1;\n        return items[frontIdx++];\n    }\n    int front() {\n        if (isEmpty()) return -1;\n        return items[frontIdx];\n    }\n    bool isEmpty() { return frontIdx >= (int)items.size(); }\n};",
     "explanations": {
-      "step_1": "Initialize an empty list for storage and front_idx = 0 to track the head.",
-      "step_2": "Enqueue simply appends to the end of the array in O(1) time.",
-      "step_3": "Dequeue returns the element at front_idx and increments front_idx by 1, avoiding slow O(N) array shifts.",
-      "step_4": "Front returns the current item at front_idx if the queue is not empty.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "def": "Executes tagged statement [def] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -218,13 +217,12 @@
     ],
     "rawCode": "class LinkedQueue {\n    struct Node { int val; Node* next; Node(int v): val(v), next(nullptr) {} };\n    Node* head = nullptr;\n    Node* tail = nullptr;\npublic:\n    void enqueue(int val) {\n        Node* n = new Node(val);\n        if (!tail) head = tail = n;\n        else { tail->next = n; tail = n; }\n    }\n    int dequeue() {\n        if (!head) return -1;\n        int val = head->val;\n        Node* tmp = head;\n        head = head->next;\n        if (!head) tail = nullptr;\n        delete tmp;\n        return val;\n    }\n};",
     "explanations": {
-      "step_1": "Standard Node object holding val and pointer to next node.",
-      "step_2": "Initialize queue with head = None and tail = None.",
-      "step_3": "Enqueue: link new node to tail.next and advance tail. If queue was empty, head and tail both become the new node.",
-      "step_4": "Dequeue: advance head to head.next. If head becomes None, clear tail to prevent dangling references.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp.",
+      "pointer": "Executes tagged statement [pointer] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -359,13 +357,12 @@
     ],
     "rawCode": "#include <vector>\nusing namespace std;\n\nclass MyCircularQueue {\n    vector<int> data;\n    int head = 0, count = 0, cap;\npublic:\n    MyCircularQueue(int k) : data(k), cap(k) {}\n    bool enQueue(int value) {\n        if (isFull()) return false;\n        data[(head + count) % cap] = value;\n        count++;\n        return true;\n    }\n    bool deQueue() {\n        if (isEmpty()) return false;\n        head = (head + 1) % cap;\n        count--;\n        return true;\n    }\n    int Front() { return isEmpty() ? -1 : data[head]; }\n    int Rear() { return isEmpty() ? -1 : data[(head + count - 1) % cap]; }\n    bool isEmpty() { return count == 0; }\n    bool isFull() { return count == cap; }\n};",
     "explanations": {
-      "step_1": "Allocate fixed buffer of size k with head = 0 and counter count = 0.",
-      "step_2": "Calculate tail index as (head + count) % k to wrap back to 0 when reaching end.",
-      "step_3": "Dequeue increments head circularly: (head + 1) % k.",
-      "step_4": "Rear element is located at (head + count - 1) % k.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "def": "Executes tagged statement [def] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -560,13 +557,12 @@
     ],
     "rawCode": "#include <vector>\nusing namespace std;\n\nclass MyCircularDeque {\n    vector<int> data;\n    int front = 0, count = 0, k;\npublic:\n    MyCircularDeque(int k) : data(k), k(k) {}\n    bool insertFront(int v) {\n        if (isFull()) return false;\n        front = (front - 1 + k) % k;\n        data[front] = v;\n        count++;\n        return true;\n    }\n    bool insertLast(int v) {\n        if (isFull()) return false;\n        data[(front + count) % k] = v;\n        count++;\n        return true;\n    }\n    bool deleteFront() {\n        if (isEmpty()) return false;\n        front = (front + 1) % k;\n        count--;\n        return true;\n    }\n    bool deleteLast() {\n        if (isEmpty()) return false;\n        count--;\n        return true;\n    }\n    int getFront() { return isEmpty() ? -1 : data[front]; }\n    int getRear() { return isEmpty() ? -1 : data[(front + count - 1) % k]; }\n    bool isEmpty() { return count == 0; }\n    bool isFull() { return count == k; }\n};",
     "explanations": {
-      "step_1": "insertFront steps backwards circularly: (front - 1 + k) % k and places value at the new front.",
-      "step_2": "insertLast calculates the next tail slot as (front + count) % k.",
-      "step_3": "deleteFront moves front forward circularly: (front + 1) % k.",
-      "step_4": "deleteLast simply decrements count without moving front.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "def": "Executes tagged statement [def] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -681,12 +677,12 @@
     ],
     "rawCode": "#include <queue>\nusing namespace std;\n\nclass MyStack {\n    queue<int> q;\npublic:\n    void push(int x) {\n        q.push(x);\n        for (int i = 0; i < (int)q.size() - 1; i++) {\n            q.push(q.front());\n            q.pop();\n        }\n    }\n    int pop() {\n        int v = q.front();\n        q.pop();\n        return v;\n    }\n    int top() { return q.front(); }\n    bool empty() { return q.empty(); }\n};",
     "explanations": {
-      "step_1": "Push new element to queue, then rotate (size - 1) elements by popping from front and appending to rear.",
-      "step_2": "Pop simply dequeues from the front of the queue in O(1) time.",
-      "step_3": "Top inspects the front element.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "def": "Executes tagged statement [def] in cpp.",
+      "mutate": "Executes tagged statement [mutate] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -771,12 +767,11 @@
     ],
     "rawCode": "#include <vector>\n#include <deque>\nusing namespace std;\n\nvector<int> maxSlidingWindow(vector<int>& nums, int k) {\n    deque<int> q;\n    vector<int> res;\n    for (int i = 0; i < (int)nums.size(); i++) {\n        if (!q.empty() && q.front() < i - k + 1) q.pop_front();\n        while (!q.empty() && nums[q.back()] < nums[i]) q.pop_back();\n        q.push_back(i);\n        if (i >= k - 1) res.push_back(nums[q.front()]);\n    }\n    return res;\n}",
     "explanations": {
-      "step_1": "If front index is older than i - k + 1, it has slipped out of the window; remove it.",
-      "step_2": "While current number is greater than numbers at rear of deque, pop them. They can never be maximums again.",
-      "step_3": "Append current index. Once window size >= k, record nums[q[0]] as window max.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -846,12 +841,11 @@
     ],
     "rawCode": "#include <string>\n#include <vector>\nusing namespace std;\n\nint firstUniqChar(string s) {\n    vector<int> freq(26, 0);\n    for (char c : s) freq[c - 'a']++;\n    for (int i = 0; i < (int)s.size(); i++) {\n        if (freq[s[i] - 'a'] == 1) return i;\n    }\n    return -1;\n}",
     "explanations": {
-      "step_1": "Build frequency hash map counting occurrences of each character.",
-      "step_2": "Traverse the string from left to right; return index of first character with frequency 1.",
-      "step_3": "If no unique character is found, return -1.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -921,12 +915,12 @@
     ],
     "rawCode": "#include <queue>\nusing namespace std;\n\nclass RecentCounter {\n    queue<int> q;\npublic:\n    int ping(int t) {\n        q.push(t);\n        while (q.front() < t - 3000) q.pop();\n        return q.size();\n    }\n};",
     "explanations": {
-      "step_1": "Enqueue incoming request timestamp t into the queue.",
-      "step_2": "Evict older calls that fall before the sliding 3000ms window (t - 3000).",
-      "step_3": "Return current queue length representing active calls in the window.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "def": "Executes tagged statement [def] in cpp.",
+      "mutate": "Executes tagged statement [mutate] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -1096,12 +1090,13 @@
     ],
     "rawCode": "#include <vector>\n#include <queue>\nusing namespace std;\n\nint orangesRotting(vector<vector<int>>& grid) {\n    int rows = grid.size(), cols = grid[0].size();\n    queue<pair<int,int>> q;\n    int fresh = 0;\n    for (int r = 0; r < rows; r++) {\n        for (int c = 0; c < cols; c++) {\n            if (grid[r][c] == 2) q.push({r, c});\n            else if (grid[r][c] == 1) fresh++;\n        }\n    }\n    if (fresh == 0) return 0;\n    int minutes = 0;\n    int dirs[4][2] = {{0,1},{0,-1},{1,0},{-1,0}};\n    while (!q.empty() && fresh > 0) {\n        minutes++;\n        int sz = q.size();\n        for (int i = 0; i < sz; i++) {\n            auto [r, c] = q.front(); q.pop();\n            for (auto& d : dirs) {\n                int nr = r + d[0], nc = c + d[1];\n                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] == 1) {\n                    grid[nr][nc] = 2; fresh--; q.push({nr, nc});\n                }\n            }\n        }\n    }\n    return fresh == 0 ? minutes : -1;\n}",
     "explanations": {
-      "step_1": "Scan grid: enqueue all rotten oranges (multi-source seeds) and count fresh ones.",
-      "step_2": "Process BFS layer by layer: each while iteration corresponds to 1 minute of rotting propagation.",
-      "step_3": "Infect adjacent fresh neighbors (4 directions), mark them rotten (2), decrement fresh count, and enqueue.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp.",
+      "mutate": "Executes tagged statement [mutate] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   }

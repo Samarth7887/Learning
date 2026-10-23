@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: PYTHON - Arrays & Strings
+ * SynapseCS Language-Specific Implementation: PYTHON - arrays-strings
  */
 (function(window) {
   'use strict';
@@ -37,10 +37,10 @@
     ],
     "rawCode": "def get_memory_addresses(arr, base=0x1000):\n    return [f\"0x{base + i * 4:04X}: {val}\" for i, val in enumerate(arr)]\n\n# Test\nprint(get_memory_addresses([10, 20, 30, 40]))",
     "explanations": {
-      "step_1": "Iterate through elements and compute hex address offset: base + (i * 4).",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -145,12 +145,11 @@
     ],
     "rawCode": "def rotate(nums, k):\n    k %= len(nums)\n    \n    def reverse(l, r):\n        while l < r:\n            nums[l], nums[r] = nums[r], nums[l]\n            l += 1\n            r -= 1\n            \n    # Step 1: reverse entire array\n    reverse(0, len(nums) - 1)\n    # Step 2: reverse first k elements\n    reverse(0, k - 1)\n    # Step 3: reverse remaining elements\n    reverse(k, len(nums) - 1)\n    return nums\n\n# Test\nprint(rotate([1, 2, 3, 4, 5, 6, 7], 3))",
     "explanations": {
-      "step_1": "Normalize k with modulo: k %= n so k is within array bounds.",
-      "step_2": "Helper function reversing elements between index l and r in-place.",
-      "step_3": "The magic 3-reversal sequence: reverse all, reverse first k, reverse the rest.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -230,12 +229,13 @@
     ],
     "rawCode": "def twoSumSorted(numbers, target):\n    l, r = 0, len(numbers) - 1\n    while l < r:\n        s = numbers[l] + numbers[r]\n        if s == target:\n            return [l + 1, r + 1]  # 1-indexed\n        elif s < target:\n            l += 1\n        else:\n            r -= 1\n    return []\n\n# Test\nprint(twoSumSorted([2, 7, 11, 15], 9))",
     "explanations": {
-      "step_1": "Initialize left pointer at 0 and right pointer at the last index.",
-      "step_2": "If sum equals target, return 1-based indices [l + 1, r + 1].",
-      "step_3": "If sum is smaller, increase left; if sum is larger, decrease right.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -315,12 +315,13 @@
     ],
     "rawCode": "def maxArea(height):\n    l, r = 0, len(height) - 1\n    max_water = 0\n    while l < r:\n        h = min(height[l], height[r])\n        max_water = max(max_water, h * (r - l))\n        if height[l] < height[r]:\n            l += 1\n        else:\n            r -= 1\n    return max_water\n\n# Test\nprint(maxArea([1,8,6,2,5,4,8,3,7]))",
     "explanations": {
-      "step_1": "Initialize two pointers at ends and max_water = 0.",
-      "step_2": "Calculate area constrained by shorter line: min(height[l], height[r]) * width.",
-      "step_3": "Move pointer of the shorter line inward, because keeping the shorter line can never yield a larger area with reduced width.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -395,12 +396,13 @@
     ],
     "rawCode": "def lengthOfLongestSubstring(s: str) -> int:\n    last_seen = {}\n    l = 0\n    max_len = 0\n    for r, ch in enumerate(s):\n        if ch in last_seen and last_seen[ch] >= l:\n            l = last_seen[ch] + 1\n        last_seen[ch] = r\n        max_len = max(max_len, r - l + 1)\n    return max_len\n\n# Test\nprint(lengthOfLongestSubstring(\"abcabcbb\"))",
     "explanations": {
-      "step_1": "Initialize hash map to track last seen index of characters and left pointer l = 0.",
-      "step_2": "If incoming character has been seen within current window (index >= l), jump l to index + 1.",
-      "step_3": "Record current index and update max_len with window size (r - l + 1).",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -500,12 +502,13 @@
     ],
     "rawCode": "def trap(height):\n    if not height: return 0\n    l, r = 0, len(height) - 1\n    left_max, right_max = height[l], height[r]\n    water = 0\n    while l < r:\n        if left_max < right_max:\n            l += 1\n            left_max = max(left_max, height[l])\n            water += left_max - height[l]\n        else:\n            r -= 1\n            right_max = max(right_max, height[r])\n            water += right_max - height[r]\n    return water\n\n# Test\nprint(trap([0,1,0,2,1,0,1,3,2,1,2,1]))",
     "explanations": {
-      "step_1": "Initialize two pointers at ends and track left_max and right_max.",
-      "step_2": "When left_max < right_max, water level is bottlenecked by left_max: accumulate water and advance left.",
-      "step_3": "Otherwise water level is bottlenecked by right_max: accumulate water and decrement right.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -565,12 +568,11 @@
     ],
     "rawCode": "def maxSubArray(nums):\n    max_sum = nums[0]\n    curr_sum = nums[0]\n    for x in nums[1:]:\n        curr_sum = max(x, curr_sum + x)\n        max_sum = max(max_sum, curr_sum)\n    return max_sum\n\n# Test\nprint(maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4]))",
     "explanations": {
-      "step_1": "Initialize max_sum and curr_sum to first element.",
-      "step_2": "Dynamic Choice: Extend existing subarray (curr_sum + x) or start a new subarray from x.",
-      "step_3": "Update global max_sum if curr_sum exceeds it.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -680,11 +682,11 @@
     ],
     "rawCode": "def productExceptSelf(nums):\n    n = len(nums)\n    res = [1] * n\n    \n    # Prefix pass: res[i] contains product of elements to left of i\n    prefix = 1\n    for i in range(n):\n        res[i] = prefix\n        prefix *= nums[i]\n        \n    # Suffix pass: multiply by product of elements to right of i\n    suffix = 1\n    for i in range(n - 1, -1, -1):\n        res[i] *= suffix\n        suffix *= nums[i]\n        \n    return res\n\n# Test\nprint(productExceptSelf([1, 2, 3, 4]))",
     "explanations": {
-      "step_1": "First pass: store cumulative product of all elements to the left of index i.",
-      "step_2": "Second pass (backwards): multiply res[i] by cumulative suffix product of elements to the right.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -759,12 +761,13 @@
     ],
     "rawCode": "def merge(intervals):\n    intervals.sort(key=lambda x: x[0])\n    merged = [intervals[0]]\n    for start, end in intervals[1:]:\n        last_end = merged[-1][1]\n        if start <= last_end:\n            merged[-1][1] = max(last_end, end)\n        else:\n            merged.append([start, end])\n    return merged\n\n# Test\nprint(merge([[1, 3], [2, 6], [8, 10], [15, 18]]))",
     "explanations": {
-      "step_1": "Sort all intervals by their starting times so potential overlaps are adjacent.",
-      "step_2": "If start <= last_end, overlap detected: extend last_end to max(last_end, end).",
-      "step_3": "No overlap: append interval as a new disjoint interval.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "mutate": "Executes tagged statement [mutate] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   }

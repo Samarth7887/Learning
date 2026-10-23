@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: CPP - Hashing & Hash Tables
+ * SynapseCS Language-Specific Implementation: CPP - hashing
  */
 (function(window) {
   'use strict';
@@ -157,13 +157,12 @@
     ],
     "rawCode": "#include <vector>\n#include <list>\nusing namespace std;\n\nclass MyHashMap {\n    static const int SIZE = 1009;\n    list<pair<int,int>> buckets[SIZE];\npublic:\n    void put(int key, int value) {\n        int idx = key % SIZE;\n        for (auto& p : buckets[idx]) {\n            if (p.first == key) { p.second = value; return; }\n        }\n        buckets[idx].push_back({key, value});\n    }\n    int get(int key) {\n        int idx = key % SIZE;\n        for (auto& p : buckets[idx]) {\n            if (p.first == key) return p.second;\n        }\n        return -1;\n    }\n    void remove(int key) {\n        int idx = key % SIZE;\n        for (auto it = buckets[idx].begin(); it != buckets[idx].end(); ++it) {\n            if (it->first == key) { buckets[idx].erase(it); return; }\n        }\n    }\n};",
     "explanations": {
-      "step_1": "Initialize 1009 bucket arrays to spread hashes evenly using prime modulo.",
-      "step_2": "Hash function computes array index: key % size.",
-      "step_3": "Put checks if key already exists to update value; otherwise chains new key-value pair to bucket.",
-      "step_4": "Get hashes key and traverses bucket chain to find matching key.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "def": "Executes tagged statement [def] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -293,12 +292,11 @@
     ],
     "rawCode": "#include <vector>\n#include <list>\n#include <algorithm>\nusing namespace std;\n\nclass MyHashSet {\n    static const int SIZE = 1009;\n    list<int> buckets[SIZE];\npublic:\n    void add(int key) {\n        int idx = key % SIZE;\n        if (find(buckets[idx].begin(), buckets[idx].end(), key) == buckets[idx].end()) {\n            buckets[idx].push_back(key);\n        }\n    }\n    void remove(int key) {\n        int idx = key % SIZE;\n        buckets[idx].remove(key);\n    }\n    bool contains(int key) {\n        int idx = key % SIZE;\n        return find(buckets[idx].begin(), buckets[idx].end(), key) != buckets[idx].end();\n    }\n};",
     "explanations": {
-      "step_1": "Add checks if key is already present in bucket to guarantee set uniqueness.",
-      "step_2": "Remove deletes key from bucket if present.",
-      "step_3": "Contains hashes key and performs linear search on small bucket list.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "def": "Executes tagged statement [def] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -373,13 +371,11 @@
     ],
     "rawCode": "#include <vector>\n#include <unordered_map>\nusing namespace std;\n\nvector<int> twoSum(vector<int>& nums, int target) {\n    unordered_map<int, int> seen;\n    for (int i = 0; i < (int)nums.size(); i++) {\n        int comp = target - nums[i];\n        if (seen.count(comp)) return {seen[comp], i};\n        seen[nums[i]] = i;\n    }\n    return {};\n}",
     "explanations": {
-      "step_1": "Initialize hash map to store previously seen numbers and their indices.",
-      "step_2": "Calculate complement needed to reach target: target - num.",
-      "step_3": "If complement exists in map, return stored index and current index i.",
-      "step_4": "Otherwise store current number and index in hash map for future lookups.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -474,12 +470,10 @@
     ],
     "rawCode": "#include <vector>\n#include <string>\n#include <unordered_map>\n#include <algorithm>\nusing namespace std;\n\nvector<vector<string>> groupAnagrams(vector<string>& strs) {\n    unordered_map<string, vector<string>> map;\n    for (string& s : strs) {\n        string key = s;\n        sort(key.begin(), key.end());\n        map[key].push_back(s);\n    }\n    vector<vector<string>> res;\n    for (auto& pair : map) res.push_back(pair.second);\n    return res;\n}",
     "explanations": {
-      "step_1": "Create hash map mapping canonical sorted key to list of anagrams.",
-      "step_2": "Sort characters of each word to produce canonical signature (e.g. 'ate' -> 'aet').",
-      "step_3": "Return all grouped anagram arrays from the hash map.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -559,12 +553,11 @@
     ],
     "rawCode": "#include <string>\n#include <vector>\nusing namespace std;\n\nbool isAnagram(string s, string t) {\n    if (s.size() != t.size()) return false;\n    vector<int> counts(26, 0);\n    for (int i = 0; i < (int)s.size(); i++) {\n        counts[s[i] - 'a']++;\n        counts[t[i] - 'a']--;\n    }\n    for (int c : counts) if (c != 0) return false;\n    return true;\n}",
     "explanations": {
-      "step_1": "Early exit: strings with different lengths cannot be anagrams.",
-      "step_2": "Increment bucket for characters in s and decrement for characters in t.",
-      "step_3": "Verify every bucket returned to exactly 0.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -659,12 +652,12 @@
     ],
     "rawCode": "#include <vector>\n#include <unordered_set>\n#include <algorithm>\nusing namespace std;\n\nint longestConsecutive(vector<int>& nums) {\n    unordered_set<int> set(nums.begin(), nums.end());\n    int longest = 0;\n    for (int n : set) {\n        if (!set.count(n - 1)) {\n            int curr = n, streak = 1;\n            while (set.count(curr + 1)) { curr++; streak++; }\n            longest = max(longest, streak);\n        }\n    }\n    return longest;\n}",
     "explanations": {
-      "step_1": "Convert array to hash set for O(1) membership checks.",
-      "step_2": "Crucial optimization: only attempt sequence expansion if num - 1 is absent, ensuring we only start from sequence heads.",
-      "step_3": "Count consecutive numbers in set until gap is reached; update global longest.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -749,12 +742,12 @@
     ],
     "rawCode": "#include <vector>\n#include <unordered_map>\nusing namespace std;\n\nint subarraySum(vector<int>& nums, int k) {\n    unordered_map<int, int> map;\n    map[0] = 1;\n    int sum = 0, count = 0;\n    for (int n : nums) {\n        sum += n;\n        if (map.count(sum - k)) count += map[sum - k];\n        map[sum]++;\n    }\n    return count;\n}",
     "explanations": {
-      "step_1": "Base case {0: 1}: handles subarrays starting from index 0 where curr_sum equals k exactly.",
-      "step_2": "Accumulate current running prefix sum and calculate required previous prefix sum: curr_sum - k.",
-      "step_3": "Add occurrences of needed prefix sum to count, then record curr_sum in map.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -829,12 +822,11 @@
     ],
     "rawCode": "#include <vector>\n#include <unordered_set>\nusing namespace std;\n\nbool containsNearbyDuplicate(vector<int>& nums, int k) {\n    unordered_set<int> set;\n    for (int i = 0; i < (int)nums.size(); i++) {\n        if (set.count(nums[i])) return true;\n        set.insert(nums[i]);\n        if ((int)set.size() > k) set.erase(nums[i - k]);\n    }\n    return false;\n}",
     "explanations": {
-      "step_1": "Maintain a hash set holding elements in the active window of size k.",
-      "step_2": "If current element is already in the window set, nearby duplicate exists; return true.",
-      "step_3": "Add current element. If window exceeds k, evict the element that slid out: nums[i - k].",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -989,12 +981,11 @@
     ],
     "rawCode": "#include <vector>\n#include <unordered_map>\n#include <cstdlib>\nusing namespace std;\n\nclass RandomizedSet {\n    vector<int> nums;\n    unordered_map<int, int> map;\npublic:\n    bool insert(int val) {\n        if (map.count(val)) return false;\n        map[val] = nums.size();\n        nums.push_back(val);\n        return true;\n    }\n    bool remove(int val) {\n        if (!map.count(val)) return false;\n        int idx = map[val];\n        int last = nums.back();\n        nums[idx] = last;\n        map[last] = idx;\n        nums.pop_back();\n        map.erase(val);\n        return true;\n    }\n    int getRandom() {\n        return nums[rand() % nums.size()];\n    }\n};",
     "explanations": {
-      "step_1": "Insert: map records val -> index in array; array appends val in O(1).",
-      "step_2": "O(1) Deletion trick: swap target with last element, update moved element's map index, then pop array tail in O(1).",
-      "step_3": "getRandom: generate random index in [0..len-1] and return array element in O(1).",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "comment": "Executes tagged statement [comment] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "def": "Executes tagged statement [def] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   }

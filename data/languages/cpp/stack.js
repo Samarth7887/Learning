@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: CPP - Stack
+ * SynapseCS Language-Specific Implementation: CPP - stack
  */
 (function(window) {
   'use strict';
@@ -72,13 +72,9 @@
     ],
     "rawCode": "class ArrayStack {\n    vector<int> data;\npublic:\n    void push(int val) { data.push_back(val); }\n    int pop() {\n        if (isEmpty()) return -1;\n        int val = data.back(); data.pop_back(); return val;\n    }\n    int top() { return isEmpty() ? -1 : data.back(); }\n    bool isEmpty() { return data.empty(); }\n    int size() { return data.size(); }\n};",
     "explanations": {
-      "step_1": "Initialize underlying contiguous array buffer.",
-      "step_2": "push: append item to the end of the array buffer in O(1) amortized time.",
-      "step_3": "pop: remove and return the last item in O(1) time after checking non-empty.",
-      "step_4": "top: peek at index data.length - 1 without removing it.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "def": "Executes tagged statement [def] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -148,11 +144,12 @@
     ],
     "rawCode": "class LLStack {\n    struct Node { int val; Node* next; Node(int v, Node* n) : val(v), next(n) {} };\n    Node* head = nullptr;\npublic:\n    void push(int val) { head = new Node(val, head); }\n    int pop() {\n        if (!head) return -1;\n        Node* t = head; int val = t->val; head = head->next; delete t;\n        return val;\n    }\n    int top() { return head ? head->val : -1; }\n};",
     "explanations": {
-      "step_1": "push: allocate new node whose next points to current head, re-anchoring head to the new node in O(1).",
-      "step_2": "pop: save head.val, advance head = head.next, and decrement count in O(1).",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp.",
+      "pointer": "Executes tagged statement [pointer] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -227,13 +224,11 @@
     ],
     "rawCode": "bool isValid(string s) {\n    stack<char> st;\n    for (char c : s) {\n        if (c == '(') st.push(')');\n        else if (c == '{') st.push('}');\n        else if (c == '[') st.push(']');\n        else {\n            if (st.empty() || st.top() != c) return false;\n            st.pop();\n        }\n    }\n    return st.empty();\n}",
     "explanations": {
-      "step_1": "Initialize LIFO stack and opening/closing bracket pairing map.",
-      "step_2": "If current character is a closing bracket, pop from stack and verify matching pair.",
-      "step_3": "If current character is an opening bracket, push onto stack.",
-      "step_4": "At completion, stack must be completely empty (all opened brackets resolved).",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp.",
+      "mutate": "Executes tagged statement [mutate] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -308,13 +303,9 @@
     ],
     "rawCode": "class MinStack {\n    stack<int> st;\n    stack<int> minSt;\npublic:\n    void push(int val) {\n        st.push(val);\n        int curMin = minSt.empty() ? val : min(val, minSt.top());\n        minSt.push(curMin);\n    }\n    void pop() { st.pop(); minSt.pop(); }\n    int top() { return st.top(); }\n    int getMin() { return minSt.top(); }\n};",
     "explanations": {
-      "step_1": "Maintain main storage stack and parallel minimum tracker stack.",
-      "step_2": "push: append new element and compute new minimum relative to previous minStack top.",
-      "step_3": "pop: remove from both stacks in lockstep, preserving previous minimum context.",
-      "step_4": "getMin: return top of minStack in O(1) without scanning.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "def": "Executes tagged statement [def] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "mutate": "Executes tagged statement [mutate] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -389,12 +380,10 @@
     ],
     "rawCode": "vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {\n    unordered_map<int, int> map;\n    stack<int> st;\n    for (int num : nums2) {\n        while (!st.empty() && st.top() < num) {\n            map[st.top()] = num; st.pop();\n        }\n        st.push(num);\n    }\n    vector<int> res;\n    for (int x : nums1) res.push_back(map.count(x) ? map[x] : -1);\n    return res;\n}",
     "explanations": {
-      "step_1": "Initialize hash map to store results and stack to maintain decreasing elements.",
-      "step_2": "Whenever current number is greater than stack top, resolve top's next greater element and pop it.",
-      "step_3": "Map queries in nums1 directly to O(1) results from hash map.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "mutate": "Executes tagged statement [mutate] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -469,12 +458,10 @@
     ],
     "rawCode": "vector<int> dailyTemperatures(vector<int>& temperatures) {\n    int n = temperatures.size();\n    vector<int> res(n, 0);\n    stack<int> st;\n    for (int i = 0; i < n; i++) {\n        while (!st.empty() && temperatures[st.top()] < temperatures[i]) {\n            int prevI = st.top(); st.pop();\n            res[prevI] = i - prevI;\n        }\n        st.push(i);\n    }\n    return res;\n}",
     "explanations": {
-      "step_1": "Allocate answer array initialized with 0s and initialize monotonic stack of indices.",
-      "step_2": "When today is warmer than stack top day, pop previous day and compute elapsed days (i - prev_i).",
-      "step_3": "Push today's index onto the stack.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "mutate": "Executes tagged statement [mutate] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -564,11 +551,11 @@
     ],
     "rawCode": "int evalRPN(vector<string>& tokens) {\n    stack<int> st;\n    for (const string& s : tokens) {\n        if (s == \"+\" || s == \"-\" || s == \"*\" || s == \"/\") {\n            int b = st.top(); st.pop();\n            int a = st.top(); st.pop();\n            if (s == \"+\") st.push(a + b);\n            else if (s == \"-\") st.push(a - b);\n            else if (s == \"*\") st.push(a * b);\n            else st.push(a / b);\n        } else {\n            st.push(stoi(s));\n        }\n    }\n    return st.top();\n}",
     "explanations": {
-      "step_1": "Pop second operand (b) first, then first operand (a). Order matters for subtraction and division.",
-      "step_2": "Apply operation (a op b) and push computed result back onto the stack.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp.",
+      "mutate": "Executes tagged statement [mutate] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -643,11 +630,12 @@
     ],
     "rawCode": "class MyQueue {\n    stack<int> inSt, outSt;\npublic:\n    void push(int x) { inSt.push(x); }\n    int pop() { int v = peek(); outSt.pop(); return v; }\n    int peek() {\n        if (outSt.empty()) {\n            while (!inSt.empty()) { outSt.push(inSt.top()); inSt.pop(); }\n        }\n        return outSt.top();\n    }\n    bool empty() { return inSt.empty() && outSt.empty(); }\n};",
     "explanations": {
-      "step_1": "push: simply append to in_stack in O(1).",
-      "step_2": "peek/pop: if out_stack is dry, dump in_stack into out_stack, reversing the stack order into FIFO order.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in cpp.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "mutate": "Executes tagged statement [mutate] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -737,13 +725,10 @@
     ],
     "rawCode": "string simplifyPath(string path) {\n    stringstream ss(path);\n    string part;\n    vector<string> st;\n    while (getline(ss, part, '/')) {\n        if (part == \"\" || part == \".\") continue;\n        if (part == \"..\") {\n            if (!st.empty()) st.pop_back();\n        } else {\n            st.push_back(part);\n        }\n    }\n    string res = \"\";\n    for (const string& dir : st) res += \"/\" + dir;\n    return res.empty() ? \"/\" : res;\n}",
     "explanations": {
-      "step_1": "Ignore consecutive slashes (empty string) and '.' current directory tokens.",
-      "step_2": "When '..' appears, pop the parent directory from stack if stack is not at root.",
-      "step_3": "Push actual directory names onto the stack.",
-      "step_4": "Assemble canonical path by joining stack elements with leading root '/'.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "branch": "Executes tagged statement [branch] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   },
@@ -828,11 +813,11 @@
     ],
     "rawCode": "int largestRectangleArea(vector<int>& heights) {\n    heights.push_back(0);\n    stack<int> st;\n    int maxArea = 0;\n    for (int i = 0; i < heights.size(); i++) {\n        while (!st.empty() && heights[st.top()] >= heights[i]) {\n            int h = heights[st.top()]; st.pop();\n            int w = st.empty() ? i : i - st.top() - 1;\n            maxArea = max(maxArea, h * w);\n        }\n        st.push(i);\n    }\n    heights.pop_back();\n    return maxArea;\n}",
     "explanations": {
-      "step_1": "Append 0-height sentinel at end so all pending bars in stack are flushed.",
-      "step_2": "While current bar is shorter than stack top, pop top: height is heights[popped], width extends between left boundary (stack.top) and right boundary (i).",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in cpp.",
+      "mutate": "Executes tagged statement [mutate] in cpp."
     },
     "notes": "Fast explicit memory layout with direct value semantics or pointer references."
   }

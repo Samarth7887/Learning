@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: JAVASCRIPT - Hashing & Hash Tables
+ * SynapseCS Language-Specific Implementation: JAVASCRIPT - hashing
  */
 (function(window) {
   'use strict';
@@ -237,13 +237,13 @@
     ],
     "rawCode": "class MyHashMap {\n  constructor() {\n    this.size = 1009;\n    this.buckets = Array.from({ length: this.size }, () => []);\n  }\n  _hash(key) { return key % this.size; }\n  put(key, value) {\n    const idx = this._hash(key);\n    for (let i = 0; i < this.buckets[idx].length; i++) {\n      if (this.buckets[idx][i][0] === key) {\n        this.buckets[idx][i][1] = value;\n        return;\n      }\n    }\n    this.buckets[idx].push([key, value]);\n  }\n  get(key) {\n    const idx = this._hash(key);\n    for (const [k, v] of this.buckets[idx]) {\n      if (k === key) return v;\n    }\n    return -1;\n  }\n  remove(key) {\n    const idx = this._hash(key);\n    const b = this.buckets[idx];\n    for (let i = 0; i < b.length; i++) {\n      if (b[i][0] === key) {\n        b.splice(i, 1);\n        return;\n      }\n    }\n  }\n}\n\nconst hm = new MyHashMap();\nhm.put(1, 1);\nhm.put(2, 2);\nconst r1 = hm.get(1);\nconst r2 = hm.get(3);\nhm.put(2, 1);\nconst r3 = hm.get(2);\nhm.remove(2);\nconst r4 = hm.get(2);\nconsole.log(JSON.stringify([r1, r2, r3, r4]));",
     "explanations": {
-      "step_1": "Initialize 1009 bucket arrays to spread hashes evenly using prime modulo.",
-      "step_2": "Hash function computes array index: key % size.",
-      "step_3": "Put checks if key already exists to update value; otherwise chains new key-value pair to bucket.",
-      "step_4": "Get hashes key and traverses bucket chain to find matching key.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "mutate": "Executes tagged statement [mutate] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -373,12 +373,12 @@
     ],
     "rawCode": "class MyHashSet {\n  constructor() {\n    this.size = 1009;\n    this.buckets = Array.from({ length: this.size }, () => []);\n  }\n  _hash(key) { return key % this.size; }\n  add(key) {\n    const idx = this._hash(key);\n    if (!this.buckets[idx].includes(key)) this.buckets[idx].push(key);\n  }\n  remove(key) {\n    const idx = this._hash(key);\n    const p = this.buckets[idx].indexOf(key);\n    if (p !== -1) this.buckets[idx].splice(p, 1);\n  }\n  contains(key) {\n    return this.buckets[this._hash(key)].includes(key);\n  }\n}\n\nconst hs = new MyHashSet();\nhs.add(1);\nhs.add(2);\nconsole.log(JSON.stringify([hs.contains(1), hs.contains(3), hs.contains(2), (hs.remove(2), hs.contains(2))]));",
     "explanations": {
-      "step_1": "Add checks if key is already present in bucket to guarantee set uniqueness.",
-      "step_2": "Remove deletes key from bucket if present.",
-      "step_3": "Contains hashes key and performs linear search on small bucket list.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "mutate": "Executes tagged statement [mutate] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -443,13 +443,12 @@
     ],
     "rawCode": "function twoSum(nums, target) {\n  const seen = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    const comp = target - nums[i];\n    if (seen.has(comp)) return [seen.get(comp), i];\n    seen.set(nums[i], i);\n  }\n  return [];\n}\n\nconsole.log(JSON.stringify(twoSum([2, 7, 11, 15], 9)));",
     "explanations": {
-      "step_1": "Initialize hash map to store previously seen numbers and their indices.",
-      "step_2": "Calculate complement needed to reach target: target - num.",
-      "step_3": "If complement exists in map, return stored index and current index i.",
-      "step_4": "Otherwise store current number and index in hash map for future lookups.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -514,12 +513,13 @@
     ],
     "rawCode": "function groupAnagrams(strs) {\n  const map = {};\n  for (const s of strs) {\n    const key = s.split('').sort().join('');\n    if (!map[key]) map[key] = [];\n    map[key].push(s);\n  }\n  return Object.values(map).sort((a, b) => a.length - b.length);\n}\n\nconsole.log(JSON.stringify(groupAnagrams([\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"])));",
     "explanations": {
-      "step_1": "Create hash map mapping canonical sorted key to list of anagrams.",
-      "step_2": "Sort characters of each word to produce canonical signature (e.g. 'ate' -> 'aet').",
-      "step_3": "Return all grouped anagram arrays from the hash map.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "mutate": "Executes tagged statement [mutate] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -584,12 +584,12 @@
     ],
     "rawCode": "function isAnagram(s, t) {\n  if (s.length !== t.length) return false;\n  const counts = new Array(26).fill(0);\n  for (let i = 0; i < s.length; i++) {\n    counts[s.charCodeAt(i) - 97]++;\n    counts[t.charCodeAt(i) - 97]--;\n  }\n  return counts.every(c => c === 0);\n}\n\nconsole.log(isAnagram(\"anagram\", \"nagaram\"));",
     "explanations": {
-      "step_1": "Early exit: strings with different lengths cannot be anagrams.",
-      "step_2": "Increment bucket for characters in s and decrement for characters in t.",
-      "step_3": "Verify every bucket returned to exactly 0.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -684,12 +684,12 @@
     ],
     "rawCode": "function longestConsecutive(nums) {\n  const set = new Set(nums);\n  let longest = 0;\n  for (const n of set) {\n    if (!set.has(n - 1)) {\n      let curr = n, streak = 1;\n      while (set.has(curr + 1)) {\n        curr++;\n        streak++;\n      }\n      longest = Math.max(longest, streak);\n    }\n  }\n  return longest;\n}\n\nconsole.log(longestConsecutive([100, 4, 200, 1, 3, 2]));",
     "explanations": {
-      "step_1": "Convert array to hash set for O(1) membership checks.",
-      "step_2": "Crucial optimization: only attempt sequence expansion if num - 1 is absent, ensuring we only start from sequence heads.",
-      "step_3": "Count consecutive numbers in set until gap is reached; update global longest.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -759,12 +759,12 @@
     ],
     "rawCode": "function subarraySum(nums, k) {\n  const map = new Map([[0, 1]]);\n  let sum = 0, count = 0;\n  for (const n of nums) {\n    sum += n;\n    if (map.has(sum - k)) count += map.get(sum - k);\n    map.set(sum, (map.get(sum) || 0) + 1);\n  }\n  return count;\n}\n\nconsole.log(subarraySum([1, 1, 1], 2));",
     "explanations": {
-      "step_1": "Base case {0: 1}: handles subarrays starting from index 0 where curr_sum equals k exactly.",
-      "step_2": "Accumulate current running prefix sum and calculate required previous prefix sum: curr_sum - k.",
-      "step_3": "Add occurrences of needed prefix sum to count, then record curr_sum in map.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -829,12 +829,13 @@
     ],
     "rawCode": "function containsNearbyDuplicate(nums, k) {\n  const set = new Set();\n  for (let i = 0; i < nums.length; i++) {\n    if (set.has(nums[i])) return true;\n    set.add(nums[i]);\n    if (set.size > k) set.delete(nums[i - k]);\n  }\n  return false;\n}\n\nconsole.log(containsNearbyDuplicate([1, 2, 3, 1], 3));",
     "explanations": {
-      "step_1": "Maintain a hash set holding elements in the active window of size k.",
-      "step_2": "If current element is already in the window set, nearby duplicate exists; return true.",
-      "step_3": "Add current element. If window exceeds k, evict the element that slid out: nums[i - k].",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "mutate": "Executes tagged statement [mutate] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -984,12 +985,12 @@
     ],
     "rawCode": "class RandomizedSet {\n  constructor() {\n    this.nums = [];\n    this.map = new Map();\n  }\n  insert(val) {\n    if (this.map.has(val)) return false;\n    this.map.set(val, this.nums.length);\n    this.nums.push(val);\n    return true;\n  }\n  remove(val) {\n    if (!this.map.has(val)) return false;\n    const idx = this.map.get(val);\n    const last = this.nums[this.nums.length - 1];\n    this.nums[idx] = last;\n    this.map.set(last, idx);\n    this.nums.pop();\n    this.map.delete(val);\n    return true;\n  }\n  getRandom() {\n    return this.nums[Math.floor(Math.random() * this.nums.length)];\n  }\n}\n\nconst rs = new RandomizedSet();\nconsole.log(JSON.stringify([rs.insert(1), rs.remove(2), rs.insert(2)]));",
     "explanations": {
-      "step_1": "Insert: map records val -> index in array; array appends val in O(1).",
-      "step_2": "O(1) Deletion trick: swap target with last element, update moved element's map index, then pop array tail in O(1).",
-      "step_3": "getRandom: generate random index in [0..len-1] and return array element in O(1).",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "mutate": "Executes tagged statement [mutate] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   }

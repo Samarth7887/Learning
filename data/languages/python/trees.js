@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: PYTHON - Binary Trees & BST
+ * SynapseCS Language-Specific Implementation: PYTHON - trees
  */
 (function(window) {
   'use strict';
@@ -67,11 +67,9 @@
     ],
     "rawCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\n# Build Tree: 1 -> left: 2, right: 3\nroot = TreeNode(1)\nroot.left = TreeNode(2)\nroot.right = TreeNode(3)\nprint([root.val, root.left.val, root.right.val])",
     "explanations": {
-      "step_1": "TreeNode class holding a value and pointers to left and right children.",
-      "step_2": "Instantiate root (1) and attach left child (2) and right child (3).",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -176,13 +174,13 @@
     ],
     "rawCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef inorderTraversal(root):\n    res = []\n    def dfs(node):\n        if not node: return\n        dfs(node.left)\n        res.append(node.val)\n        dfs(node.right)\n    dfs(root)\n    return res\n\n# Test\nroot = TreeNode(1, None, TreeNode(2, TreeNode(3), None))\nprint(inorderTraversal(root))",
     "explanations": {
-      "step_1": "Base case: if current node is null, return immediately.",
-      "step_2": "Recursive step 1: Visit entire left subtree.",
-      "step_3": "Process current node: append value to result list.",
-      "step_4": "Recursive step 2: Visit entire right subtree.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "mutate": "Executes tagged statement [mutate] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -317,12 +315,14 @@
     ],
     "rawCode": "from collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef levelOrder(root):\n    if not root: return []\n    res = []\n    q = deque([root])\n    while q:\n        level = []\n        for _ in range(len(q)):\n            node = q.popleft()\n            level.append(node.val)\n            if node.left: q.append(node.left)\n            if node.right: q.append(node.right)\n        res.append(level)\n    return res\n\n# Test\nroot = TreeNode(3, TreeNode(9), TreeNode(20, TreeNode(15), TreeNode(7)))\nprint(levelOrder(root))",
     "explanations": {
-      "step_1": "Base check and initialize FIFO queue containing the root node.",
-      "step_2": "Snapshot current queue length to process exactly one tree level at a time.",
-      "step_3": "Enqueue non-null left and right child nodes for the next level.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "def": "Executes tagged statement [def] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "mutate": "Executes tagged statement [mutate] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -392,11 +392,11 @@
     ],
     "rawCode": "def maxDepth(root):\n    if not root:\n        return 0\n    return 1 + max(maxDepth(root.left), maxDepth(root.right))\n\n# Test\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val, self.left, self.right = val, left, right\n\nroot = TreeNode(3, TreeNode(9), TreeNode(20, TreeNode(15), TreeNode(7)))\nprint(maxDepth(root))",
     "explanations": {
-      "step_1": "Base case: empty tree has depth 0.",
-      "step_2": "Postorder: depth of this node is 1 plus the larger depth of its two subtrees.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -476,12 +476,11 @@
     ],
     "rawCode": "def invertTree(root):\n    if not root:\n        return None\n    root.left, root.right = invertTree(root.right), invertTree(root.left)\n    return root\n\n# Test\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val, self.left, self.right = val, left, right\n\nroot = TreeNode(4, TreeNode(2), TreeNode(7))\ninvertTree(root)\nprint([root.val, root.left.val, root.right.val])",
     "explanations": {
-      "step_1": "Base case: null node requires no inversion.",
-      "step_2": "Swap left and right pointers with the recursively inverted subtrees.",
-      "step_3": "Return root of the newly mirrored tree.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -566,12 +565,11 @@
     ],
     "rawCode": "def isValidBST(root):\n    def validate(node, low, high):\n        if not node:\n            return True\n        if not (low < node.val < high):\n            return False\n        return validate(node.left, low, node.val) and validate(node.right, node.val, high)\n    return validate(root, float('-inf'), float('inf'))\n\n# Test\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val, self.left, self.right = val, left, right\n\nprint(isValidBST(TreeNode(2, TreeNode(1), TreeNode(3))))",
     "explanations": {
-      "step_1": "Base case: empty subtree is valid.",
-      "step_2": "Verify current node strictly obeys both upper and lower inherited boundaries.",
-      "step_3": "Left child inherits upper bound = node.val; right child inherits lower bound = node.val.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   },
@@ -666,12 +664,12 @@
     ],
     "rawCode": "def lowestCommonAncestor(root, p_val, q_val):\n    curr = root\n    while curr:\n        if p_val < curr.val and q_val < curr.val:\n            curr = curr.left\n        elif p_val > curr.val and q_val > curr.val:\n            curr = curr.right\n        else:\n            return curr.val\n\n# Test\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val, self.left, self.right = val, left, right\n\nroot = TreeNode(6, TreeNode(2), TreeNode(8))\nprint(lowestCommonAncestor(root, 2, 8))",
     "explanations": {
-      "step_1": "If both values are smaller than current node, LCA must be in left subtree.",
-      "step_2": "If both values are larger than current node, LCA must be in right subtree.",
-      "step_3": "Split point reached: one value is on the left, one on the right (or one is current node). Current node is the LCA.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in python.",
+      "exec": "Executes tagged statement [exec] in python.",
+      "branch": "Executes tagged statement [branch] in python.",
+      "comment": "Executes tagged statement [comment] in python."
     },
     "notes": "Python utilizes reference binding without manual memory deallocation."
   }

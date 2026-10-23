@@ -380,13 +380,13 @@ window.SynapseComponents = (function () {
 
   // 9. LANGUAGE CARD (Neo-Brutalist Spec)
   function LanguageCard({ lang, questionCount = 0, completedCount = 0 }) {
-    const isAvail = lang.available;
-    const isDone = isAvail && questionCount > 0 && completedCount === questionCount;
+    const isAvail = questionCount > 0;
+    const isDone = isAvail && completedCount === questionCount;
 
     return `
       <div 
-        ${isAvail ? `onclick="window.SynapseApp.selectLanguage('${lang.id}')"` : ''}
-        class="group p-6 bg-white border-2 border-black rounded-xl hard-shadow flex flex-col justify-between transition-all select-none ${
+        ${isAvail ? `onclick="window.SynapseApp.selectLanguage('${lang.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.SynapseApp.selectLanguage('${lang.id}');}"` : 'tabindex="-1" aria-disabled="true"'}
+        class="group p-6 bg-white border-2 border-black rounded-xl hard-shadow flex flex-col justify-between transition-all select-none h-full focus:outline-none focus:ring-4 focus:ring-[#ffe17c] md:last:col-span-2 md:last:max-w-md md:last:mx-auto md:last:w-full lg:last:col-start-2 lg:last:col-span-1 lg:last:max-w-none ${
           isAvail ? 'cursor-pointer btn-press hover:bg-zinc-50' : 'opacity-60 cursor-not-allowed bg-zinc-100 border-dashed'
         }"
       >
@@ -423,7 +423,7 @@ window.SynapseComponents = (function () {
         <!-- Footer Action -->
         <div class="pt-4 border-t-2 border-black flex items-center justify-between">
           <span class="text-xs font-mono font-bold ${isAvail ? 'text-[#171e19]' : 'text-zinc-500'}">
-            ${isAvail ? `${questionCount} questions available` : 'Scaffolded syntax preview'}
+            ${isAvail ? `${questionCount} questions available` : 'Coming soon'}
           </span>
           <span class="font-mono font-black text-xs uppercase px-3 py-1.5 rounded border border-black ${
             isAvail ? 'bg-[#ffe17c] text-[#171e19]' : 'bg-zinc-200 text-zinc-500'

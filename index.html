@@ -276,11 +276,14 @@
             </div>
 
             <!-- Rosetta Stone Multi-Language Tabs -->
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-1 flex-wrap">
               <button onclick="window.SynapseApp.selectLanguage('python')" id="lang-btn-python" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-black bg-[#ffe17c] text-[#171e19]">Python</button>
               <button onclick="window.SynapseApp.selectLanguage('javascript')" id="lang-btn-javascript" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-zinc-700 bg-zinc-900 text-zinc-400">JavaScript</button>
               <button onclick="window.SynapseApp.selectLanguage('java')" id="lang-btn-java" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-zinc-700 bg-zinc-900 text-zinc-400">Java</button>
               <button onclick="window.SynapseApp.selectLanguage('cpp')" id="lang-btn-cpp" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-zinc-700 bg-zinc-900 text-zinc-400">C++</button>
+              <button onclick="window.SynapseApp.selectLanguage('c')" id="lang-btn-c" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-zinc-700 bg-zinc-900 text-zinc-400">C</button>
+              <button onclick="window.SynapseApp.selectLanguage('go')" id="lang-btn-go" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-zinc-700 bg-zinc-900 text-zinc-400">Go</button>
+              <button onclick="window.SynapseApp.selectLanguage('rust')" id="lang-btn-rust" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-zinc-700 bg-zinc-900 text-zinc-400">Rust</button>
             </div>
 
           </div>
@@ -291,7 +294,10 @@
             <!-- Code Block (Lines) -->
             <div class="lg:col-span-8 p-4 bg-[#171e19] overflow-x-auto border-b lg:border-b-0 lg:border-r-2 border-black">
               <div class="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800">
-                <span class="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Source Code (Click any line to inspect)</span>
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Source Code (Click line to inspect)</span>
+                  <span id="compiler-status-badge" class="hidden px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded border"></span>
+                </div>
                 <button id="explain-all-lines-btn" class="px-2.5 py-1 text-[10px] font-mono font-bold uppercase bg-white text-[#171e19] border border-black rounded hard-shadow-sm btn-press">
                   Explain All Lines (Beginner Mode)
                 </button>
@@ -513,6 +519,27 @@
   <script src="data/languages/javascript/queue.js"></script>
   <script src="data/languages/javascript/hashing.js"></script>
   <script src="data/languages/javascript/trees.js"></script>
+
+  <script src="data/languages/c/arrays-strings.js"></script>
+  <script src="data/languages/c/linked-list.js"></script>
+  <script src="data/languages/c/stack.js"></script>
+  <script src="data/languages/c/queue.js"></script>
+  <script src="data/languages/c/hashing.js"></script>
+  <script src="data/languages/c/trees.js"></script>
+
+  <script src="data/languages/go/arrays-strings.js"></script>
+  <script src="data/languages/go/linked-list.js"></script>
+  <script src="data/languages/go/stack.js"></script>
+  <script src="data/languages/go/queue.js"></script>
+  <script src="data/languages/go/hashing.js"></script>
+  <script src="data/languages/go/trees.js"></script>
+
+  <script src="data/languages/rust/arrays-strings.js"></script>
+  <script src="data/languages/rust/linked-list.js"></script>
+  <script src="data/languages/rust/stack.js"></script>
+  <script src="data/languages/rust/queue.js"></script>
+  <script src="data/languages/rust/hashing.js"></script>
+  <script src="data/languages/rust/trees.js"></script>
 
   <!-- Legacy Fallback Modules -->
   <script src="data/topics/arrays-strings.js"></script>

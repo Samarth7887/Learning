@@ -1,5 +1,5 @@
 /**
- * SynapseCS Language-Specific Implementation: JAVASCRIPT - Linked List
+ * SynapseCS Language-Specific Implementation: JAVASCRIPT - linked-list
  */
 (function(window) {
   'use strict';
@@ -72,13 +72,11 @@
     ],
     "rawCode": "function ListNode(val, next = null) {\n    this.val = val;\n    this.next = next;\n}\nfunction createList() {\n    const head = new ListNode(10);\n    const second = new ListNode(20);\n    const third = new ListNode(30);\n    head.next = second;\n    second.next = third;\n    return head;\n}",
     "explanations": {
-      "step_1": "Define the fundamental Node constructor storing the element value and a pointer reference.",
-      "step_2": "Instantiate 3 individual nodes with values 10, 20, and 30 in heap memory.",
-      "step_3": "Link node 10 to node 20, and node 20 to node 30 via forward next pointers.",
-      "step_4": "Return the head pointer pointing to the first node in the sequence.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -113,12 +111,11 @@
     ],
     "rawCode": "function insertAtHead(head, val) {\n    const newNode = new ListNode(val);\n    newNode.next = head;\n    return newNode;\n}",
     "explanations": {
-      "step_1": "Allocate a new heap node holding the target insertion value.",
-      "step_2": "Point the new node's next link to the existing head node.",
-      "step_3": "Return the new node as the updated head of the entire list.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -168,12 +165,13 @@
     ],
     "rawCode": "function insertAtTail(head, val) {\n    const newNode = new ListNode(val);\n    if (!head) return newNode;\n    let curr = head;\n    while (curr.next) curr = curr.next;\n    curr.next = newNode;\n    return head;\n}",
     "explanations": {
-      "step_1": "Handle edge case: if list is empty, newly allocated node is returned as head.",
-      "step_2": "Step through the chain with pointer curr until reaching the node where curr.next is null.",
-      "step_3": "Link the final node to the new node and return the unchanged head pointer.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -253,12 +251,13 @@
     ],
     "rawCode": "function insertAtK(head, index, val) {\n    if (index === 0) {\n        const n = new ListNode(val);\n        n.next = head;\n        return n;\n    }\n    let curr = head;\n    for (let i = 0; i < index - 1 && curr; i++) curr = curr.next;\n    if (!curr) return head;\n    const n = new ListNode(val);\n    n.next = curr.next;\n    curr.next = n;\n    return head;\n}",
     "explanations": {
-      "step_1": "Handle zero index: delegates directly to O(1) head insertion.",
-      "step_2": "Traverse index-1 steps to stand on the predecessor node right before insertion point.",
-      "step_3": "Crucial order: connect new node to successor first, then connect predecessor to new node.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -288,11 +287,10 @@
     ],
     "rawCode": "function deleteHead(head) {\n    if (!head) return null;\n    return head.next;\n}",
     "explanations": {
-      "step_1": "Verify non-empty boundary condition to prevent accessing null.",
-      "step_2": "Advance head to head.next, deallocating the evicted node where manual memory management applies.",
-      "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -337,12 +335,12 @@
     ],
     "rawCode": "function deleteTail(head) {\n    if (!head || !head.next) return null;\n    let curr = head;\n    while (curr.next.next) curr = curr.next;\n    curr.next = null;\n    return head;\n}",
     "explanations": {
-      "step_1": "If list has 0 or 1 node, deleting tail leaves the list empty (NULL).",
-      "step_2": "Scan forward while looking two steps ahead (curr.next.next) to stop on the penultimate node.",
-      "step_3": "Sever the terminal link by setting curr.next to NULL.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -412,12 +410,13 @@
     ],
     "rawCode": "function removeElements(head, val) {\n    const dummy = new ListNode(0, head);\n    let curr = dummy;\n    while (curr.next) {\n        if (curr.next.val === val) {\n            curr.next = curr.next.next;\n        } else {\n            curr = curr.next;\n        }\n    }\n    return dummy.next;\n}",
     "explanations": {
-      "step_1": "Initialize dummy node pointing to head, eliminating special-casing when head itself matches target.",
-      "step_2": "If curr.next matches target val, bypass it via curr.next = curr.next.next without advancing curr.",
-      "step_3": "Only advance curr when no deletion occurred, ensuring consecutive duplicates are caught.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -477,12 +476,13 @@
     ],
     "rawCode": "function searchList(head, target) {\n    let curr = head;\n    let idx = 0;\n    while (curr) {\n        if (curr.val === target) return idx;\n        curr = curr.next;\n        idx++;\n    }\n    return -1;\n}",
     "explanations": {
-      "step_1": "Set current pointer to head and initialize zero-based index counter.",
-      "step_2": "Check node value against target; if matched, return the index immediately.",
-      "step_3": "Advance pointer and increment counter. If end of list reached, return -1.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -537,11 +537,13 @@
     ],
     "rawCode": "function traverse(head) {\n    const res = [];\n    let curr = head;\n    while (curr) {\n        res.push(curr.val);\n        curr = curr.next;\n    }\n    return res;\n}",
     "explanations": {
-      "step_1": "Allocate dynamic array buffer and set traversal pointer curr = head.",
-      "step_2": "Loop while curr is non-null, appending curr.val and advancing curr to curr.next.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "mutate": "Executes tagged statement [mutate] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -586,11 +588,11 @@
     ],
     "rawCode": "function updateVal(head, index, newVal) {\n    let curr = head;\n    for (let i = 0; i < index && curr; i++) curr = curr.next;\n    if (!curr) return false;\n    curr.val = newVal;\n    return true;\n}",
     "explanations": {
-      "step_1": "Walk forward index times, checking boundary safety.",
-      "step_2": "Mutate node's val directly in memory.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -645,11 +647,12 @@
     ],
     "rawCode": "function getSize(head) {\n    let count = 0;\n    let curr = head;\n    while (curr) {\n        count++;\n        curr = curr.next;\n    }\n    return count;\n}",
     "explanations": {
-      "step_1": "Initialize accumulator count to 0 and cursor to head.",
-      "step_2": "Increment count on every node visit until curr becomes null.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -714,13 +717,12 @@
     ],
     "rawCode": "function reverseList(head) {\n    let prev = null;\n    let curr = head;\n    while (curr) {\n        const nextTemp = curr.next;\n        curr.next = prev;\n        prev = curr;\n        curr = nextTemp;\n    }\n    return prev;\n}",
     "explanations": {
-      "step_1": "Initialize prev = null (which will become the new tail's next pointer) and curr = head.",
-      "step_2": "Save the forward node reference (next_temp = curr.next) before breaking the link.",
-      "step_3": "Point current node backwards: curr.next = prev.",
-      "step_4": "Shift both pointers forward: prev becomes curr, and curr becomes next_temp.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -775,12 +777,11 @@
     ],
     "rawCode": "function middleNode(head) {\n    let slow = head;\n    let fast = head;\n    while (fast && fast.next) {\n        slow = slow.next;\n        fast = fast.next.next;\n    }\n    return slow;\n}",
     "explanations": {
-      "step_1": "Initialize both slow and fast pointers to the head node.",
-      "step_2": "Loop while fast and fast.next are valid: advance slow by 1 step and fast by 2 steps.",
-      "step_3": "When fast reaches the end, slow is exactly at the midpoint.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -840,12 +841,12 @@
     ],
     "rawCode": "function hasCycle(head) {\n    let slow = head;\n    let fast = head;\n    while (fast && fast.next) {\n        slow = slow.next;\n        fast = fast.next.next;\n        if (slow === fast) return true;\n    }\n    return false;\n}",
     "explanations": {
-      "step_1": "Set both pointers to head.",
-      "step_2": "Advance slow by 1 step and fast by 2 steps.",
-      "step_3": "If memory addresses collide (slow == fast), cycle is confirmed. If fast hits null, return false.",
-      "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -925,12 +926,13 @@
     ],
     "rawCode": "function mergeTwoLists(l1, l2) {\n    const dummy = new ListNode(0);\n    let tail = dummy;\n    while (l1 && l2) {\n        if (l1.val <= l2.val) {\n            tail.next = l1; l1 = l1.next;\n        } else {\n            tail.next = l2; l2 = l2.next;\n        }\n        tail = tail.next;\n    }\n    tail.next = l1 || l2;\n    return dummy.next;\n}",
     "explanations": {
-      "step_1": "Create dummy anchor node to build the merged list cleanly.",
-      "step_2": "Compare values: wire tail.next to the smaller node and advance that input pointer.",
-      "step_3": "Attach whichever non-empty list remains in O(1) time and return dummy.next.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -1000,13 +1002,12 @@
     ],
     "rawCode": "function removeNthFromEnd(head, n) {\n    const dummy = new ListNode(0, head);\n    let fast = dummy;\n    let slow = dummy;\n    for (let i = 0; i <= n; i++) fast = fast.next;\n    while (fast) {\n        fast = fast.next;\n        slow = slow.next;\n    }\n    slow.next = slow.next.next;\n    return dummy.next;\n}",
     "explanations": {
-      "step_1": "Set dummy node before head so deleting the first element requires no special case.",
-      "step_2": "Advance fast n+1 steps ahead to create a fixed gap between fast and slow.",
-      "step_3": "Slide both pointers forward until fast reaches null. slow is now at predecessor.",
-      "step_4": "Bypass the target node: slow.next = slow.next.next.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -1111,12 +1112,13 @@
     ],
     "rawCode": "function isPalindrome(head) {\n    let slow = head, fast = head;\n    while (fast && fast.next) {\n        slow = slow.next; fast = fast.next.next;\n    }\n    let prev = null;\n    while (slow) {\n        const nxt = slow.next;\n        slow.next = prev;\n        prev = slow;\n        slow = nxt;\n    }\n    let left = head, right = prev;\n    while (right) {\n        if (left.val !== right.val) return false;\n        left = left.next; right = right.next;\n    }\n    return true;\n}",
     "explanations": {
-      "step_1": "Find middle node using slow and fast pointers.",
-      "step_2": "Reverse the second half of the list in-place starting from slow.",
-      "step_3": "Compare front half against reversed tail half. If all match, return true.",
       "init": "Initialize pointers and variables.",
       "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   },
@@ -1231,13 +1233,12 @@
     ],
     "rawCode": "class LRUCache {\n    constructor(capacity) {\n        this.cap = capacity;\n        this.map = new Map();\n    }\n    get(key) {\n        if (!this.map.has(key)) return -1;\n        const val = this.map.get(key);\n        this.map.delete(key);\n        this.map.set(key, val);\n        return val;\n    }\n    put(key, value) {\n        if (this.map.has(key)) this.map.delete(key);\n        this.map.set(key, value);\n        if (this.map.size > this.cap) {\n            const oldestKey = this.map.keys().next().value;\n            this.map.delete(oldestKey);\n        }\n    }\n}",
     "explanations": {
-      "step_1": "Maintain dummy head (most recently used) and dummy tail (least recently used).",
-      "step_2": "_remove detaches node in O(1); _add splices node right after head in O(1).",
-      "step_3": "get(key): lookup node in hash map, promote to head, return value in O(1).",
-      "step_4": "put(key, val): insert/update node, promote to front, and evict tail.prev if capacity exceeded.",
       "init": "Initialize pointers and variables.",
-      "loop": "Loop across elements or until condition terminates.",
-      "return": "Return computed solution result."
+      "return": "Return computed solution result.",
+      "def": "Executes tagged statement [def] in javascript.",
+      "exec": "Executes tagged statement [exec] in javascript.",
+      "branch": "Executes tagged statement [branch] in javascript.",
+      "pointer": "Executes tagged statement [pointer] in javascript."
     },
     "notes": "V8 engine optimizes execution via hidden classes and just-in-time compilation."
   }
