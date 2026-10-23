@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SynapseCS // Animation Self-Test Diagnostic Harness (/debug.html)</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-[#fbfbf8] text-[#171e19] p-6 sm:p-10 font-mono">
+
+  <div class="max-w-6xl mx-auto space-y-6">
+    
+    <!-- Title Card -->
+    <div class="p-6 bg-white border-2 border-black rounded-xl hard-shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div>
+        <div class="inline-block px-2.5 py-0.5 bg-[#ffe17c] border border-black rounded text-[10px] font-bold uppercase mb-2">
+          Diagnostic Suite
+        </div>
+        <h1 class="text-2xl font-black tracking-tight">SynapseCS Animation Self-Test (/debug.html)</h1>
+        <p class="text-xs text-zinc-600 font-sans mt-1">
+          Simulates and plays every question animation from start to finish, checking renderer contracts, step counts, pointer boundaries, and state validity.
+        </p>
+      </div>
+
+      <button id="run-all-tests-btn" onclick="runDiagnostics()" class="px-5 py-2.5 font-mono font-bold text-xs uppercase bg-[#ffe17c] text-[#171e19] border-2 border-black hard-shadow btn-press rounded-lg">
+        ▶ Re-Run All Diagnostics
+      </button>
+    </div>
+
+    <!-- Summary Metrics -->
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      <div class="p-4 bg-white border-2 border-black rounded-lg hard-shadow-sm text-center">
+        <div id="stat-total" class="text-3xl font-black">0</div>
+        <div class="text-[10px] text-zinc-500 font-bold uppercase">Total Questions</div>
+      </div>
+      <div class="p-4 bg-[#b7c6c2] border-2 border-black rounded-lg hard-shadow-sm text-center">
+        <div id="stat-pass" class="text-3xl font-black text-[#171e19]">0</div>
+        <div class="text-[10px] text-zinc-800 font-bold uppercase">Passed</div>
+      </div>
+      <div class="p-4 bg-[#ff5f56] text-white border-2 border-black rounded-lg hard-shadow-sm text-center">
+        <div id="stat-fail" class="text-3xl font-black text-white">0</div>
+        <div class="text-[10px] text-white/90 font-bold uppercase">Failed</div>
+      </div>
+      <div class="p-4 bg-[#ffe17c] border-2 border-black rounded-lg hard-shadow-sm text-center">
+        <div id="stat-pct" class="text-3xl font-black">0%</div>
+        <div class="text-[10px] text-zinc-800 font-bold uppercase">Pass Rate</div>
+      </div>
+    </div>
+
+    <!-- Detailed Diagnostic Table -->
+    <div class="bg-white border-2 border-black rounded-xl hard-shadow-md overflow-hidden">
+      <div class="p-4 bg-[#0f1411] text-white border-b-2 border-black flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#ffe17c]">Live Execution Log</span>
+        <span id="log-status" class="text-xs text-zinc-400">Ready</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-zinc-100 border-b-2 border-black text-zinc-700 font-bold">
+              <th class="p-3 w-16">#</th>
+              <th class="p-3 w-40">Topic</th>
+              <th class="p-3">Question Title &amp; ID</th>
+              <th class="p-3 w-28">Steps</th>
+              <th class="p-3 w-28">Status</th>
+              <th class="p-3">Diagnostic Result / Error Detail</th>
+            </tr>
+          </thead>
+          <tbody id="test-results-tbody" class="divide-y divide-zinc-200">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Offscreen Mock Viewport for Animation Rendering Test -->
+  <div id="mock-canvas" class="hidden"></div>
+  <div id="mock-desc" class="hidden"></div>
+
+  <!-- Load Data Modules & Tracers -->
+  <script src="js/tracers/tracer-core.js"></script>
+  <script src="js/tracers/linked-list.js"></script>
+  <script src="js/tracers/stack.js"></script>
+  <script src="js/tracers/queue.js"></script>
+  <script src="js/tracers/arrays-strings.js"></script>
+  <script src="js/tracers/hashing.js"></script>
+  <script src="js/tracers/trees.js"></script>
+  <script src="data/topics/arrays-strings.js"></script>
+  <script src="data/topics/linked-list.js"></script>
+  <script src="data/topics/stack.js"></script>
+  <script src="data/topics/queue.js"></script>
+  <script src="data/topics/hashing.js"></script>
+  <script src="data/topics/trees.js"></script>
+  <script src="js/animator.js"></script>
+
+  <script>
+    const KNOWN_RENDERERS = new Set([
+      'array', 'linked-list', 'doubly-linked-list', 'stack', 'queue',
+      'tree', 'graph', 'hash-table', 'grid', 'dp-table', 'heap', 'trie'
+    ]);
+
+    function runDiagnostics() {
+      const tbody = document.getElementById('test-results-tbody');
+      tbody.innerHTML = '';
+      
+      const topics = window.DSA_TOPICS || {};
+      let total = 0, pass = 0, fail = 0;
+      let counter = 1;
+
+      for (const tKey in topics) {
+        const topic = topics[tKey];
+        const questions = [];
+        if (Array.isArray(topic.questions)) questions.push(...topic.questions);
+        if (Array.isArray(topic.subtopics)) {
+          for (const sub of topic.subtopics) {
+            if (Array.isArray(sub.questions)) {
+              for (const q of sub.questions) {
+                if (!questions.some(existing => existing.id === q.id)) {
+                  questions.push(q);
+                }
+              }
+            }
+          }
+        }
+
+        for (const q of questions) {
+          total++;
+          const errors = [];
+          const approaches = q.approaches || [];
+
+          if (!approaches.length) {
+            errors.push('No approaches defined');
+          } else {
+            const appr = approaches[0];
+            const steps = appr.animationSteps;
+
+            // Verify tracer execution if available
+            const tracerFn = window.Tracers && (window.Tracers[q.tracer] || window.Tracers[q.id]);
+            if (typeof tracerFn === 'function') {
+              try {
+                const tracerSteps = tracerFn(q.sampleInput);
+                if (!Array.isArray(tracerSteps) || tracerSteps.length === 0) {
+                  errors.push('Tracer returned 0 steps');
+                }
+              } catch (tErr) {
+                errors.push(`Tracer Execution Failed: ${tErr.message}`);
+              }
+            }
+
+            if (!steps || !Array.isArray(steps)) {
+              errors.push('animationSteps is missing or not an array');
+            } else if (steps.length === 0) {
+              errors.push('step count of 0');
+            } else {
+              // Test step playback
+              try {
+                steps.forEach((step, idx) => {
+                  if (!step) {
+                    errors.push(`Step ${idx + 1}: null/undefined step`);
+                    return;
+                  }
+                  if (!step.description) {
+                    errors.push(`Step ${idx + 1}: missing description`);
+                  }
+                  if (!step.state || typeof step.state !== 'object') {
+                    errors.push(`Step ${idx + 1}: missing state object`);
+                  } else {
+                    const rType = step.state.type;
+                    if (!rType) {
+                      errors.push(`Step ${idx + 1}: state.type missing (renderer missing)`);
+                    } else if (!KNOWN_RENDERERS.has(rType)) {
+                      errors.push(`Step ${idx + 1}: unknown renderer "${rType}" (renderer missing)`);
+                    }
+
+                    // Pointers bounds check
+                    const ptrs = step.pointers || {};
+                    if (rType === 'array' && Array.isArray(step.state.array)) {
+                      for (const [p, val] of Object.entries(ptrs)) {
+                        if (typeof val === 'number' && (val < 0 || val >= step.state.array.length)) {
+                          errors.push(`Step ${idx + 1}: pointer "${p}" (${val}) out of array bounds [0..${step.state.array.length - 1}]`);
+                        }
+                      }
+                    } else if (rType === 'linked-list' && Array.isArray(step.state.nodes)) {
+                      for (const [p, val] of Object.entries(ptrs)) {
+                        if (typeof val === 'number' && (val < 0 || val >= step.state.nodes.length)) {
+                          errors.push(`Step ${idx + 1}: pointer "${p}" (${val}) out of node bounds [0..${step.state.nodes.length - 1}]`);
+                        }
+                      }
+                    } else if (rType === 'stack' && Array.isArray(step.state.stack)) {
+                      for (const [p, val] of Object.entries(ptrs)) {
+                        if (typeof val === 'number' && (val < 0 || val >= step.state.stack.length)) {
+                          errors.push(`Step ${idx + 1}: pointer "${p}" (${val}) out of stack bounds [0..${step.state.stack.length - 1}]`);
+                        }
+                      }
+                    } else if (rType === 'queue' && Array.isArray(step.state.queue)) {
+                      for (const [p, val] of Object.entries(ptrs)) {
+                        if (typeof val === 'number' && (val < 0 || val >= step.state.queue.length)) {
+                          errors.push(`Step ${idx + 1}: pointer "${p}" (${val}) out of queue bounds [0..${step.state.queue.length - 1}]`);
+                        }
+                      }
+                    }
+                  }
+                });
+              } catch (playErr) {
+                errors.push(`JS Runtime Playback Error: ${playErr.message}`);
+              }
+            }
+          }
+
+          const isPass = errors.length === 0;
+          if (isPass) pass++; else fail++;
+
+          const tr = document.createElement('tr');
+          tr.className = isPass ? 'hover:bg-zinc-50' : 'bg-rose-50/60 hover:bg-rose-100/50';
+          tr.innerHTML = `
+            <td class="p-3 font-mono text-zinc-500">${counter++}</td>
+            <td class="p-3 font-semibold text-zinc-700">${topic.title}</td>
+            <td class="p-3">
+              <div class="font-bold text-[#171e19]">${q.title}</div>
+              <div class="text-[10px] font-mono text-zinc-500">${q.id}</div>
+            </td>
+            <td class="p-3 font-mono">${(q.approaches && q.approaches[0] && q.approaches[0].animationSteps) ? q.approaches[0].animationSteps.length : 0}</td>
+            <td class="p-3">
+              <span class="px-2 py-0.5 font-mono text-[10px] font-bold rounded border ${
+                isPass ? 'bg-[#b7c6c2] text-[#171e19] border-black' : 'bg-[#ff5f56] text-white border-black'
+              }">
+                ${isPass ? 'PASS' : 'FAIL'}
+              </span>
+            </td>
+            <td class="p-3 text-xs font-mono ${isPass ? 'text-emerald-700 font-semibold' : 'text-rose-700 font-medium'}">
+              ${isPass ? '✓ All steps and renderers valid' : errors.join('<br>')}
+            </td>
+          `;
+          tbody.appendChild(tr);
+        }
+      }
+
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-pass').textContent = pass;
+      document.getElementById('stat-fail').textContent = fail;
+      document.getElementById('stat-pct').textContent = `${total > 0 ? Math.round((pass / total) * 100) : 0}%`;
+      document.getElementById('log-status').textContent = `Audit completed: ${pass}/${total} passing.`;
+    }
+
+    window.addEventListener('DOMContentLoaded', runDiagnostics);
+  </script>
+</body>
+</html>

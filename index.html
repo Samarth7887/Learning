@@ -209,6 +209,9 @@
       <!-- RIGHT QUESTION DETAIL & ANIMATION WORKBENCH -->
       <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 bg-[#fbfbf8] sidebar-scroll">
 
+        <!-- Language Mini Lesson Banner Mount -->
+        <div id="language-mini-lesson-mount"></div>
+
         <!-- Question Header Badge Row -->
         <div class="bg-white border-2 border-black rounded-xl p-5 hard-shadow flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div class="space-y-1.5">
@@ -320,6 +323,9 @@
                   <strong id="q-complexity-space" class="text-[#b7c6c2]">O(1)</strong>
                 </div>
               </div>
+
+              <!-- Language Memory Notes Mount -->
+              <div id="language-notes-mount"></div>
             </div>
 
           </div>
@@ -409,14 +415,106 @@
       </div>
     </div>
 
+    <!-- =================================================================== -->
+    <!-- VIEW 4: LANGUAGE PICKER PAGE                                        -->
+    <!-- =================================================================== -->
+    <div id="view-languages" class="hidden flex-1 p-6 sm:p-12 bg-[#fbfbf8] dot-pattern-light">
+      <div class="max-w-6xl mx-auto space-y-8">
+        <div class="text-center space-y-3 max-w-2xl mx-auto">
+          <div class="inline-block px-3 py-1 bg-[#ffe17c] border-2 border-black rounded-full font-mono font-bold text-xs uppercase tracking-wider hard-shadow-sm">
+            Step 1: Choose Your Stack
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-black text-[#171e19] uppercase tracking-tight">
+            Select Programming Language
+          </h1>
+          <p class="text-xs sm:text-sm text-zinc-600 font-sans">
+            SynapseCS runs true idiomatic code, tailored memory models, and line-by-line syntax explanations genuinely authored for each language.
+          </p>
+        </div>
+
+        <!-- Languages Grid -->
+        <div id="languages-grid-mount" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 5: 404 NOT FOUND PAGE                                          -->
+    <!-- =================================================================== -->
+    <div id="view-not-found" class="hidden flex-1 flex items-center justify-center p-6 bg-[#fbfbf8]">
+      <div id="not-found-mount" class="w-full"></div>
+    </div>
+
   </div>
 
   <!-- FOOTER CONTAINER -->
   <div id="app-footer-container"></div>
 
   <!-- ===================================================================== -->
-  <!-- DATA MODULES & CLIENT APPLICATION ENGINE                              -->
+  <!-- ALGORITHMIC TRACERS (A2 TRACER ENGINE)                                 -->
   <!-- ===================================================================== -->
+  <script src="js/tracers/tracer-core.js"></script>
+  <script src="js/tracers/linked-list.js"></script>
+  <script src="js/tracers/stack.js"></script>
+  <script src="js/tracers/queue.js"></script>
+  <script src="js/tracers/arrays-strings.js"></script>
+  <script src="js/tracers/hashing.js"></script>
+  <script src="js/tracers/trees.js"></script>
+
+  <!-- ===================================================================== -->
+  <!-- LANGUAGE METADATA (B2 ARCHITECTURE)                                   -->
+  <!-- ===================================================================== -->
+  <script src="data/languages/python/meta.js"></script>
+  <script src="data/languages/java/meta.js"></script>
+  <script src="data/languages/cpp/meta.js"></script>
+  <script src="data/languages/javascript/meta.js"></script>
+  <script src="data/languages/c/meta.js"></script>
+  <script src="data/languages/go/meta.js"></script>
+  <script src="data/languages/rust/meta.js"></script>
+
+  <!-- ===================================================================== -->
+  <!-- LANGUAGE-NEUTRAL QUESTION CATALOG                                     -->
+  <!-- ===================================================================== -->
+  <script src="data/questions/arrays-strings.js"></script>
+  <script src="data/questions/linked-list.js"></script>
+  <script src="data/questions/stack.js"></script>
+  <script src="data/questions/queue.js"></script>
+  <script src="data/questions/hashing.js"></script>
+  <script src="data/questions/trees.js"></script>
+
+  <!-- ===================================================================== -->
+  <!-- LANGUAGE-SPECIFIC IMPLEMENTATIONS & TAGGED CODE LINES                 -->
+  <!-- ===================================================================== -->
+  <script src="data/languages/python/arrays-strings.js"></script>
+  <script src="data/languages/python/linked-list.js"></script>
+  <script src="data/languages/python/stack.js"></script>
+  <script src="data/languages/python/queue.js"></script>
+  <script src="data/languages/python/hashing.js"></script>
+  <script src="data/languages/python/trees.js"></script>
+
+  <script src="data/languages/java/arrays-strings.js"></script>
+  <script src="data/languages/java/linked-list.js"></script>
+  <script src="data/languages/java/stack.js"></script>
+  <script src="data/languages/java/queue.js"></script>
+  <script src="data/languages/java/hashing.js"></script>
+  <script src="data/languages/java/trees.js"></script>
+
+  <script src="data/languages/cpp/arrays-strings.js"></script>
+  <script src="data/languages/cpp/linked-list.js"></script>
+  <script src="data/languages/cpp/stack.js"></script>
+  <script src="data/languages/cpp/queue.js"></script>
+  <script src="data/languages/cpp/hashing.js"></script>
+  <script src="data/languages/cpp/trees.js"></script>
+
+  <script src="data/languages/javascript/arrays-strings.js"></script>
+  <script src="data/languages/javascript/linked-list.js"></script>
+  <script src="data/languages/javascript/stack.js"></script>
+  <script src="data/languages/javascript/queue.js"></script>
+  <script src="data/languages/javascript/hashing.js"></script>
+  <script src="data/languages/javascript/trees.js"></script>
+
+  <!-- Legacy Fallback Modules -->
   <script src="data/topics/arrays-strings.js"></script>
   <script src="data/topics/linked-list.js"></script>
   <script src="data/topics/stack.js"></script>

@@ -279,14 +279,16 @@ window.SynapseComponents = (function () {
     `;
   }
 
-  // 8. ACCESSIBLE NAVBAR
-  function Navbar({ activeView = 'home' } = {}) {
+  // 8. ACCESSIBLE NAVBAR WITH LANGUAGE SELECTION
+  function Navbar({ activeView = 'home', currentLang = 'python' } = {}) {
+    const langMeta = (window.DSA_LANG_META && window.DSA_LANG_META[currentLang]) || { name: 'Python', color: '#3776ab' };
+
     return `
       <header class="sticky top-0 z-50 bg-white border-b-2 border-black">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           
           <!-- Logo Brand -->
-          <div class="flex items-center gap-2.5 cursor-pointer" onclick="window.SynapseApp.switchView('home')">
+          <div class="flex items-center gap-2.5 cursor-pointer" onclick="location.hash = '#/'">
             <div class="w-9 h-9 bg-[#ffe17c] border-2 border-black rounded-lg flex items-center justify-center font-mono font-black text-lg hard-shadow-sm">
               S
             </div>
@@ -298,30 +300,39 @@ window.SynapseComponents = (function () {
 
           <!-- Desktop Navigation Links -->
           <nav class="hidden md:flex items-center gap-1">
-            <button onclick="window.SynapseApp.switchView('home')" class="px-3.5 py-1.5 text-xs font-mono font-bold uppercase rounded border-2 ${activeView === 'home' ? 'bg-[#ffe17c] border-black hard-shadow-sm' : 'border-transparent hover:border-black hover:bg-zinc-100'}">
+            <button onclick="location.hash = '#/'" class="px-3.5 py-1.5 text-xs font-mono font-bold uppercase rounded border-2 ${activeView === 'home' ? 'bg-[#ffe17c] border-black hard-shadow-sm' : 'border-transparent hover:border-black hover:bg-zinc-100'}">
               Home
             </button>
-            <button onclick="window.SynapseApp.switchView('topics')" class="px-3.5 py-1.5 text-xs font-mono font-bold uppercase rounded border-2 ${activeView === 'topics' ? 'bg-[#ffe17c] border-black hard-shadow-sm' : 'border-transparent hover:border-black hover:bg-zinc-100'}">
-              Topics
+            <button onclick="location.hash = '#/languages'" class="px-3.5 py-1.5 text-xs font-mono font-bold uppercase rounded border-2 ${activeView === 'languages' ? 'bg-[#ffe17c] border-black hard-shadow-sm' : 'border-transparent hover:border-black hover:bg-zinc-100'}">
+              Languages
             </button>
-            <button onclick="window.SynapseApp.switchView('topics')" class="px-3.5 py-1.5 text-xs font-mono font-bold uppercase rounded border-2 border-transparent hover:border-black hover:bg-zinc-100">
-              Learning Path
+            <button onclick="location.hash = '#/learn/' + (window.SynapseApp ? window.SynapseApp.currentLang : 'python')" class="px-3.5 py-1.5 text-xs font-mono font-bold uppercase rounded border-2 ${activeView === 'topics' ? 'bg-[#ffe17c] border-black hard-shadow-sm' : 'border-transparent hover:border-black hover:bg-zinc-100'}">
+              Curriculum
             </button>
-            <button onclick="window.SynapseApp.switchView('topics')" class="px-3.5 py-1.5 text-xs font-mono font-bold uppercase rounded border-2 border-transparent hover:border-black hover:bg-zinc-100">
-              Practice
-            </button>
-            <button onclick="window.SynapseApp.switchView('progress')" class="px-3.5 py-1.5 text-xs font-mono font-bold uppercase rounded border-2 ${activeView === 'progress' ? 'bg-[#ffe17c] border-black hard-shadow-sm' : 'border-transparent hover:border-black hover:bg-zinc-100'}">
+            <button onclick="location.hash = '#/progress'" class="px-3.5 py-1.5 text-xs font-mono font-bold uppercase rounded border-2 ${activeView === 'progress' ? 'bg-[#ffe17c] border-black hard-shadow-sm' : 'border-transparent hover:border-black hover:bg-zinc-100'}">
               Progress
             </button>
           </nav>
 
-          <!-- Desktop CTA & Mobile Hamburger Toggle -->
+          <!-- Language Badge & Actions -->
           <div class="flex items-center gap-3">
+            <!-- Active Language Button -->
+            <button 
+              onclick="location.hash = '#/languages'" 
+              title="Change active programming language"
+              class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-black uppercase rounded-lg border-2 border-black bg-[#fbfbf8] hover:bg-[#ffe17c] hard-shadow-sm btn-press transition-colors cursor-pointer"
+            >
+              <span class="w-2.5 h-2.5 rounded-full inline-block" style="background-color: ${langMeta.color};"></span>
+              <span>${langMeta.name}</span>
+              <span class="text-[10px] text-zinc-500 font-normal">Change ⇄</span>
+            </button>
+
+            <!-- Desktop Start Learning CTA -->
             <div class="hidden sm:block">
               ${NeoBrutalButton({
                 text: 'Start Learning',
                 variant: 'yellow',
-                onClickAttr: "window.SynapseApp.switchView('topics')"
+                onClickAttr: "window.SynapseApp.startLearning()"
               })}
             </div>
             
@@ -342,13 +353,16 @@ window.SynapseComponents = (function () {
 
         <!-- Mobile Drawer Menu -->
         <div id="mobile-nav-drawer" class="hidden md:hidden border-t-2 border-black bg-white p-4 space-y-2">
-          <button onclick="window.SynapseApp.switchView('home'); window.SynapseApp.toggleMobileNav();" class="w-full text-left px-4 py-2 font-mono font-bold text-xs uppercase border-2 border-black rounded-lg ${activeView === 'home' ? 'bg-[#ffe17c]' : 'bg-zinc-100'}">
+          <button onclick="location.hash = '#/'; window.SynapseApp.toggleMobileNav();" class="w-full text-left px-4 py-2 font-mono font-bold text-xs uppercase border-2 border-black rounded-lg ${activeView === 'home' ? 'bg-[#ffe17c]' : 'bg-zinc-100'}">
             Home
           </button>
-          <button onclick="window.SynapseApp.switchView('topics'); window.SynapseApp.toggleMobileNav();" class="w-full text-left px-4 py-2 font-mono font-bold text-xs uppercase border-2 border-black rounded-lg ${activeView === 'topics' ? 'bg-[#ffe17c]' : 'bg-zinc-100'}">
-            Topics &amp; Practice
+          <button onclick="location.hash = '#/languages'; window.SynapseApp.toggleMobileNav();" class="w-full text-left px-4 py-2 font-mono font-bold text-xs uppercase border-2 border-black rounded-lg ${activeView === 'languages' ? 'bg-[#ffe17c]' : 'bg-zinc-100'}">
+            Languages (${langMeta.name})
           </button>
-          <button onclick="window.SynapseApp.switchView('progress'); window.SynapseApp.toggleMobileNav();" class="w-full text-left px-4 py-2 font-mono font-bold text-xs uppercase border-2 border-black rounded-lg ${activeView === 'progress' ? 'bg-[#ffe17c]' : 'bg-zinc-100'}">
+          <button onclick="location.hash = '#/learn/' + window.SynapseApp.currentLang; window.SynapseApp.toggleMobileNav();" class="w-full text-left px-4 py-2 font-mono font-bold text-xs uppercase border-2 border-black rounded-lg ${activeView === 'topics' ? 'bg-[#ffe17c]' : 'bg-zinc-100'}">
+            Curriculum
+          </button>
+          <button onclick="location.hash = '#/progress'; window.SynapseApp.toggleMobileNav();" class="w-full text-left px-4 py-2 font-mono font-bold text-xs uppercase border-2 border-black rounded-lg ${activeView === 'progress' ? 'bg-[#ffe17c]' : 'bg-zinc-100'}">
             My Progress
           </button>
           <div class="pt-2">
@@ -356,11 +370,124 @@ window.SynapseComponents = (function () {
               text: 'Start Learning',
               variant: 'yellow',
               className: 'w-full',
-              onClickAttr: "window.SynapseApp.switchView('topics'); window.SynapseApp.toggleMobileNav();"
+              onClickAttr: "window.SynapseApp.startLearning(); window.SynapseApp.toggleMobileNav();"
             })}
           </div>
         </div>
       </header>
+    `;
+  }
+
+  // 9. LANGUAGE CARD (Neo-Brutalist Spec)
+  function LanguageCard({ lang, questionCount = 0, completedCount = 0 }) {
+    const isAvail = lang.available;
+    const isDone = isAvail && questionCount > 0 && completedCount === questionCount;
+
+    return `
+      <div 
+        ${isAvail ? `onclick="window.SynapseApp.selectLanguage('${lang.id}')"` : ''}
+        class="group p-6 bg-white border-2 border-black rounded-xl hard-shadow flex flex-col justify-between transition-all select-none ${
+          isAvail ? 'cursor-pointer btn-press hover:bg-zinc-50' : 'opacity-60 cursor-not-allowed bg-zinc-100 border-dashed'
+        }"
+      >
+        <div>
+          <!-- Card Header -->
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-lg border-2 border-black flex items-center justify-center font-mono font-black text-lg hard-shadow-sm text-white" style="background-color: ${lang.color};">
+                ${lang.name.slice(0, 2).toUpperCase()}
+              </div>
+              <div>
+                <h3 class="font-black text-xl text-[#171e19] group-hover:text-black">
+                  ${lang.name}
+                </h3>
+                <span class="text-[10px] font-mono text-zinc-500 font-bold uppercase">
+                  ${lang.extension} file format
+                </span>
+              </div>
+            </div>
+
+            <span class="px-2.5 py-1 text-[10px] font-mono font-black uppercase rounded border border-black ${
+              !isAvail ? 'bg-zinc-200 text-zinc-600' : isDone ? 'bg-[#b7c6c2] text-[#171e19]' : 'bg-[#ffe17c] text-[#171e19]'
+            }">
+              ${!isAvail ? 'Coming Soon' : `${completedCount}/${questionCount} Solved`}
+            </span>
+          </div>
+
+          <!-- Description -->
+          <p class="text-xs text-zinc-700 leading-relaxed font-sans mb-6">
+            ${lang.description}
+          </p>
+        </div>
+
+        <!-- Footer Action -->
+        <div class="pt-4 border-t-2 border-black flex items-center justify-between">
+          <span class="text-xs font-mono font-bold ${isAvail ? 'text-[#171e19]' : 'text-zinc-500'}">
+            ${isAvail ? `${questionCount} questions available` : 'Scaffolded syntax preview'}
+          </span>
+          <span class="font-mono font-black text-xs uppercase px-3 py-1.5 rounded border border-black ${
+            isAvail ? 'bg-[#ffe17c] text-[#171e19]' : 'bg-zinc-200 text-zinc-500'
+          }">
+            ${isAvail ? 'Select Language →' : 'Locked'}
+          </span>
+        </div>
+      </div>
+    `;
+  }
+
+  // 10. HELLO WORLD MINI LESSON
+  function HelloWorldMiniLesson({ langMeta }) {
+    if (!langMeta || !langMeta.helloWorld) return '';
+    return `
+      <div class="p-6 bg-white border-2 border-black rounded-xl hard-shadow-md mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-4 border-b-2 border-black">
+          <div class="flex items-center gap-3">
+            <span class="w-3.5 h-3.5 rounded-full inline-block" style="background-color: ${langMeta.color};"></span>
+            <h2 class="text-lg font-black text-[#171e19]">Welcome to ${langMeta.name} Learning Track</h2>
+          </div>
+          <span class="px-2.5 py-0.5 bg-[#ffe17c] border border-black rounded text-[10px] font-mono font-bold uppercase">
+            Quickstart Mini-Lesson
+          </span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <span class="text-[10px] font-mono text-zinc-500 font-bold uppercase block mb-1">Standard Entry Point (${langMeta.extension}):</span>
+            <pre class="p-3 bg-[#171e19] text-[#ffe17c] rounded-lg border-2 border-black font-mono text-xs overflow-x-auto"><code>${langMeta.helloWorld.code}</code></pre>
+          </div>
+          <div>
+            <span class="text-[10px] font-mono text-zinc-500 font-bold uppercase block mb-1">How To Run Locally:</span>
+            <pre class="p-3 bg-zinc-100 text-[#171e19] rounded-lg border-2 border-black font-mono text-xs overflow-x-auto"><code>$ ${langMeta.helloWorld.howToRun}</code></pre>
+            <p class="text-[11px] text-zinc-600 mt-2 font-sans">
+              All question solutions in this track will render exclusively in ${langMeta.name} syntax with matching memory pointers and step explanations.
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // 11. NOT FOUND 404 VIEW
+  function NotFoundView() {
+    return `
+      <div class="max-w-2xl mx-auto py-16 px-4 text-center space-y-6">
+        <div class="inline-block px-3 py-1 bg-[#ff5f56] text-white border-2 border-black rounded-lg font-mono font-black text-sm uppercase hard-shadow-sm">
+          404 // ROUTE NOT FOUND
+        </div>
+        <h1 class="text-4xl sm:text-5xl font-black text-[#171e19] tracking-tight">
+          Lost in Heap Memory?
+        </h1>
+        <p class="text-sm text-zinc-600 font-sans leading-relaxed">
+          The requested URL does not match any registered language, topic, or question in SynapseCS.
+        </p>
+        <div class="pt-4 flex items-center justify-center gap-4">
+          <button onclick="location.hash = '#/languages'" class="px-6 py-3 font-mono font-bold text-xs uppercase bg-[#ffe17c] text-[#171e19] border-2 border-black hard-shadow btn-press rounded-lg">
+            ← Browse Languages
+          </button>
+          <button onclick="location.hash = '#/'" class="px-6 py-3 font-mono font-bold text-xs uppercase bg-white text-[#171e19] border-2 border-black hard-shadow btn-press rounded-lg">
+            Return Home
+          </button>
+        </div>
+      </div>
     `;
   }
 
@@ -427,6 +554,9 @@ window.SynapseComponents = (function () {
     ProgressCard,
     FinalCTA,
     Navbar,
+    LanguageCard,
+    HelloWorldMiniLesson,
+    NotFoundView,
     Footer
   };
 

@@ -1,7 +1,6 @@
 /**
  * SynapseCS - Main Application Controller (Neo-Brutalist Edition)
- * Handles view routing (Home, Topics, Progress), sidebar accordion hierarchy,
- * search, filtering, progress persistence, code line explanation, and animation sync.
+ * Full Hash Router, Language Separation, Dynamic Tracers, and State Contract Validation.
  */
 
 (function(window) {
@@ -9,48 +8,69 @@
 
   class SynapseApp {
     constructor() {
+      // Load language-neutral questions or fallback to legacy topics
+      this.questionsCatalog = window.DSA_QUESTIONS || {};
       this.topics = window.DSA_TOPICS || {};
-      this.currentView = 'home'; // 'home' | 'topics' | 'progress'
+      this.langMeta = window.DSA_LANG_META || {};
+      this.langCode = window.DSA_LANG_CODE || {};
+
+      this.currentView = 'home';
+      this.currentLang = localStorage.getItem('synapse_selected_lang') || 'python';
       this.currentTopicId = 'linked-list';
       this.currentQuestionId = null;
       this.currentApproachIdx = 0;
-      this.currentLang = 'python';
       this.explainAllMode = false;
       this.filterDifficulty = 'all';
       this.filterStatus = 'all';
       this.searchQuery = '';
-      
-      // Hero Mini Reversal State
-      this.heroMiniStep = 0;
+      this.compareLang = null; // Optional secondary language for comparison
 
-      // Normalize topics: support both flat questions array and subtopic.questions arrays
-      for (const tKey in this.topics) {
-        const topic = this.topics[tKey];
-        if (!topic.questions) topic.questions = [];
-        if (topic.subtopics) {
-          topic.subtopics.forEach(sub => {
-            if (Array.isArray(sub.questions)) {
-              sub.questions.forEach(q => {
-                if (!q.subtopicId) q.subtopicId = sub.id;
-                if (!topic.questions.some(existing => existing.id === q.id)) {
-                  topic.questions.push(q);
-                }
-              });
-            }
-          });
-        }
-      }
+      // Normalize topics catalog
+      this.normalizeData();
 
-      this.expandedTopics = new Set(Object.keys(this.topics));
+      this.expandedTopics = new Set(Object.keys(this.catalog));
       this.expandedSubtopics = new Set();
-      for (const tKey in this.topics) {
-        (this.topics[tKey].subtopics || []).forEach(s => this.expandedSubtopics.add(s.id));
+      for (const tKey in this.catalog) {
+        (this.catalog[tKey].subtopics || []).forEach(s => this.expandedSubtopics.add(s.id));
       }
-      
+
       this.progress = this.loadProgress();
       this.animator = null;
+      this.heroMiniStep = 0;
 
       this.init();
+    }
+
+    normalizeData() {
+      // Prefer window.DSA_QUESTIONS, fallback to window.DSA_TOPICS
+      const source = Object.keys(this.questionsCatalog).length > 0 ? this.questionsCatalog : this.topics;
+      this.catalog = {};
+
+      for (const tKey in source) {
+        const item = source[tKey];
+        const qList = [];
+        if (Array.isArray(item.questions)) qList.push(...item.questions);
+        if (Array.isArray(item.subtopics)) {
+          for (const sub of item.subtopics) {
+            if (Array.isArray(sub.questions)) {
+              for (const q of sub.questions) {
+                if (!qList.some(existing => existing.id === q.id)) {
+                  qList.push(q);
+                }
+              }
+            }
+          }
+        }
+
+        this.catalog[tKey] = {
+          id: item.id || tKey,
+          title: item.title,
+          icon: item.icon || 'ph:code',
+          description: item.description || '',
+          subtopics: item.subtopics || [{ id: 'all', title: 'All Questions' }],
+          questions: qList
+        };
+      }
     }
 
     init() {
@@ -58,38 +78,127 @@
       this.renderFooter();
       this.initAnimator();
       this.bindSearchAndFilters();
+      this.bindCustomInputControls();
       this.bindKeyboardShortcuts();
-      
-      // Set initial view
-      this.switchView('home');
 
-      // Auto-select first question for when topics view opens
-      const firstTopic = this.topics[this.currentTopicId] || Object.values(this.topics)[0];
-      if (firstTopic && firstTopic.questions && firstTopic.questions.length > 0) {
-        this.selectQuestion(firstTopic.questions[0].id);
-      }
+      // Listen for URL Hash Changes
+      window.addEventListener('hashchange', () => this.handleRoute());
+
+      // Initial Route Dispatch
+      this.handleRoute();
     }
 
     /* -----------------------------------------------------------------------
-     * VIEW ROUTING & NAVBAR / FOOTER
+     * HASH ROUTING (Zero-build, works on file:// and localhost)
+     * #/
+     * #/languages
+     * #/learn/:lang
+     * #/learn/:lang/:topic
+     * #/learn/:lang/:topic/:qid
+     * #/progress
      * ----------------------------------------------------------------------- */
+    handleRoute() {
+      const hash = window.location.hash.trim();
+      if (!hash || hash === '#' || hash === '#/') {
+        this.switchView('home');
+        return;
+      }
+
+      if (hash === '#/languages') {
+        this.switchView('languages');
+        return;
+      }
+
+      if (hash === '#/progress') {
+        this.switchView('progress');
+        return;
+      }
+
+      const matchLearn = hash.match(/^#\/learn\/([a-zA-Z0-9_\-]+)(?:\/([a-zA-Z0-9_\-]+))?(?:\/([a-zA-Z0-9_\-]+))?$/);
+      if (matchLearn) {
+        const lang = matchLearn[1].toLowerCase();
+        const topicId = matchLearn[2];
+        const qid = matchLearn[3];
+
+        // Check if language is registered
+        if (this.langMeta && this.langMeta[lang]) {
+          if (this.currentLang !== lang) {
+            this.currentLang = lang;
+            localStorage.setItem('synapse_selected_lang', lang);
+            this.progress = this.loadProgress();
+          }
+
+          if (topicId && this.catalog[topicId]) {
+            this.currentTopicId = topicId;
+            this.expandedTopics.add(topicId);
+          }
+
+          this.switchView('topics');
+
+          if (qid) {
+            this.selectQuestion(qid, false);
+          } else {
+            // Select first question of active topic
+            const activeTopic = this.catalog[this.currentTopicId] || Object.values(this.catalog)[0];
+            if (activeTopic && activeTopic.questions.length > 0) {
+              this.selectQuestion(activeTopic.questions[0].id, false);
+            }
+          }
+          return;
+        }
+      }
+
+      // Route Not Found (404)
+      this.switchView('not-found');
+    }
+
+    startLearning() {
+      const savedLang = localStorage.getItem('synapse_selected_lang');
+      if (savedLang && this.langMeta[savedLang] && this.langMeta[savedLang].available) {
+        window.location.hash = `#/learn/${savedLang}`;
+      } else {
+        window.location.hash = '#/languages';
+      }
+    }
+
+    goToLanguages() {
+      window.location.hash = '#/languages';
+    }
+
+    selectLanguage(langId) {
+      if (this.langMeta[langId] && !this.langMeta[langId].available) return;
+      this.currentLang = langId;
+      localStorage.setItem('synapse_selected_lang', langId);
+      this.progress = this.loadProgress();
+      window.location.hash = `#/learn/${langId}`;
+    }
+
     switchView(viewName) {
       this.currentView = viewName;
       this.renderNavbar();
 
-      const homeView = document.getElementById('view-home');
-      const topicsView = document.getElementById('view-topics');
-      const progressView = document.getElementById('view-progress');
+      const views = {
+        'home': document.getElementById('view-home'),
+        'topics': document.getElementById('view-topics'),
+        'progress': document.getElementById('view-progress'),
+        'languages': document.getElementById('view-languages'),
+        'not-found': document.getElementById('view-not-found')
+      };
 
-      if (homeView) homeView.classList.toggle('hidden', viewName !== 'home');
-      if (topicsView) topicsView.classList.toggle('hidden', viewName !== 'topics');
-      if (progressView) progressView.classList.toggle('hidden', viewName !== 'progress');
+      for (const vKey in views) {
+        if (views[vKey]) {
+          views[vKey].classList.toggle('hidden', vKey !== viewName);
+        }
+      }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       if (viewName === 'home') {
         this.renderHome();
+      } else if (viewName === 'languages') {
+        this.renderLanguagesPicker();
       } else if (viewName === 'topics') {
+        this.renderLanguageBanner();
         this.renderSidebar();
         this.updateProgressSummary();
         if (this.currentQuestionId) {
@@ -97,13 +206,21 @@
         }
       } else if (viewName === 'progress') {
         this.renderDedicatedProgress();
+      } else if (viewName === 'not-found') {
+        const mount = document.getElementById('not-found-mount');
+        if (mount && window.SynapseComponents) {
+          mount.innerHTML = window.SynapseComponents.NotFoundView();
+        }
       }
     }
 
     renderNavbar() {
       const container = document.getElementById('app-navbar-container');
       if (container && window.SynapseComponents) {
-        container.innerHTML = window.SynapseComponents.Navbar({ activeView: this.currentView });
+        container.innerHTML = window.SynapseComponents.Navbar({
+          activeView: this.currentView,
+          currentLang: this.currentLang
+        });
       }
     }
 
@@ -116,13 +233,49 @@
 
     toggleMobileNav() {
       const drawer = document.getElementById('mobile-nav-drawer');
-      if (drawer) {
-        drawer.classList.toggle('hidden');
+      if (drawer) drawer.classList.toggle('hidden');
+    }
+
+    /* -----------------------------------------------------------------------
+     * LANGUAGE PICKER VIEW (#/languages)
+     * ----------------------------------------------------------------------- */
+    renderLanguagesPicker() {
+      const mount = document.getElementById('languages-grid-mount');
+      if (!mount || !window.SynapseComponents) return;
+      mount.innerHTML = '';
+
+      const langs = Object.values(this.langMeta || {});
+      langs.forEach(lang => {
+        let qCount = 0;
+        if (lang.available) {
+          for (const tKey in this.catalog) {
+            qCount += (this.catalog[tKey].questions || []).length;
+          }
+        }
+        const langProgress = this.loadProgress(lang.id);
+        const solved = langProgress.size;
+
+        mount.innerHTML += window.SynapseComponents.LanguageCard({
+          lang: lang,
+          questionCount: qCount,
+          completedCount: solved
+        });
+      });
+    }
+
+    renderLanguageBanner() {
+      const mount = document.getElementById('language-mini-lesson-mount');
+      if (!mount || !window.SynapseComponents) return;
+      const meta = (this.langMeta && this.langMeta[this.currentLang]) || null;
+      if (meta) {
+        mount.innerHTML = window.SynapseComponents.HelloWorldMiniLesson({ langMeta: meta });
+      } else {
+        mount.innerHTML = '';
       }
     }
 
     /* -----------------------------------------------------------------------
-     * HOME PAGE SECTIONS
+     * HOME PAGE
      * ----------------------------------------------------------------------- */
     renderHome() {
       this.renderHeroMiniDemo();
@@ -140,7 +293,7 @@
 
       const steps = [
         {
-          desc: "Step 0: Head points to 0x1000 (10). Links forward: 10 -> 20 -> 30 -> NULL",
+          desc: "Step 0: Head points to 0x1000 (10). Chain: 10 -> 20 -> 30 -> NULL",
           nodes: [
             { val: 10, addr: "0x1000", next: "0x1020", ptr: "HEAD" },
             { val: 20, addr: "0x1020", next: "0x1040", ptr: "" },
@@ -148,7 +301,7 @@
           ]
         },
         {
-          desc: "Step 1: Rewire Node 10. 10.next = NULL. Prev = 10, Curr moves to 20.",
+          desc: "Step 1: Rewire Node 10. 10.next = NULL. Prev = 10, Curr = 20.",
           nodes: [
             { val: 10, addr: "0x1000", next: "NULL", ptr: "PREV" },
             { val: 20, addr: "0x1020", next: "0x1040", ptr: "CURR" },
@@ -156,7 +309,7 @@
           ]
         },
         {
-          desc: "Step 2: Rewire Node 20. 20.next = 10 (0x1000). Prev = 20, Curr moves to 30.",
+          desc: "Step 2: Rewire Node 20. 20.next = 10 (0x1000). Prev = 20, Curr = 30.",
           nodes: [
             { val: 20, addr: "0x1020", next: "0x1000", ptr: "PREV" },
             { val: 10, addr: "0x1000", next: "NULL", ptr: "" },
@@ -199,200 +352,100 @@
       `).join('');
 
       const stepBtn = document.getElementById('hero-mini-step-btn');
-      if (stepBtn) {
-        stepBtn.onclick = () => {
-          this.heroMiniStep = (this.heroMiniStep + 1) % steps.length;
-          this.renderHeroMiniDemo();
-        };
-      }
-
       const resetBtn = document.getElementById('hero-mini-reset-btn');
-      if (resetBtn) {
-        resetBtn.onclick = () => {
-          this.heroMiniStep = 0;
-          this.renderHeroMiniDemo();
-        };
-      }
+      if (stepBtn) stepBtn.onclick = () => { this.heroMiniStep++; this.renderHeroMiniDemo(); };
+      if (resetBtn) resetBtn.onclick = () => { this.heroMiniStep = 0; this.renderHeroMiniDemo(); };
     }
 
     renderHomeTopicsGrid() {
-      const grid = document.getElementById('home-topics-grid');
-      if (!grid || !window.SynapseComponents) return;
+      const container = document.getElementById('home-topics-grid');
+      if (!container || !window.SynapseComponents) return;
+      container.innerHTML = '';
 
-      const topicIcons = {
-        'linked-list': '🔗',
-        'stack': '🥞',
-        'queue': '🚶',
-        'hashing': '🗝️',
-        'arrays-strings': '📦',
-        'trees': '🌳'
-      };
-
-      grid.innerHTML = Object.keys(this.topics).map(tKey => {
-        const topic = this.topics[tKey];
+      for (const tKey in this.catalog) {
+        const topic = this.catalog[tKey];
         const qCount = (topic.questions || []).length;
-        const doneCount = (topic.questions || []).filter(q => this.isCompleted(q.id)).length;
-        const icon = topicIcons[tKey] || '💡';
+        const solved = (topic.questions || []).filter(q => this.isCompleted(q.id)).length;
 
-        return window.SynapseComponents.TopicCard({
-          id: topic.id,
+        container.innerHTML += window.SynapseComponents.TopicCard({
+          id: tKey,
           title: topic.title,
-          icon: icon,
-          description: topic.description || 'Core algorithmic patterns and memory layout fundamentals.',
+          icon: topic.icon === 'ph:tree-structure' ? '🌳' :
+                topic.icon === 'ph:rows' ? '📚' :
+                topic.icon === 'ph:clock-countdown' ? '⏳' :
+                topic.icon === 'ph:grid-four' ? '#️⃣' : '🔗',
+          description: topic.description,
           questionCount: qCount,
-          completedCount: doneCount,
-          onClick: `window.SynapseApp.selectTopic('${topic.id}')`
+          completedCount: solved,
+          onClick: `window.location.hash = '#/learn/${this.currentLang}/${tKey}'`
         });
-      }).join('');
+      }
     }
 
     renderHowItWorks() {
-      if (!window.SynapseComponents) return;
-      
-      const s1 = document.getElementById('how-step-1');
-      const s2 = document.getElementById('how-step-2');
-      const s3 = document.getElementById('how-step-3');
+      const container = document.getElementById('how-it-works-steps');
+      if (!container || !window.SynapseComponents) return;
+      container.innerHTML = '';
 
-      if (s1) {
-        s1.innerHTML = window.SynapseComponents.HowItWorksStep({
-          stepNumber: '01',
-          title: 'Learn The Physical Model',
-          description: 'Understand exactly how memory nodes, 64-bit addresses, and contiguous arrays sit in physical RAM before jumping to code.',
-          borderColor: 'sage'
-        });
-      }
+      const steps = [
+        { num: '01', title: 'Pick Your Language Track', desc: 'Choose between Python, Java, C++, or JavaScript with pure native idioms and memory semantics.' },
+        { num: '02', title: 'Watch Dynamic Tracers', desc: 'Step forward and back through physical pointers, heap allocations, and stack frames generated by reference tracers.' },
+        { num: '03', title: 'Master Line-by-Line Tags', desc: 'Every single line is tagged and explained in plain English, synchronizing code execution with visual state.' }
+      ];
 
-      if (s2) {
-        s2.innerHTML = window.SynapseComponents.HowItWorksStep({
-          stepNumber: '02',
-          title: 'Watch It Move Step-by-Step',
-          description: 'Play and scrub through step-by-step animations with synchronized line highlighting and beginner-friendly plain-English descriptions.',
-          borderColor: 'yellow'
-        });
-      }
-
-      if (s3) {
-        s3.innerHTML = window.SynapseComponents.HowItWorksStep({
-          stepNumber: '03',
-          title: 'Test Across 4 Languages',
-          description: 'Compare idiomatic Python, JavaScript, Java, and C++ code side-by-side with 100% verified executable solutions.',
-          borderColor: 'white'
-        });
-      }
+      steps.forEach(s => {
+        container.innerHTML += window.SynapseComponents.HowItWorksStep(s);
+      });
     }
 
     renderDifficultyCards() {
-      if (!window.SynapseComponents) return;
+      const container = document.getElementById('difficulty-cards-grid');
+      if (!container || !window.SynapseComponents) return;
+      container.innerHTML = '';
 
-      const dBasic = document.getElementById('diff-card-basic');
-      const dMed = document.getElementById('diff-card-medium');
-      const dHard = document.getElementById('diff-card-hard');
+      const diffs = [
+        { diff: 'Basic', title: 'Foundations & Layouts', desc: 'Master physical node definitions, 64-bit pointer arithmetic, and linear contiguous allocation.', count: 18 },
+        { diff: 'Medium', title: 'Algorithmic Patterns', desc: 'Conquer two pointers, sliding windows, Floyd cycle detection, and monotonic stacks.', count: 32 },
+        { diff: 'Hard', title: 'System & Optimization', desc: 'Solve LRU cache, Trapping Rain Water, Largest Histogram, and Multi-source BFS.', count: 12 }
+      ];
 
-      if (dBasic) {
-        dBasic.innerHTML = window.SynapseComponents.DifficultyCard({
-          level: 'BASIC & EASY',
-          title: 'Fundamental Blocks',
-          subtitle: 'Pointers, Arrays, Loops, Queue & Stacks',
-          icon: '🌱',
-          variant: 'sage',
-          onClick: "window.SynapseApp.filterByDifficulty('basic')"
+      diffs.forEach(d => {
+        container.innerHTML += window.SynapseComponents.DifficultyCard({
+          diff: d.diff,
+          title: d.title,
+          description: d.desc,
+          questionCount: d.count,
+          onClick: `window.SynapseApp.filterByDifficulty('${d.diff}')`
         });
-      }
-
-      if (dMed) {
-        dMed.innerHTML = window.SynapseComponents.DifficultyCard({
-          level: 'MEDIUM',
-          title: 'Algorithmic Patterns',
-          subtitle: 'Two Pointers, Sliding Window, Monotonic Stack & BST',
-          icon: '⚡',
-          variant: 'yellow',
-          onClick: "window.SynapseApp.filterByDifficulty('medium')"
-        });
-      }
-
-      if (dHard) {
-        dHard.innerHTML = window.SynapseComponents.DifficultyCard({
-          level: 'HARD',
-          title: 'Mastery Challenges',
-          subtitle: 'Trapping Rain Water, Sliding Window Max, Complex Heaps',
-          icon: '🔥',
-          variant: 'dark',
-          onClick: "window.SynapseApp.filterByDifficulty('hard')"
-        });
-      }
+      });
     }
 
     renderHomeProgress() {
       const container = document.getElementById('home-progress-container');
-      if (container && window.SynapseComponents) {
-        let totalQ = 0;
-        let topicsDone = 0;
-        for (const tKey in this.topics) {
-          const qs = this.topics[tKey].questions || [];
-          totalQ += qs.length;
-          if (qs.length > 0 && qs.every(q => this.isCompleted(q.id))) {
-            topicsDone++;
-          }
-        }
-        container.innerHTML = window.SynapseComponents.ProgressCard({
-          totalSolved: this.progress.size,
-          totalQuestions: totalQ,
-          streak: this.progress.size > 0 ? 1 : 0,
-          topicsCompleted: topicsDone
-        });
-      }
-    }
+      if (!container || !window.SynapseComponents) return;
 
-    renderDedicatedProgress() {
-      const mount = document.getElementById('dedicated-progress-mount');
-      if (mount && window.SynapseComponents) {
-        let totalQ = 0;
-        let topicsDone = 0;
-        for (const tKey in this.topics) {
-          const qs = this.topics[tKey].questions || [];
-          totalQ += qs.length;
-          if (qs.length > 0 && qs.every(q => this.isCompleted(q.id))) {
-            topicsDone++;
-          }
-        }
-        mount.innerHTML = `
-          ${window.SynapseComponents.ProgressCard({
-            totalSolved: this.progress.size,
-            totalQuestions: totalQ,
-            streak: this.progress.size > 0 ? 1 : 0,
-            topicsCompleted: topicsDone
-          })}
-          <div class="mt-8 p-6 bg-white border-2 border-black rounded-xl hard-shadow">
-            <h3 class="font-bold text-lg text-[#171e19] mb-4">Topic Breakdown</h3>
-            <div class="space-y-4">
-              ${Object.keys(this.topics).map(tKey => {
-                const topic = this.topics[tKey];
-                const qs = topic.questions || [];
-                const solved = qs.filter(q => this.isCompleted(q.id)).length;
-                const pct = qs.length > 0 ? Math.round((solved / qs.length) * 100) : 0;
-                return `
-                  <div class="space-y-1">
-                    <div class="flex items-center justify-between text-xs font-mono">
-                      <span class="font-bold text-[#171e19]">${topic.title}</span>
-                      <span class="text-zinc-600">${solved} / ${qs.length} (${pct}%)</span>
-                    </div>
-                    <div class="w-full h-2 bg-zinc-200 border border-black rounded-full overflow-hidden">
-                      <div class="h-full bg-[#ffe17c]" style="width: ${pct}%"></div>
-                    </div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          </div>
-        `;
+      let totalQuestions = 0;
+      for (const tKey in this.catalog) {
+        totalQuestions += (this.catalog[tKey].questions || []).length;
       }
+      const solved = this.progress.size;
+
+      container.innerHTML = window.SynapseComponents.ProgressCard({
+        totalQuestions,
+        completedCount: solved,
+        topics: Object.values(this.catalog).map(t => ({
+          title: t.title,
+          total: t.questions.length,
+          completed: t.questions.filter(q => this.isCompleted(q.id)).length
+        }))
+      });
     }
 
     renderHomeCTA() {
       const container = document.getElementById('home-cta-container');
       if (container && window.SynapseComponents) {
         container.innerHTML = window.SynapseComponents.FinalCTA({
-          onStartLearning: "window.SynapseApp.switchView('topics')"
+          onStartLearning: "window.SynapseApp.startLearning()"
         });
       }
     }
@@ -401,34 +454,24 @@
       this.filterDifficulty = diff;
       const select = document.getElementById('filter-difficulty-select');
       if (select) select.value = diff;
-      this.switchView('topics');
-    }
-
-    selectTopic(tKey) {
-      this.currentTopicId = tKey;
-      this.expandedTopics.add(tKey);
-      const topic = this.topics[tKey];
-      if (topic && topic.questions && topic.questions.length > 0) {
-        this.selectQuestion(topic.questions[0].id);
-      }
-      this.switchView('topics');
+      window.location.hash = `#/learn/${this.currentLang}`;
     }
 
     /* -----------------------------------------------------------------------
-     * PROGRESS TRACKER (Local Storage)
+     * PROGRESS TRACKING PER LANGUAGE
      * ----------------------------------------------------------------------- */
-    loadProgress() {
+    loadProgress(lang = this.currentLang) {
       try {
-        const saved = localStorage.getItem('synapse_dsa_progress');
+        const saved = localStorage.getItem(`synapse_progress_${lang}`);
         return saved ? new Set(JSON.parse(saved)) : new Set();
       } catch (e) {
         return new Set();
       }
     }
 
-    saveProgress() {
+    saveProgress(lang = this.currentLang) {
       try {
-        localStorage.setItem('synapse_dsa_progress', JSON.stringify(Array.from(this.progress)));
+        localStorage.setItem(`synapse_progress_${lang}`, JSON.stringify(Array.from(this.progress)));
       } catch (e) {}
     }
 
@@ -451,8 +494,8 @@
 
     updateProgressSummary() {
       let totalQuestions = 0;
-      for (const tKey in this.topics) {
-        totalQuestions += (this.topics[tKey].questions || []).length;
+      for (const tKey in this.catalog) {
+        totalQuestions += (this.catalog[tKey].questions || []).length;
       }
       const completedCount = this.progress.size;
       const pct = totalQuestions > 0 ? Math.round((completedCount / totalQuestions) * 100) : 0;
@@ -472,7 +515,7 @@
     }
 
     /* -----------------------------------------------------------------------
-     * ANIMATOR INITIALIZATION
+     * ANIMATOR ENGINE INTEGRATION
      * ----------------------------------------------------------------------- */
     initAnimator() {
       if (typeof window.DSAAnimator !== 'function') return;
@@ -483,69 +526,61 @@
         scrubberEl: document.getElementById('anim-scrubber'),
         counterEl: document.getElementById('anim-step-counter'),
         playBtn: document.getElementById('anim-btn-play'),
-        onHighlightLine: (lineNum) => this.highlightCodeLine(lineNum)
+        speedInput: document.getElementById('anim-speed'),
+        onHighlightTag: (tag, step) => this.onTracerHighlightStep(tag, step)
       });
 
       // Bind Playback Controls
-      const playBtn = document.getElementById('anim-btn-play');
-      if (playBtn) playBtn.onclick = () => this.animator && this.animator.togglePlay();
+      const pBtn = document.getElementById('anim-btn-play');
+      const bBtn = document.getElementById('anim-btn-back');
+      const fBtn = document.getElementById('anim-btn-step');
+      const rBtn = document.getElementById('anim-btn-reset');
 
-      const prevBtn = document.getElementById('anim-btn-prev');
-      if (prevBtn) prevBtn.onclick = () => this.animator && this.animator.stepBack();
+      if (pBtn) pBtn.onclick = () => this.animator.togglePlay();
+      if (bBtn) bBtn.onclick = () => this.animator.stepBack();
+      if (fBtn) fBtn.onclick = () => this.animator.stepForward();
+      if (rBtn) rBtn.onclick = () => this.animator.reset();
+    }
 
-      const nextBtn = document.getElementById('anim-btn-next');
-      if (nextBtn) nextBtn.onclick = () => this.animator && this.animator.stepForward();
+    onTracerHighlightStep(tag, step) {
+      // Highlight code line matching tag
+      this.highlightCodeTag(tag);
 
-      const resetBtn = document.getElementById('anim-btn-reset');
-      if (resetBtn) resetBtn.onclick = () => this.animator && this.animator.reset();
+      // Update Explanation Panel
+      const expEl = document.getElementById('active-line-explanation');
+      const badgeEl = document.getElementById('active-line-badge');
+      if (badgeEl) badgeEl.textContent = `Tag: [${tag.toUpperCase()}]`;
 
-      const speedSelect = document.getElementById('anim-speed-select');
-      if (speedSelect) speedSelect.onchange = (e) => this.animator && this.animator.setSpeed(e.target.value);
-
-      const customInputBtn = document.getElementById('anim-custom-run-btn');
-      if (customInputBtn) {
-        customInputBtn.onclick = () => this.runCustomInput();
+      const langQ = this.getLangQuestionData(this.currentQuestionId);
+      if (expEl) {
+        if (langQ && langQ.explanations && langQ.explanations[tag]) {
+          expEl.innerHTML = `<span class="text-[#ffe17c] font-mono font-bold mr-1">[${tag.toUpperCase()}]:</span> ${langQ.explanations[tag]}`;
+        } else if (step && step.description) {
+          expEl.textContent = step.description;
+        }
       }
     }
 
-    runCustomInput() {
+    bindCustomInputControls() {
+      const runBtn = document.getElementById('anim-custom-run-btn');
       const inputEl = document.getElementById('anim-custom-input');
-      if (!inputEl) return;
-      const val = inputEl.value.trim();
-      if (!val) return;
 
-      try {
-        let parsed = JSON.parse(val);
-        if (!Array.isArray(parsed)) parsed = [parsed];
-        
-        // Dynamically build synthetic steps for the custom input
-        const customSteps = [
-          {
-            codeLine: 1,
-            description: `Loaded custom user input: [${parsed.join(', ')}]`,
-            state: { type: 'array', array: parsed },
-            highlights: [],
-            pointers: { 'HEAD': 0 }
-          },
-          {
-            codeLine: 3,
-            description: `Processing element 0: ${parsed[0]}`,
-            state: { type: 'array', array: parsed },
-            highlights: [0],
-            pointers: { 'CURRENT': 0 }
+      if (runBtn && inputEl) {
+        runBtn.onclick = () => {
+          const val = inputEl.value.trim();
+          if (!val) return;
+          if (this.animator) {
+            const res = this.animator.runCustomInput(val);
+            if (!res.success) {
+              alert(res.error);
+            }
           }
-        ];
-
-        if (this.animator) {
-          this.animator.loadSteps(customSteps);
-        }
-      } catch (err) {
-        alert('Please enter valid JSON (e.g. [10, 20, 30] or "hello")');
+        };
       }
     }
 
     /* -----------------------------------------------------------------------
-     * SIDEBAR ACCORDION & FILTER RENDERING
+     * SIDEBAR ACCORDION & SEARCH
      * ----------------------------------------------------------------------- */
     bindSearchAndFilters() {
       const searchInput = document.getElementById('sidebar-search-input');
@@ -578,22 +613,16 @@
       if (!sidebarContainer) return;
       sidebarContainer.innerHTML = '';
 
-      for (const topicKey in this.topics) {
-        const topic = this.topics[topicKey];
+      for (const topicKey in this.catalog) {
+        const topic = this.catalog[topicKey];
         const isTopicExpanded = this.expandedTopics.has(topic.id);
-        
-        // Filter questions belonging to this topic
         const allQuestions = topic.questions || [];
+
         const filteredQuestions = allQuestions.filter(q => {
-          // Difficulty filter
-          if (this.filterDifficulty !== 'all' && q.difficulty.toLowerCase() !== this.filterDifficulty.toLowerCase()) {
-            return false;
-          }
-          // Status filter
+          if (this.filterDifficulty !== 'all' && q.difficulty.toLowerCase() !== this.filterDifficulty.toLowerCase()) return false;
           const completed = this.isCompleted(q.id);
           if (this.filterStatus === 'completed' && !completed) return false;
           if (this.filterStatus === 'pending' && completed) return false;
-          // Search query
           if (this.searchQuery) {
             const matchTitle = q.title.toLowerCase().includes(this.searchQuery);
             const matchDesc = (q.description || '').toLowerCase().includes(this.searchQuery);
@@ -602,16 +631,15 @@
           return true;
         });
 
-        // Compute topic progress
         const solvedInTopic = allQuestions.filter(q => this.isCompleted(q.id)).length;
 
-        // Topic Wrapper
         const topicWrapper = document.createElement('div');
         topicWrapper.className = 'border-2 border-black rounded-lg overflow-hidden bg-white hard-shadow-sm';
 
-        // Topic Header
         const topicHeader = document.createElement('div');
-        topicHeader.className = `p-3 bg-white flex items-center justify-between cursor-pointer select-none font-mono text-xs font-bold border-b border-black ${this.currentTopicId === topic.id ? 'bg-[#ffe17c]' : 'hover:bg-zinc-50'}`;
+        topicHeader.className = `p-3 bg-white flex items-center justify-between cursor-pointer select-none font-mono text-xs font-bold border-b border-black ${
+          this.currentTopicId === topic.id ? 'bg-[#ffe17c]' : 'hover:bg-zinc-50'
+        }`;
         topicHeader.onclick = () => {
           if (this.expandedTopics.has(topic.id)) {
             this.expandedTopics.delete(topic.id);
@@ -627,15 +655,14 @@
             <span class="text-xs transition-transform duration-200 ${isTopicExpanded ? 'rotate-90' : ''}">▸</span>
             <span class="truncate">${topic.title}</span>
           </div>
-          <div class="flex items-center space-x-2 flex-shrink-0">
-            <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border border-black ${solvedInTopic === allQuestions.length && allQuestions.length > 0 ? 'bg-[#b7c6c2] text-[#171e19]' : 'bg-[#ffe17c] text-[#171e19]'}">
-              ${solvedInTopic}/${allQuestions.length}
-            </span>
-          </div>
+          <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border border-black ${
+            solvedInTopic === allQuestions.length && allQuestions.length > 0 ? 'bg-[#b7c6c2] text-[#171e19]' : 'bg-[#ffe17c] text-[#171e19]'
+          }">
+            ${solvedInTopic}/${allQuestions.length}
+          </span>
         `;
         topicWrapper.appendChild(topicHeader);
 
-        // Topic Content (Subtopics & Questions)
         if (isTopicExpanded) {
           const topicBody = document.createElement('div');
           topicBody.className = 'p-2 space-y-2 bg-[#fbfbf8]';
@@ -649,72 +676,52 @@
             const subWrap = document.createElement('div');
             subWrap.className = 'space-y-1';
 
-            // Subtopic Header Dropdown
-            const subHeader = document.createElement('div');
-            subHeader.className = 'p-2 rounded border border-black/30 bg-white flex items-center justify-between cursor-pointer hover:border-black text-[11px] font-mono font-semibold';
-            subHeader.onclick = () => {
-              if (this.expandedSubtopics.has(sub.id)) {
-                this.expandedSubtopics.delete(sub.id);
-              } else {
-                this.expandedSubtopics.add(sub.id);
-              }
-              this.renderSidebar();
-            };
-            subHeader.innerHTML = `
-              <div class="flex items-center space-x-1.5">
-                <span class="text-[10px] transition-transform ${isSubExpanded ? 'rotate-90' : ''}">▸</span>
-                <span>${sub.title}</span>
-              </div>
-              <span class="text-[10px] font-mono text-zinc-500">${subQuestions.length}</span>
-            `;
-            subWrap.appendChild(subHeader);
+            if (sub.id !== 'all' && sub.title) {
+              const subHeader = document.createElement('div');
+              subHeader.className = 'flex items-center justify-between text-[11px] font-mono font-bold text-zinc-600 px-2 py-1 cursor-pointer hover:text-black';
+              subHeader.onclick = () => {
+                if (this.expandedSubtopics.has(sub.id)) this.expandedSubtopics.delete(sub.id);
+                else this.expandedSubtopics.add(sub.id);
+                this.renderSidebar();
+              };
+              subHeader.innerHTML = `
+                <span>${isSubExpanded ? '▾' : '▸'} ${sub.title}</span>
+                <span class="text-[9px] text-zinc-500">${subQuestions.length}</span>
+              `;
+              subWrap.appendChild(subHeader);
+            }
 
-            // Questions List
-            if (isSubExpanded) {
+            if (isSubExpanded || sub.id === 'all') {
               const qList = document.createElement('div');
-              qList.className = 'space-y-1 pt-1 pl-2';
+              qList.className = 'space-y-1 pl-1';
 
-              if (subQuestions.length === 0) {
-                qList.innerHTML = '<div class="text-[11px] text-zinc-500 py-1 italic font-mono">No matching questions</div>';
-              } else {
-                subQuestions.forEach(q => {
-                  const isCur = this.currentQuestionId === q.id;
-                  const isDone = this.isCompleted(q.id);
+              subQuestions.forEach(q => {
+                const isSelected = q.id === this.currentQuestionId;
+                const isDone = this.isCompleted(q.id);
+                const diffBadgeClass = q.difficulty.toLowerCase() === 'hard' ? 'badge-hard' :
+                                       q.difficulty.toLowerCase() === 'medium' ? 'badge-medium' : 'badge-basic';
 
-                  let diffBadgeClass = 'badge-basic';
-                  if (q.difficulty.toLowerCase() === 'medium') diffBadgeClass = 'badge-medium';
-                  else if (q.difficulty.toLowerCase() === 'hard') diffBadgeClass = 'badge-hard';
+                const qRow = document.createElement('div');
+                qRow.className = `p-2 rounded border border-black flex items-center justify-between cursor-pointer text-xs font-mono transition-all ${
+                  isSelected ? 'bg-[#ffe17c] font-black hard-shadow-sm' : isDone ? 'bg-[#b7c6c2]/40 text-zinc-600' : 'bg-white hover:bg-zinc-100'
+                }`;
+                qRow.onclick = () => this.selectQuestion(q.id, true);
 
-                  const qRow = document.createElement('div');
-                  qRow.className = `p-2 rounded border-2 border-black flex items-center justify-between gap-2 cursor-pointer transition-all ${isCur ? 'bg-[#ffe17c] hard-shadow-sm font-bold' : 'bg-white hover:bg-zinc-100'}`;
-                  qRow.onclick = () => this.selectQuestion(q.id);
-
-                  qRow.innerHTML = `
-                    <div class="flex items-center space-x-2 overflow-hidden flex-1">
-                      <input 
-                        type="checkbox" 
-                        class="w-3.5 h-3.5 rounded border border-black cursor-pointer accent-black" 
-                        ${isDone ? 'checked' : ''} 
-                        onclick="window.SynapseApp.toggleCompleted('${q.id}', event)"
-                      />
-                      <span class="text-xs truncate ${isDone ? 'line-through text-zinc-500' : 'text-[#171e19]'}">${q.title}</span>
-                    </div>
-                    <div class="flex items-center space-x-1 flex-shrink-0">
-                      ${q.leetcode ? `
-                        <span class="text-[9px] font-mono px-1 py-0.2 rounded border border-black bg-white font-bold">
-                          #${q.leetcode.number}
-                        </span>
-                      ` : ''}
-                      <span class="text-[9px] px-1.5 py-0.2 rounded ${diffBadgeClass}">
-                        ${q.difficulty[0]}
-                      </span>
-                    </div>
-                  `;
-                  qList.appendChild(qRow);
-                });
-              }
+                qRow.innerHTML = `
+                  <div class="flex items-center space-x-2 overflow-hidden pr-2">
+                    <span class="text-xs ${isDone ? 'text-black font-bold' : 'text-zinc-400'}">${isDone ? '✓' : '○'}</span>
+                    <span class="text-xs truncate ${isDone ? 'line-through text-zinc-600' : 'text-[#171e19]'}">${q.title}</span>
+                  </div>
+                  <div class="flex items-center space-x-1 flex-shrink-0">
+                    ${q.leetcode ? `<span class="text-[9px] font-mono px-1 py-0.2 rounded border border-black bg-white font-bold">#${q.leetcode.number}</span>` : ''}
+                    <span class="text-[9px] px-1.5 py-0.2 rounded ${diffBadgeClass}">${q.difficulty[0]}</span>
+                  </div>
+                `;
+                qList.appendChild(qRow);
+              });
               subWrap.appendChild(qList);
             }
+
             topicBody.appendChild(subWrap);
           });
 
@@ -726,21 +733,36 @@
     }
 
     /* -----------------------------------------------------------------------
-     * QUESTION SELECTION & CONTENT RENDERING
+     * QUESTION CONTENT & LANGUAGE-SPECIFIC CODE
      * ----------------------------------------------------------------------- */
     findQuestion(qid) {
-      for (const tKey in this.topics) {
-        const found = (this.topics[tKey].questions || []).find(q => q.id === qid);
-        if (found) return { question: found, topic: this.topics[tKey] };
+      for (const tKey in this.catalog) {
+        const found = (this.catalog[tKey].questions || []).find(q => q.id === qid);
+        if (found) return { question: found, topic: this.catalog[tKey] };
       }
       return null;
     }
 
-    selectQuestion(qid) {
+    selectQuestion(qid, updateHash = true) {
       this.currentQuestionId = qid;
-      this.currentApproachIdx = 0;
+      const match = this.findQuestion(qid);
+      if (match && updateHash) {
+        window.location.hash = `#/learn/${this.currentLang}/${match.topic.id}/${qid}`;
+      }
       this.renderSidebar();
       this.loadQuestion(qid);
+    }
+
+    getLangQuestionData(qid) {
+      if (!this.langCode[this.currentLang]) return null;
+      for (const tKey in this.langCode[this.currentLang]) {
+        const qList = this.langCode[this.currentLang][tKey];
+        if (Array.isArray(qList)) {
+          const match = qList.find(q => q.id === qid);
+          if (match) return match;
+        }
+      }
+      return null;
     }
 
     loadQuestion(qid) {
@@ -748,7 +770,7 @@
       if (!match) return;
       const { question, topic } = match;
 
-      // Update Header Badges
+      // Badges
       const diffBadge = document.getElementById('q-difficulty-badge');
       if (diffBadge) {
         diffBadge.textContent = question.difficulty.toUpperCase();
@@ -776,15 +798,13 @@
       const titleEl = document.getElementById('q-title');
       if (titleEl) titleEl.textContent = question.title;
 
-      // Update Completion Checkbox
       this.updateQuestionCompletedButton();
 
-      // Description & Constraints
       const descEl = document.getElementById('q-description');
       if (descEl) descEl.textContent = question.description;
 
       const constrEl = document.getElementById('q-constraints');
-      if (constrEl) constrEl.textContent = question.constraints || 'Standard competitive programming bounds apply.';
+      if (constrEl) constrEl.textContent = question.constraints || 'Standard memory bounds apply.';
 
       // Examples
       const exContainer = document.getElementById('q-examples');
@@ -803,17 +823,100 @@
         });
       }
 
-      // Common Mistakes
       const cmEl = document.getElementById('q-common-mistakes');
       if (cmEl) {
-        cmEl.textContent = question.commonMistakes || 'Pay strict attention to boundary conditions, off-by-one pointer index bounds, and null terminator checks.';
+        cmEl.textContent = question.commonMistakes || 'Be mindful of null references and boundary pointer cases.';
       }
 
-      // Load Approaches Tabs
-      this.renderApproachTabs(question);
+      // Render Language-Specific Code & Notes
+      this.renderLanguageCodePanel(question);
 
-      // Render Selected Approach Code & Animation
-      this.renderCurrentApproach();
+      // Load Dynamic Tracer Animation
+      if (this.animator) {
+        this.animator.load(question);
+      }
+    }
+
+    renderLanguageCodePanel(question) {
+      const langQ = this.getLangQuestionData(question.id);
+      const codeContainer = document.getElementById('code-lines-display');
+      if (!codeContainer) return;
+      codeContainer.innerHTML = '';
+
+      // Update active language selector tab indicator
+      ['python', 'javascript', 'java', 'cpp'].forEach(l => {
+        const btn = document.getElementById(`lang-btn-${l}`);
+        if (btn) {
+          if (l === this.currentLang) {
+            btn.className = 'px-2.5 py-1 text-[11px] font-mono font-bold rounded border-2 border-black bg-[#ffe17c] text-[#171e19] hard-shadow-sm';
+          } else {
+            btn.className = 'px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-zinc-700 bg-zinc-900 text-zinc-400 hover:text-white';
+          }
+        }
+      });
+
+      if (!langQ || !langQ.code || langQ.code.length === 0) {
+        codeContainer.innerHTML = `
+          <div class="p-6 text-center text-xs font-mono text-zinc-400 space-y-2">
+            <span class="px-2 py-1 bg-zinc-800 rounded text-[#ffe17c] font-bold">Coming Soon</span>
+            <p>Code for ${this.currentLang.toUpperCase()} is currently in testing harness.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Render tagged lines
+      langQ.code.forEach((line, idx) => {
+        const lineRow = document.createElement('div');
+        lineRow.className = 'flex items-stretch hover:bg-zinc-800/80 px-2 py-0.5 rounded cursor-pointer transition-colors';
+        lineRow.id = `code-line-row-${idx + 1}`;
+        lineRow.setAttribute('data-tag', line.tag);
+        lineRow.onclick = () => this.inspectLineTag(line.tag, line.lineNum, langQ);
+
+        lineRow.innerHTML = `
+          <span class="w-8 flex-shrink-0 text-right pr-3 select-none text-zinc-500 font-mono text-[11px]">${line.lineNum}</span>
+          <span class="flex-1 font-mono text-[12px] whitespace-pre text-zinc-200">${this.escapeHtml(line.text)}</span>
+          <span class="text-[9px] font-mono text-zinc-600 px-1 select-none">[${line.tag}]</span>
+        `;
+        codeContainer.appendChild(lineRow);
+      });
+
+      // Display language-specific notes
+      const noteMount = document.getElementById('language-notes-mount');
+      if (noteMount && langQ.notes) {
+        noteMount.innerHTML = `
+          <div class="mt-4 p-3 bg-zinc-900 border border-zinc-800 rounded-lg text-xs font-sans text-zinc-300">
+            <span class="text-[10px] font-mono font-bold uppercase text-[#ffe17c] block mb-1">
+              ${this.currentLang.toUpperCase()} MEMORY &amp; IDIOMS:
+            </span>
+            ${langQ.notes}
+          </div>
+        `;
+      }
+    }
+
+    inspectLineTag(tag, lineNum, langQ) {
+      const lineBadge = document.getElementById('active-line-badge');
+      const textEl = document.getElementById('active-line-explanation');
+      if (lineBadge) lineBadge.textContent = `Line ${lineNum} [${tag.toUpperCase()}]`;
+
+      this.highlightCodeTag(tag);
+
+      if (textEl && langQ && langQ.explanations) {
+        const text = langQ.explanations[tag] || `Executes tagged statement [${tag}] in ${this.currentLang}.`;
+        textEl.innerHTML = `<span class="text-[#ffe17c] font-bold font-mono mr-1">[${tag.toUpperCase()}]:</span> ${text}`;
+      }
+    }
+
+    highlightCodeTag(tag) {
+      document.querySelectorAll('#code-lines-display > div').forEach(el => {
+        const lineTag = el.getAttribute('data-tag');
+        if (lineTag === tag) {
+          el.classList.add('code-line-active');
+        } else {
+          el.classList.remove('code-line-active');
+        }
+      });
     }
 
     updateQuestionCompletedButton() {
@@ -822,163 +925,37 @@
       const isDone = this.isCompleted(this.currentQuestionId);
       if (checkbox) checkbox.checked = isDone;
       if (label) label.textContent = isDone ? 'Completed' : 'Mark Completed';
-      
+
       const btn = document.getElementById('q-complete-toggle-btn');
       if (btn) {
         btn.onclick = () => this.toggleCompleted(this.currentQuestionId);
       }
     }
 
-    /* -----------------------------------------------------------------------
-     * APPROACH & ROSETTA STONE CODE RENDERING
-     * ----------------------------------------------------------------------- */
-    renderApproachTabs(question) {
-      const container = document.getElementById('approach-tabs');
-      if (!container) return;
-      container.innerHTML = '';
+    renderDedicatedProgress() {
+      const mount = document.getElementById('dedicated-progress-mount');
+      if (!mount || !window.SynapseComponents) return;
 
-      (question.approaches || []).forEach((appr, idx) => {
-        const btn = document.createElement('button');
-        const isSel = idx === this.currentApproachIdx;
-        btn.className = `px-3 py-1 text-xs font-mono font-bold rounded border ${
-          isSel ? 'bg-[#ffe17c] text-[#171e19] border-black hard-shadow-sm' : 'bg-zinc-900 text-zinc-300 border-zinc-700 hover:text-white'
-        }`;
-        btn.textContent = appr.name;
-        btn.onclick = () => {
-          this.currentApproachIdx = idx;
-          this.renderApproachTabs(question);
-          this.renderCurrentApproach();
-        };
-        container.appendChild(btn);
+      let totalQuestions = 0;
+      for (const tKey in this.catalog) {
+        totalQuestions += (this.catalog[tKey].questions || []).length;
+      }
+      const solved = this.progress.size;
+
+      mount.innerHTML = window.SynapseComponents.ProgressCard({
+        totalQuestions,
+        completedCount: solved,
+        topics: Object.values(this.catalog).map(t => ({
+          title: t.title,
+          total: t.questions.length,
+          completed: t.questions.filter(q => this.isCompleted(q.id)).length
+        }))
       });
     }
 
-    selectLanguage(lang) {
-      this.currentLang = lang;
-      ['python', 'javascript', 'java', 'cpp'].forEach(l => {
-        const btn = document.getElementById(`lang-btn-${l}`);
-        if (btn) {
-          if (l === lang) {
-            btn.className = 'px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-black bg-[#ffe17c] text-[#171e19]';
-          } else {
-            btn.className = 'px-2.5 py-1 text-[11px] font-mono font-bold rounded border border-zinc-700 bg-zinc-900 text-zinc-400';
-          }
-        }
-      });
-      this.renderCurrentApproach();
-    }
-
-    renderCurrentApproach() {
-      const match = this.findQuestion(this.currentQuestionId);
-      if (!match) return;
-      const question = match.question;
-      const approach = (question.approaches || [])[this.currentApproachIdx] || {};
-
-      // Complexities
-      const timeEl = document.getElementById('q-complexity-time');
-      const spaceEl = document.getElementById('q-complexity-space');
-      if (timeEl) timeEl.textContent = approach.timeComplexity || 'O(N)';
-      if (spaceEl) spaceEl.textContent = approach.spaceComplexity || 'O(1)';
-
-      // Code Display
-      const codeContainer = document.getElementById('code-lines-display');
-      if (!codeContainer) return;
-      codeContainer.innerHTML = '';
-
-      const codeString = (approach.code && approach.code[this.currentLang]) || '// Code coming soon';
-      const lines = codeString.split('\n');
-
-      lines.forEach((lineText, idx) => {
-        const lineNum = idx + 1;
-        const lineRow = document.createElement('div');
-        lineRow.className = 'flex items-stretch hover:bg-zinc-800/80 px-2 py-0.5 rounded cursor-pointer transition-colors';
-        lineRow.id = `code-line-row-${lineNum}`;
-        lineRow.onclick = () => this.inspectLineExplanation(lineNum, approach);
-
-        lineRow.innerHTML = `
-          <span class="w-8 flex-shrink-0 text-right pr-3 select-none text-zinc-500 font-mono text-[11px]">${lineNum}</span>
-          <span class="flex-1 font-mono text-[12px] whitespace-pre">${this.escapeHtml(lineText)}</span>
-        `;
-        codeContainer.appendChild(lineRow);
-      });
-
-      // Bind Explain All Lines Toggle
-      const explainBtn = document.getElementById('explain-all-lines-btn');
-      if (explainBtn) {
-        explainBtn.onclick = () => this.showBeginnerExplainAll(approach);
-      }
-
-      // Auto-load Animation Steps
-      if (this.animator && approach.animationSteps) {
-        this.animator.loadSteps(approach.animationSteps);
-      }
-    }
-
-    inspectLineExplanation(lineNum, approach) {
-      const lineBadge = document.getElementById('active-line-badge');
-      const textEl = document.getElementById('active-line-explanation');
-      if (lineBadge) lineBadge.textContent = `Line ${lineNum}`;
-
-      // Highlight in code panel
-      this.highlightCodeLine(lineNum);
-
-      // Match explanation range
-      const explanations = approach.lineExplanations || [];
-      const match = explanations.find(e => lineNum >= e.lines[0] && lineNum <= e.lines[1]);
-
-      if (textEl) {
-        if (match) {
-          textEl.innerHTML = `<span class="text-[#ffe17c] font-bold font-mono mr-1">[Lines ${match.lines[0]}-${match.lines[1]}]:</span> ${match.text}`;
-        } else {
-          textEl.textContent = `Executes statement on line ${lineNum} as part of the ${approach.name} algorithm flow.`;
-        }
-      }
-    }
-
-    highlightCodeLine(lineNum) {
-      document.querySelectorAll('[id^="code-line-row-"]').forEach(el => {
-        el.classList.remove('code-line-active');
-      });
-      const target = document.getElementById(`code-line-row-${lineNum}`);
-      if (target) {
-        target.classList.add('code-line-active');
-      }
-    }
-
-    showBeginnerExplainAll(approach) {
-      const textEl = document.getElementById('active-line-explanation');
-      if (!textEl) return;
-
-      const explanations = approach.lineExplanations || [];
-      if (explanations.length === 0) {
-        textEl.textContent = "Every line in this solution executes in sequence to process inputs and maintain invariants.";
-        return;
-      }
-
-      textEl.innerHTML = `
-        <div class="space-y-3 max-h-[300px] overflow-y-auto pr-1 sidebar-scroll">
-          <div class="font-bold text-xs uppercase text-[#ffe17c] border-b border-zinc-700 pb-1">
-            Beginner Walkthrough (${approach.name})
-          </div>
-          ${explanations.map(e => `
-            <div class="p-2.5 rounded bg-zinc-900 border border-zinc-700 text-xs font-sans">
-              <span class="font-mono text-[#ffe17c] font-bold block mb-1">Lines ${e.lines[0]} - ${e.lines[1]}</span>
-              <p class="text-zinc-300 leading-relaxed font-sans">${e.text}</p>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    /* -----------------------------------------------------------------------
-     * KEYBOARD SHORTCUTS & UTILITIES
-     * ----------------------------------------------------------------------- */
     bindKeyboardShortcuts() {
-      document.addEventListener('keydown', (e) => {
-        // Only trigger if not typing in input
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
-          return;
-        }
+      window.addEventListener('keydown', (e) => {
+        if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
 
         if (e.code === 'Space') {
           e.preventDefault();
@@ -997,16 +974,13 @@
     }
 
     escapeHtml(str) {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
   }
 
-  // Attach global instance
-  window.SynapseApp = new SynapseApp();
+  window.addEventListener('DOMContentLoaded', () => {
+    window.SynapseApp = new SynapseApp();
+  });
 
-})(window);
+})(typeof window !== 'undefined' ? window : global);

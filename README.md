@@ -1,6 +1,6 @@
 # SynapseCS | Complete Interactive Data Structures & Algorithms Lab
 
-SynapseCS is an interactive, zero-build Data Structures & Algorithms (DSA) learning application engineered to teach CS fundamentals through real-time memory-address mental models, multi-language code synchronization (Python, Java, C++, JavaScript), line-by-line beginner explanations, and a universal animation engine.
+SynapseCS is an interactive, zero-build Data Structures & Algorithms (DSA) learning application engineered to teach CS fundamentals through real-time memory-address mental models, multi-language code synchronization (Python, Java, C++, JavaScript), line-by-line beginner explanations, dynamic algorithmic tracers, and a universal animation engine.
 
 ---
 
@@ -19,6 +19,9 @@ python -m http.server 3000
 ```
 Then visit `http://localhost:3000/index.html`.
 
+### Diagnostic Self-Test
+Open `debug.html` or run `node tools/validate.js` to inspect all 62 questions and tracers.
+
 ---
 
 ## 🏗 Modular, Data-Driven Architecture
@@ -26,34 +29,154 @@ Then visit `http://localhost:3000/index.html`.
 The codebase follows a decoupled, data-driven Neo-Brutalist architecture:
 
 ```text
-├── index.html                  # Neo-Brutalist single-page shell (Home, Topics, Progress)
+├── index.html                  # Neo-Brutalist single-page shell (Home, Languages, Topics, Progress, 404)
+├── debug.html                  # Automated self-test harness verifying all animation steps & renderers
 ├── css/
 │   └── styles.css              # Neo-Brutalist design tokens (#ffe17c, #171e19, #b7c6c2), hard shadows & tactile CSS
 ├── js/
-│   ├── components.js           # Reusable HTML component factory (Navbar, Hero, TopicCard, DifficultyCard, etc.)
-│   ├── app.js                  # View router, sidebar accordion, difficulty filters & progress
-│   └── animator.js             # Universal step-driven animation engine
+│   ├── components.js           # Reusable HTML component factory (Navbar, LanguageCard, TopicCard, etc.)
+│   ├── app.js                  # Hash router (#/languages, #/learn/:lang), state controller & keyboard navigation
+│   ├── animator.js             # Universal step-driven animation engine with CONTRACTS validation
+│   ├── renderers/
+│   │   └── CONTRACTS.md        # Formal data contracts for all 12 visualizer data structure renderers
+│   └── tracers/                # Executable algorithmic reference tracers generating validated snapshots
+│       ├── tracer-core.js      # Tracer base class (immutable deep-cloning, step recording)
+│       ├── linked-list.js      # Reference tracers for 18 linked list questions
+│       ├── stack.js            # Reference tracers for 10 stack questions
+│       ├── queue.js            # Reference tracers for 9 queue questions
+│       ├── arrays-strings.js   # Reference tracers for 9 array & string questions
+│       ├── hashing.js          # Reference tracers for 9 hash table questions
+│       └── trees.js            # Reference tracers for 7 binary tree & BST questions
 ├── data/
-│   └── topics/                 # Standalone data modules (62 verified problems across 6 topics)
-│       ├── arrays-strings.js
-│       ├── linked-list.js
-│       ├── stack.js
-│       ├── queue.js
-│       ├── hashing.js
-│       └── trees.js
+│   ├── questions/              # Language-neutral question catalog (statements, examples, complexities, tracer keys)
+│   │   ├── arrays-strings.js
+│   │   ├── linked-list.js
+│   │   ├── stack.js
+│   │   ├── queue.js
+│   │   ├── hashing.js
+│   │   └── trees.js
+│   └── languages/              # Language-specific code implementations, line tags & idiomatic notes
+│       ├── python/             # (meta.js, topic code files)
+│       ├── java/               # (meta.js, topic code files)
+│       ├── cpp/                # (meta.js, topic code files)
+│       ├── javascript/         # (meta.js, topic code files)
+│       ├── c/                  # (meta.js, coming soon)
+│       ├── go/                 # (meta.js, coming soon)
+│       └── rust/               # (meta.js, coming soon)
+├── tools/
+│   ├── validate.js             # Plain Node test suite (contracts, tracers, parity, code parsing)
+│   └── migrate.js              # Data extraction & code tagging migration tool
+├── ANIMATION_REPORT.md         # Diagnostic report with 100% pass verification (62/62)
+├── CHANGES.md                  # Detailed plain-English summary of architectural upgrades
 ├── AUDIT.md                    # Technical debt audit & file redundancy report
 ├── TESTS.md                    # Test harness report verifying 100% passing solutions (62/62)
-└── README.md                   # Project overview & progress roadmap
+└── README.md                   # Project overview & documentation
 ```
 
+---
 
-### 🧩 Global Registry Pattern
-To ensure `index.html` works when double-clicked from disk (where browser CORS security blocks `fetch()` and `import`), every topic file registers onto a safe global registry:
+## 🌐 How to Add a New Programming Language
+
+Adding a new programming language requires **zero UI changes**:
+
+1. Create a directory in `data/languages/<lang_id>/` (e.g., `data/languages/go/`).
+2. Add `meta.js` defining language details and a Hello World quickstart:
 ```javascript
-window.DSA_TOPICS = window.DSA_TOPICS || {};
-window.DSA_TOPICS["topic-id"] = { ... };
+window.DSA_LANG_META['go'] = {
+  id: 'go',
+  name: 'Go',
+  icon: 'logos:go',
+  extension: '.go',
+  color: '#00add8',
+  available: true,
+  description: 'Fast, concurrent, compiled language with lightweight goroutines.',
+  helloWorld: {
+    code: 'package main\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, SynapseCS!")\n}',
+    howToRun: 'go run main.go'
+  }
+};
 ```
-Adding a new question requires **zero UI code changes**—simply append a question object to the respective data file following the schema.
+3. Add topic files in `data/languages/<lang_id>/<topic>.js` containing tagged lines:
+```javascript
+window.DSA_LANG_CODE['go']['linked-list'] = [
+  {
+    id: 'll-reverse',
+    code: [
+      { text: 'func reverseList(head *ListNode) *ListNode {', tag: 'def' },
+      { text: '    var prev *ListNode', tag: 'init' },
+      { text: '    curr := head', tag: 'init' },
+      ...
+    ],
+    explanations: {
+      'init': 'Initialize prev pointer to nil and curr pointer to head.',
+      'flip': 'Point curr.Next backwards to prev.',
+      'return': 'Return prev as updated head pointer.'
+    },
+    notes: 'In Go, pointer mechanics use explicit asterisks and nil pointers without pointer arithmetic.'
+  }
+];
+```
+4. Include the scripts in `index.html`. The Language Picker automatically generates a card with real question counts.
+
+---
+
+## ❓ How to Add a New Question
+
+1. **Add Language-Neutral Metadata:**  
+   In `data/questions/<topic>.js`, add the question object:
+   ```javascript
+   {
+     id: "my-question",
+     title: "My New Question",
+     difficulty: "Medium",
+     description: "Problem statement...",
+     constraints: "1 <= N <= 10^5",
+     examples: [{ input: "[1, 2, 3]", output: "[3, 2, 1]" }],
+     approach: { name: "Optimal Two Pointers", timeComplexity: "O(N)", spaceComplexity: "O(1)" },
+     tracer: "my-question",
+     sampleInput: [1, 2, 3]
+   }
+   ```
+
+2. **Add Algorithmic Reference Tracer:**  
+   In `js/tracers/<topic>.js`, write the executable reference algorithm:
+   ```javascript
+   Tracers['my-question'] = function(input) {
+     const t = new Tracer('array');
+     t.step({
+       tag: 'init',
+       description: 'Initialize pointers at array boundaries.',
+       state: { type: 'array', array: [...input] },
+       pointers: { left: 0, right: input.length - 1 }
+     });
+     // execute algorithm and record steps...
+     return t.getSteps();
+   };
+   ```
+
+3. **Add Language Code Implementations:**  
+   In `data/languages/<lang>/<topic>.js`, add the tagged lines and explanations for each supported language.
+
+4. **Verify:**  
+   Run `node tools/validate.js` to ensure 100% pass across contracts, tracers, and syntax parsing.
+
+---
+
+## 🧪 How to Run Tests
+
+### Command Line Verification (Node.js)
+```bash
+node tools/validate.js
+```
+Checks:
+- All 62 questions and animation state contracts
+- Pointer bounds and non-empty steps
+- 100% ID parity across question catalogs and language tracks
+- Real code sample parsing via `ast.parse` (Python) and `vm.Script` (JavaScript)
+- Compiler availability checks for Java (`javac`), C++ (`g++`), C (`gcc`), Go, and Rust
+
+### In-Browser Diagnostic Self-Test
+Open `debug.html` in any browser or visit `http://localhost:3000/debug.html`. It simulates each animation from start to finish with live status badges.
 
 ---
 
@@ -67,41 +190,5 @@ Adding a new question requires **zero UI code changes**—simply append a questi
 | **Phase 2** | **Queue & Deque** | 9 | ✅ **Complete** | Array queue, Linked list queue, Circular Queue, Circular Deque, Stack using Queues, Sliding Window Maximum, First Unique Char, Rate Limiter, Rotting Oranges |
 | **Phase 2** | **Hashing** | 9 | ✅ **Complete** | Separate Chaining HashMap, HashSet, Two Sum, Group Anagrams, Valid Anagram, Longest Consecutive Sequence, Subarray Sum = K, Nearby Duplicate, RandomizedSet O(1) |
 | **Phase 2** | **Binary Trees & BST** | 7 | ✅ **Complete** | Tree Node linking, Inorder DFS, Level Order BFS, Max Depth, Invert Tree, Validate BST (Min/Max ranges), Lowest Common Ancestor (BST split) |
-| Phase 3 | Heaps & Priority Queues| Target: 12+ | ⏳ Queued | Heapify, Top-K, Merge K sorted, Median of stream |
-| Phase 3 | Graphs | Target: 20+ | ⏳ Queued | BFS, DFS, Dijkstra, Topo Sort, Union-Find, MST, Islands |
-| Phase 3 | Tries | Target: 10+ | ⏳ Queued | Prefix tree, autocomplete, Word Search II |
-| Phase 3 | Sorting & Searching | Target: 15+ | ⏳ Queued | Binary search variants, QuickSort, MergeSort |
-| Phase 4 | Recursion & Backtracking| Target: 15+ | ⏳ Queued | Subsets, Permutations, N-Queens, Sudoku |
-| Phase 4 | Dynamic Programming | Target: 25+ | ⏳ Queued | 1D, 2D, Knapsack, LIS, LCS, Edit Distance, Coin Change |
-| Phase 4 | Greedy & Bit Manipulation| Target: 15+ | ⏳ Queued | Interval scheduling, Bitwise tricks, Segment Tree |
 
-**Current Total:** 62 questions verified across 6 completed topics (100% test pass rate).
-
-
----
-
-## 🧪 Automated Testing & Verification
-
-Every algorithm solution is validated using an automated test harness across multiple programming languages.
-- **Python 3.14**: 28 / 28 test suites passed (100%)
-- **JavaScript (Node.js)**: 28 / 28 test suites passed (100%)
-
-Full test outputs, expected values, and actual execution results are documented in [TESTS.md](file:///c:/Users/Samartha/OneDrive/Desktop/Repo/LEARNING/Learning/TESTS.md).
-
----
-
-## 🖥️ UI & Educational Features
-
-1. **Physical Memory Addresses**: Linked lists display simulated 64-bit hexadecimal heap addresses (`0x1000`, `0x1020`), null terminators, and dynamic SVG pointer arrows.
-2. **Rosetta Stone Code Panel**: Instant switching between **Python**, **Java**, **C++**, and **JavaScript** for every problem.
-3. **Interactive Line Explanations**: Hover or click any line of code to see an instant beginner-friendly explanation.
-4. **"Explain All Lines (Beginner Mode)"**: A one-click detailed breakdown walking through every line of code without unexplained jargon.
-5. **Universal Animation Engine (`animator.js`)**: Play, pause, step forward/backward, scrub timeline, and adjust playback speed with synchronized code highlighting.
-6. **Live User Input**: Type custom input arrays and re-run the animation in real-time.
-7. **Progress Persistence**: Checkboxes remember solved problems across browser sessions using `localStorage`.
-
----
-
-## 📄 License
-MIT License. Free to use, adapt, and deploy.
-
+**Total:** 62 questions verified with 100% pass rate across Python, Java, C++, and JavaScript.

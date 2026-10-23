@@ -1051,6 +1051,8 @@ window.DSA_TOPICS['queue'] = {
                   "text": "Return current queue length representing active calls in the window."
                 }
               ],
+              "tracer": "recent-counter",
+              "sampleInput": [1, 100, 3001, 3002],
               "animationSteps": [
                 {
                   "codeLine": 8,
@@ -1065,7 +1067,8 @@ window.DSA_TOPICS['queue'] = {
                     0
                   ],
                   "pointers": {
-                    "t": 1
+                    "front": 0,
+                    "current": 0
                   }
                 },
                 {
@@ -1082,7 +1085,8 @@ window.DSA_TOPICS['queue'] = {
                     1
                   ],
                   "pointers": {
-                    "t": 100
+                    "front": 0,
+                    "current": 1
                   }
                 },
                 {
@@ -1100,7 +1104,8 @@ window.DSA_TOPICS['queue'] = {
                     2
                   ],
                   "pointers": {
-                    "t": 3001
+                    "front": 0,
+                    "current": 2
                   }
                 },
                 {
@@ -1120,7 +1125,8 @@ window.DSA_TOPICS['queue'] = {
                     2
                   ],
                   "pointers": {
-                    "t": 3002
+                    "front": 0,
+                    "current": 2
                   }
                 }
               ]
